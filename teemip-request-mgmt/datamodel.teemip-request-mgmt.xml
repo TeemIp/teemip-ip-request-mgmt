@@ -1,0 +1,4410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+  <classes>
+    <class id="IPRequest" _delta="define">
+      <parent>Ticket</parent>
+      <php_parent>
+        <name>_IPRequest</name>
+        <file>_iprequest.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <comment><![CDATA[/**
+ * Typology of attributes dedicated to IP Management
+ * Persistent classes for IP Management
+ *
+ * @author      Christophe Naud <christophe.naud@gmail.com>
+ * @license     http://www.opensource.org/licenses/gpl-3.0.html LGPL
+ */]]></comment>
+        <category>bizmodel,ipmgmt,requestmgmt</category>
+        <abstract>true</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="status" xsi:type="AttributeEnum">
+          <values>
+            <value>new</value>
+            <value>rejected</value>
+            <value>assigned</value>
+            <value>resolved</value>
+            <value>closed</value>
+          </values>
+          <sql>status</sql>
+          <default_value>new</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+        <field id="public_log" xsi:type="AttributeCaseLog">
+          <sql>public_log</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="user_comment" xsi:type="AttributeText">
+          <sql>user_comment</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+      </fields>
+      <methods/>
+      <presentation>
+        <search>
+          <items>
+            <item id="ref">
+              <rank>10</rank>
+            </item>
+            <item id="title">
+              <rank>20</rank>
+            </item>
+            <item id="org_id">
+              <rank>30</rank>
+            </item>
+            <item id="status">
+              <rank>40</rank>
+            </item>
+            <item id="caller_id">
+              <rank>50</rank>
+            </item>
+            <item id="team_id">
+              <rank>60</rank>
+            </item>
+            <item id="agent_id">
+              <rank>70</rank>
+            </item>
+            <item id="close_date">
+              <rank>80</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="finalclass">
+              <rank>10</rank>
+            </item>
+            <item id="title">
+              <rank>20</rank>
+            </item>
+            <item id="status">
+              <rank>30</rank>
+            </item>
+            <item id="caller_id">
+              <rank>40</rank>
+            </item>
+            <item id="team_id">
+              <rank>50</rank>
+            </item>
+            <item id="agent_id">
+              <rank>60</rank>
+            </item>
+            <item id="start_date">
+              <rank>70</rank>
+            </item>
+            <item id="org_id">
+              <rank>80</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="IPRequestAddress" _delta="define">
+      <parent>IPRequest</parent>
+      <properties>
+        <category>bizmodel,ipmgmt,requestmgmt</category>
+        <abstract>true</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_add</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="ip_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPAddress AS ip WHERE ip.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>ip_id</sql>
+          <target_class>IPAddress</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+      </fields>
+      <methods/>
+      <presentation/>
+    </class>
+    <class id="IPRequestAddressCreate" _delta="define">
+      <parent>IPRequestAddress</parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>true</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_add_create</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="status_ip" xsi:type="AttributeEnum">
+          <values>
+            <value>reserved</value>
+            <value>allocated</value>
+          </values>
+          <sql>status_ip</sql>
+          <default_value>allocated</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+        <field id="short_name" xsi:type="AttributeHostName">
+          <sql>short_name</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="domain_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Domain AS d WHERE d.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>domain_id</sql>
+          <filter/>
+          <is_null_allowed>true</is_null_allowed>
+          <target_class>Domain</target_class>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="domain_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>domain_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+        <field id="usage_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPUsage AS i WHERE i.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>usage_id</sql>
+          <target_class>IPUsage</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="usage_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>usage_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+        <field id="ciclass" xsi:type="AttributeClassWithIP">
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>ciclass</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+        <field id="connectableci_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT FunctionalCI AS ci WHERE ci.org_id = :this->org_id AND ci.finalclass = :this->ciclass]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+            <attribute id="ciclass"/>
+          </dependencies>
+          <sql>connectableci_id</sql>
+          <target_class>FunctionalCI</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <allow_target_creation>false</allow_target_creation>
+        </field>
+        <field id="connectableci_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>connectableci_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+        <field id="ip_device_link" xsi:type="AttributeIPFieldInClass">
+          <dependencies>
+            <attribute id="ciclass"/>
+          </dependencies>
+          <sql>ip_device_link</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+      </fields>
+      <methods/>
+      <presentation/>
+    </class>
+    <class id="IPRequestAddressCreateV4" _delta="define">
+      <parent>IPRequestAddressCreate</parent>
+      <php_parent>
+        <name>_IPRequestAddressCreateV4</name>
+        <file>_iprequestaddresscreatev4.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_add_create_v4</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="block_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv4Block AS b WHERE b.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>block_id</sql>
+          <target_class>IPv4Block</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="subnet_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv4Subnet AS s WHERE s.block_id = :this->block_id AND s.org_id = :this->org_id AND s.mask NOT IN ('255.255.255.254', '255.255.255.255')]]></filter>
+          <dependencies>
+            <attribute id="block_id"/>
+          </dependencies>
+          <sql>subnet_id</sql>
+          <target_class>IPv4Subnet</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="range_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv4Range AS r WHERE r.subnet_id = :this->subnet_id AND r.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="subnet_id"/>
+          </dependencies>
+          <sql>range_id</sql>
+          <target_class>IPv4Range</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="location_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Location AS l WHERE l.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+            <attribute id="subnet_id"/>
+          </dependencies>
+          <sql>location_id</sql>
+          <target_class>Location</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="location_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>location_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="usage_id">
+                <read_only/>
+              </attribute>
+              <attribute id="connectableci_id">
+                <read_only/>
+              </attribute>
+              <attribute id="ip_device_link">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="range_id">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="usage_id">
+                <read_only/>
+              </attribute>
+              <attribute id="connectableci_id">
+                <read_only/>
+              </attribute>
+              <attribute id="ip_device_link">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="range_id">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="public_log">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+              <attribute id="status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="usage_id">
+                <read_only/>
+              </attribute>
+              <attribute id="connectableci_id">
+                <read_only/>
+              </attribute>
+              <attribute id="ip_device_link">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="range_id">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:ipinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="block_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="subnet_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="range_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="location_id">
+                      <rank>40</rank>
+                    </item>
+                    <item id="status_ip">
+                      <rank>50</rank>
+                    </item>
+                    <item id="short_name">
+                      <rank>60</rank>
+                    </item>
+                    <item id="domain_id">
+                      <rank>70</rank>
+                    </item>
+                    <item id="usage_id">
+                      <rank>80</rank>
+                    </item>
+                    <item id="ip_id">
+                      <rank>90</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:device">
+                  <rank>20</rank>
+                  <items>
+                    <item id="ciclass">
+                      <rank>10</rank>
+                    </item>
+                    <item id="connectableci_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="ip_device_link">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:date">
+                  <rank>30</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestAddressCreateV6" _delta="define">
+      <parent>IPRequestAddressCreate</parent>
+      <php_parent>
+        <name>_IPRequestAddressCreateV6</name>
+        <file>_iprequestaddresscreatev6.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_add_create_v6</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="block_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv6Block AS b WHERE b.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>block_id</sql>
+          <target_class>IPv6Block</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="subnet_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv6Subnet AS s WHERE s.block_id = :this->block_id AND s.org_id = :this->org_id AND s.mask NOT IN ('127', '128')]]></filter>
+          <dependencies>
+            <attribute id="block_id"/>
+          </dependencies>
+          <sql>subnet_id</sql>
+          <target_class>IPv6Subnet</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="range_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv6Range AS r WHERE r.subnet_id = :this->subnet_id AND r.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="subnet_id"/>
+          </dependencies>
+          <sql>range_id</sql>
+          <target_class>IPv6Range</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="location_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Location AS l WHERE l.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+            <attribute id="subnet_id"/>
+          </dependencies>
+          <sql>location_id</sql>
+          <target_class>Location</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="location_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>location_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="usage_id">
+                <read_only/>
+              </attribute>
+              <attribute id="connectableci_id">
+                <read_only/>
+              </attribute>
+              <attribute id="ip_device_link">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="range_id">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="usage_id">
+                <read_only/>
+              </attribute>
+              <attribute id="connectableci_id">
+                <read_only/>
+              </attribute>
+              <attribute id="ip_device_link">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="range_id">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="public_log">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+              <attribute id="status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="usage_id">
+                <read_only/>
+              </attribute>
+              <attribute id="connectableci_id">
+                <read_only/>
+              </attribute>
+              <attribute id="ip_device_link">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="range_id">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:ipinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="block_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="subnet_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="range_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="location_id">
+                      <rank>40</rank>
+                    </item>
+                    <item id="status_ip">
+                      <rank>50</rank>
+                    </item>
+                    <item id="short_name">
+                      <rank>60</rank>
+                    </item>
+                    <item id="domain_id">
+                      <rank>70</rank>
+                    </item>
+                    <item id="usage_id">
+                      <rank>80</rank>
+                    </item>
+                    <item id="ip_id">
+                      <rank>90</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:device">
+                  <rank>20</rank>
+                  <items>
+                    <item id="ciclass">
+                      <rank>10</rank>
+                    </item>
+                    <item id="connectableci_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="ip_device_link">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:date">
+                  <rank>30</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestAddressUpdate" _delta="define">
+      <parent>IPRequestAddress</parent>
+      <php_parent>
+        <name>_IPRequestAddressUpdate</name>
+        <file>_iprequestaddressupdate.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_add_update</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="new_status_ip" xsi:type="AttributeEnum">
+          <values>
+            <value>reserved</value>
+            <value>allocated</value>
+          </values>
+          <sql>new_status_ip</sql>
+          <default_value>allocated</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+        <field id="new_short_name" xsi:type="AttributeHostName">
+          <sql>new_short_name</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="new_domain_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Domain AS d WHERE d.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>new_domain_id</sql>
+          <filter/>
+          <is_null_allowed>true</is_null_allowed>
+          <target_class>Domain</target_class>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="new_domain_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>new_domain_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+        <field id="new_usage_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPUsage WHERE org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>new_usage_id</sql>
+          <target_class>IPUsage</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="new_usage_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>new_usage_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <mandatory/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="new_short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="new_domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_usage_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="new_short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="new_domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_usage_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="public_log">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_status_ip">
+                <read_only/>
+              </attribute>
+              <attribute id="new_short_name">
+                <read_only/>
+              </attribute>
+              <attribute id="new_domain_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_usage_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:ipinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ip_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="new_status_ip">
+                      <rank>20</rank>
+                    </item>
+                    <item id="new_short_name">
+                      <rank>30</rank>
+                    </item>
+                    <item id="new_domain_id">
+                      <rank>40</rank>
+                    </item>
+                    <item id="new_usage_id">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:date">
+                  <rank>20</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestAddressDelete" _delta="define">
+      <parent>IPRequestAddress</parent>
+      <php_parent>
+        <name>_IPRequestAddressDelete</name>
+        <file>_iprequestaddressdelete.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_add_delete</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields/>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <mandatory/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="public_log">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="ip_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestAddress:ipinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ip_id">
+                      <rank>10</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestAddress:date">
+                  <rank>20</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestSubnet" _delta="define">
+      <parent>IPRequest</parent>
+      <properties>
+        <category>bizmodel,ipmgmt,requestmgmt</category>
+        <abstract>true</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_sub</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="subnet_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPSubnet AS s WHERE s.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>subnet_id</sql>
+          <target_class>IPSubnet</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+      </fields>
+      <methods/>
+      <presentation/>
+    </class>
+    <class id="IPRequestSubnetCreate" _delta="define">
+      <parent>IPRequestSubnet</parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>true</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_sub_create</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="name" xsi:type="AttributeString">
+          <sql>name</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="status_subnet" xsi:type="AttributeEnum">
+          <values>
+            <value>reserved</value>
+            <value>allocated</value>
+          </values>
+          <sql>status_subnet</sql>
+          <default_value>allocated</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+        <field id="type" xsi:type="AttributeString">
+          <sql>type</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+      </fields>
+      <methods/>
+      <presentation/>
+    </class>
+    <class id="IPRequestSubnetCreateV4" _delta="define">
+      <parent>IPRequestSubnetCreate</parent>
+      <php_parent>
+        <name>_IPRequestSubnetCreateV4</name>
+        <file>_iprequestsubnetcreatev4.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_sub_create_v4</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="block_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv4Block AS b WHERE b.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>block_id</sql>
+          <target_class>IPv4Block</target_class>
+          <is_null_allowed>false</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="mask" xsi:type="AttributeEnum">
+          <values>
+            <value>255.255.0.0</value>
+            <value>255.255.128.0</value>
+            <value>255.255.192.0</value>
+            <value>255.255.224.0</value>
+            <value>255.255.240.0</value>
+            <value>255.255.248.0</value>
+            <value>255.255.252.0</value>
+            <value>255.255.254.0</value>
+            <value>255.255.255.0</value>
+            <value>255.255.255.128</value>
+            <value>255.255.255.192</value>
+            <value>255.255.255.224</value>
+            <value>255.255.255.240</value>
+            <value>255.255.255.248</value>
+            <value>255.255.255.252</value>
+            <value>255.255.255.254</value>
+            <value>255.255.255.255</value>
+          </values>
+          <sql>mask</sql>
+          <default_value/>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="location_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Location AS l WHERE l.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>location_id</sql>
+          <target_class>Location</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <must_prompt/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+              </attribute>
+              <attribute id="status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="type">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="mask">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+              </attribute>
+              <attribute id="status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="type">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="mask">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="public_log">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+              </attribute>
+              <attribute id="status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="type">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="mask">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:subnetinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="block_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="mask">
+                      <rank>20</rank>
+                    </item>
+                    <item id="name">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status_subnet">
+                      <rank>40</rank>
+                    </item>
+                    <item id="type">
+                      <rank>50</rank>
+                    </item>
+                    <item id="location_id">
+                      <rank>60</rank>
+                    </item>
+                    <item id="subnet_id">
+                      <rank>70</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:date">
+                  <rank>20</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestSubnetCreateV6" _delta="define">
+      <parent>IPRequestSubnetCreate</parent>
+      <php_parent>
+        <name>_IPRequestSubnetCreateV6</name>
+        <file>_iprequestsubnetcreatev6.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_sub_create_v6</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="block_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT IPv6Block AS b WHERE b.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>block_id</sql>
+          <target_class>IPv6Block</target_class>
+          <is_null_allowed>false</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="mask" xsi:type="AttributeEnum">
+          <values>
+            <value>64</value>
+            <value>65</value>
+            <value>66</value>
+            <value>67</value>
+            <value>68</value>
+            <value>69</value>
+            <value>70</value>
+            <value>71</value>
+            <value>72</value>
+            <value>73</value>
+            <value>74</value>
+            <value>75</value>
+            <value>76</value>
+            <value>77</value>
+            <value>78</value>
+            <value>79</value>
+            <value>80</value>
+            <value>81</value>
+            <value>82</value>
+            <value>83</value>
+            <value>84</value>
+            <value>85</value>
+            <value>86</value>
+            <value>87</value>
+            <value>88</value>
+            <value>89</value>
+            <value>90</value>
+            <value>91</value>
+            <value>92</value>
+            <value>93</value>
+            <value>94</value>
+            <value>95</value>
+            <value>96</value>
+            <value>97</value>
+            <value>98</value>
+            <value>99</value>
+            <value>100</value>
+            <value>101</value>
+            <value>102</value>
+            <value>103</value>
+            <value>104</value>
+            <value>105</value>
+            <value>106</value>
+            <value>107</value>
+            <value>108</value>
+            <value>109</value>
+            <value>110</value>
+            <value>111</value>
+            <value>112</value>
+            <value>113</value>
+            <value>114</value>
+            <value>115</value>
+            <value>116</value>
+            <value>117</value>
+            <value>118</value>
+            <value>119</value>
+            <value>120</value>
+            <value>121</value>
+            <value>122</value>
+            <value>123</value>
+            <value>124</value>
+            <value>125</value>
+            <value>126</value>
+            <value>127</value>
+            <value>128</value>
+          </values>
+          <sql>mask</sql>
+          <default_value/>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="location_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Location AS l WHERE l.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>location_id</sql>
+          <target_class>Location</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <must_prompt/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+              </attribute>
+              <attribute id="status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="type">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="mask">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+              </attribute>
+              <attribute id="status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="type">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="mask">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="public_log">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+              </attribute>
+              <attribute id="status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="type">
+                <read_only/>
+              </attribute>
+              <attribute id="block_id">
+                <read_only/>
+              </attribute>
+              <attribute id="mask">
+                <read_only/>
+              </attribute>
+              <attribute id="location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:subnetinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="block_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="mask">
+                      <rank>20</rank>
+                    </item>
+                    <item id="name">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status_subnet">
+                      <rank>40</rank>
+                    </item>
+                    <item id="type">
+                      <rank>50</rank>
+                    </item>
+                    <item id="location_id">
+                      <rank>60</rank>
+                    </item>
+                    <item id="subnet_id">
+                      <rank>70</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:date">
+                  <rank>20</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestSubnetUpdate" _delta="define">
+      <parent>IPRequestSubnet</parent>
+      <php_parent>
+        <name>_IPRequestSubnetUpdate</name>
+        <file>_iprequestsubnetupdate.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_sub_update</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="new_name" xsi:type="AttributeString">
+          <sql>new_name</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="new_status_subnet" xsi:type="AttributeEnum">
+          <values>
+            <value>reserved</value>
+            <value>allocated</value>
+          </values>
+          <sql>new_status_subnet</sql>
+          <default_value>allocated</default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="new_type" xsi:type="AttributeString">
+          <sql>new_type</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="old_location_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Location AS l JOIN lnkIPSubnetToLocation AS sl ON sl.location_id=l.id JOIN IPSubnet AS s ON sl.ipsubnet_id=s.id WHERE s.id = :this->subnet_id]]></filter>
+          <dependencies>
+            <attribute id="subnet_id"/>
+          </dependencies>
+          <sql>old_location_id</sql>
+          <target_class>Location</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+        <field id="new_location_id" xsi:type="AttributeExternalKey">
+          <filter><![CDATA[SELECT Location AS l WHERE l.org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>new_location_id</sql>
+          <target_class>Location</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+          <jointype/>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="private_log">
+                <hidden/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <mandatory/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <must_prompt/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_name">
+                <read_only/>
+              </attribute>
+              <attribute id="new_status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="new_type">
+                <read_only/>
+              </attribute>
+              <attribute id="old_location_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_name">
+                <read_only/>
+              </attribute>
+              <attribute id="new_status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="new_type">
+                <read_only/>
+              </attribute>
+              <attribute id="old_location_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="contacts_list">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_name">
+                <read_only/>
+              </attribute>
+              <attribute id="new_status_subnet">
+                <read_only/>
+              </attribute>
+              <attribute id="new_type">
+                <read_only/>
+              </attribute>
+              <attribute id="old_location_id">
+                <read_only/>
+              </attribute>
+              <attribute id="new_location_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:subnetinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="subnet_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="new_name">
+                      <rank>20</rank>
+                    </item>
+                    <item id="new_status_subnet">
+                      <rank>30</rank>
+                    </item>
+                    <item id="new_type">
+                      <rank>40</rank>
+                    </item>
+	                <item id="old_location_id">
+                      <rank>50</rank>
+                    </item>
+                    <item id="new_location_id">
+                      <rank>60</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:date">
+                  <rank>20</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPRequestSubnetDelete" _delta="define">
+      <parent>IPRequestSubnet</parent>
+      <php_parent>
+        <name>_IPRequestSubnetDelete</name>
+        <file>_iprequestsubnetdelete.class.inc.php</file>
+      </php_parent>
+      <properties>
+        <category>bizmodel,searchable,ipmgmt,requestmgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>ip_req_sub_delete</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/iprequest.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="org_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields/>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="new">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="private_log">
+                <hidden/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <mandatory/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="rejected">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <mandatory/>
+              </attribute>
+              <attribute id="description">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="caller_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="team_id">
+                <hidden/>
+              </attribute>
+              <attribute id="agent_id">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>new</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="assigned">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <must_prompt/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
+                <actions/>
+              </transition>
+              <transition>
+                <stimulus>ev_reject</stimulus>
+                <target>rejected</target>
+                <actions/>
+              </transition>
+            </transitions>
+          </state>
+          <state id="resolved">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="user_comment">
+                <hidden/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition>
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetClosureDate</verb>
+                  </action>
+                </actions>
+              </transition>
+              <transition>
+                <stimulus>ev_reopen</stimulus>
+                <target>assigned</target>
+                <actions>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="ref">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="contacts_list">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="user_comment">
+                <must_prompt/>
+              </attribute>
+              <attribute id="subnet_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+        </states>
+      </lifecycle>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="ref">
+                      <rank>10</rank>
+                    </item>
+                    <item id="title">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:contact">
+                  <rank>20</rank>
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRequestSubnet:subnetinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="subnet_id">
+                      <rank>10</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Class:IPRequestSubnet:date">
+                  <rank>20</rank>
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>20</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="user_comment">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPConfig" _delta="must_exist">
+	  <fields>
+        <field id="request_creation_ipv4_offset" xsi:type="AttributeDecimal" _delta="define">
+          <sql>request_creation_ipv4_offset</sql>
+          <default_value>0</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <digits>4</digits>
+          <decimals>0</decimals>
+        </field>
+        <field id="request_creation_ipv6_offset" xsi:type="AttributeDecimal" _delta="define">
+          <sql>request_creation_ipv6_offset</sql>
+          <default_value>0</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <digits>4</digits>
+          <decimals>0</decimals>
+        </field>
+      </fields>
+      <presentation>
+        <details>
+          <items>
+            <item id="col:col1">
+              <items>
+                <item id="fieldset:Class:IPConfig:requestinfo" _delta="define">
+                  <rank>15</rank>
+                  <items>
+                    <item id="request_creation_ipv4_offset" _delta="define">
+                      <rank>10</rank>
+                    </item>
+                    <item id="request_creation_ipv6_offset" _delta="define">
+                      <rank>20</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+        <search/>
+        <list/>
+      </presentation>
+    </class>
+  </classes>
+  <menus>
+    <menu id="IPRequestManagement" xsi:type="MenuGroup" _delta="define">
+      <rank>30</rank>
+      <enable_class>IPRequest</enable_class>
+      <enable_action>UR_ACTION_READ</enable_action>
+    </menu>
+    <menu id="IPRequestManagement:Overview" xsi:type="DashboardMenuNode" _delta="define">
+      <rank>0</rank>
+      <parent>IPRequestManagement</parent>
+      <definition>
+        <layout>DashboardLayoutTwoCols</layout>
+        <title>UI:IPRequestManagement:Overview:Title</title>
+        <cells>
+          <cell id="0">
+            <rank>0</rank>
+            <dashlets>
+              <dashlet id="1" xsi:type="DashletGroupByPie">
+                <rank>0</rank>
+                <title>UI:IPRequestManagement:Overview:RequestByType-last-14-days</title>
+                <query>SELECT IPRequest WHERE DATE_SUB(NOW(), INTERVAL 14 DAY) &lt; start_date</query>
+                <group_by>finalclass</group_by>
+                <style>pie</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="1">
+            <rank>1</rank>
+            <dashlets>
+              <dashlet id="2" xsi:type="DashletGroupByBars">
+                <rank>0</rank>
+                <title>UI:IPRequestManagement:Overview:Last-14-days</title>
+                <query>SELECT IPRequest WHERE DATE_SUB(NOW(), INTERVAL 14 DAY) &lt; start_date</query>
+                <group_by>start_date:day_of_month</group_by>
+                <style>bars</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="1">
+            <rank>2</rank>
+            <dashlets>
+              <dashlet id="3" xsi:type="DashletGroupByTable">
+                <rank>0</rank>
+                <title>UI:IPRequestManagement:Overview:OpenRequestByStatus</title>
+                <query>SELECT IPRequest WHERE status NOT IN ('closed','rejected')</query>
+                <group_by>status</group_by>
+                <style>table</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="2">
+            <rank>3</rank>
+            <dashlets>
+              <dashlet id="4" xsi:type="DashletGroupByTable">
+                <rank>0</rank>
+                <title>UI:IPRequestManagement:Overview:OpenRequestByAgent</title>
+                <query>SELECT IPRequest WHERE status NOT IN ('closed','rejected')</query>
+                <group_by>agent_id</group_by>
+                <style>table</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="3">
+            <rank>4</rank>
+            <dashlets>
+              <dashlet id="5" xsi:type="DashletGroupByTable">
+                <rank>0</rank>
+                <title>UI:IPRequestManagement:Overview:OpenRequestByType</title>
+                <query>SELECT IPRequest WHERE status NOT IN ('closed','rejected')</query>
+                <group_by>finalclass</group_by>
+                <style>table</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="4">
+            <rank>5</rank>
+            <dashlets>
+              <dashlet id="6" xsi:type="DashletGroupByTable">
+                <rank>0</rank>
+                <title>UI:IPRequestManagement:Overview:OpenRequestByCustomer</title>
+                <query>SELECT IPRequest WHERE status NOT IN ('closed','rejected')</query>
+                <group_by>org_id</group_by>
+                <style>table</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+        </cells>
+      </definition>
+    </menu>
+    <menu id="IPRequestManagement:New" xsi:type="NewObjectMenuNode" _delta="define">
+      <rank>1</rank>
+      <parent>IPRequestManagement</parent>
+      <class>IPRequest</class>
+    </menu>
+    <menu id="IPRequestManagement:Search" xsi:type="SearchMenuNode" _delta="define">
+      <rank>2</rank>
+      <parent>IPRequestManagement</parent>
+      <class>IPRequest</class>
+    </menu>
+    <menu id="IPRequestManagement:ShortCut" xsi:type="TemplateMenuNode" _delta="define">
+      <rank>3</rank>
+      <parent>IPRequestManagement</parent>
+      <template_file/>
+    </menu>
+    <menu id="IPRequestManagement:MyRequests" xsi:type="OQLMenuNode" _delta="define">
+      <rank>4</rank>
+      <parent>IPRequestManagement:ShortCut</parent>
+      <oql><![CDATA[SELECT IPRequest WHERE agent_id = :current_contact_id AND status NOT IN ("closed")]]></oql>
+      <do_search/>
+      <auto_reload>fast</auto_reload>
+    </menu>
+    <menu id="IPRequestManagement:OpenRequests" xsi:type="OQLMenuNode" _delta="define">
+      <rank>5</rank>
+      <parent>IPRequestManagement:ShortCut</parent>
+      <oql><![CDATA[SELECT IPRequest WHERE status IN ("new", "rejected", "assigned")]]></oql>
+      <do_search/>
+      <auto_reload>fast</auto_reload>
+    </menu>
+    <menu id="WelcomeMenuPage" xsi:type="DashboardMenuNode" _delta="must_exist">
+      <definition>
+        <cells>
+          <cell id="1">
+            <rank>1</rank>
+            <dashlets>
+              <dashlet id="1" xsi:type="DashletHeaderDynamic" _delta="define">
+                <rank>0</rank>
+                <title>Menu:IPRequestManagement</title>
+                <icon>teemip-request-mgmt/images/iprequest.png</icon>
+                <subtitle>Menu:IPRequestManagement:Overview:Requests</subtitle>
+                <query>SELECT IPRequest</query>
+                <group_by>status</group_by>
+                <values>new,rejected,assigned,resolved,closed</values>
+              </dashlet>
+              <dashlet id="2" xsi:type="DashletObjectList" _delta="define">
+                <rank>1</rank>
+                <title>Menu:IPRequestManagement:MyOpenRequests</title>
+                <query>SELECT IPRequest AS r WHERE r.agent_id = :current_contact_id AND r.status NOT IN ("resolved", "closed")</query>
+                <menu>false</menu>
+              </dashlet>
+            </dashlets>  
+          </cell>
+        </cells>
+      </definition>
+    </menu>
+  </menus>
+  <user_rights>
+    <groups>
+      <group id="IPRequest" _delta="define">
+        <classes>
+          <class id="IPRequest"/>
+          <class id="IPRequestAddress"/>
+          <class id="IPRequestAddressCreate"/>
+          <class id="IPRequestAddressCreateV4"/>
+          <class id="IPRequestAddressCreateV6"/>
+          <class id="IPRequestAddressUpdate"/>
+          <class id="IPRequestAddressDelete"/>
+          <class id="IPRequestSubnet"/>
+          <class id="IPRequestSubnetCreate"/>
+          <class id="IPRequestSubnetCreateV4"/>
+          <class id="IPRequestSubnetCreateV6"/>
+          <class id="IPRequestSubnetUpdate"/>
+          <class id="IPRequestSubnetDelete"/>
+        </classes>
+      </group>
+      <group id="IPRequestAddress" _delta="define">
+        <classes>
+          <class id="IPRequestAddressCreate"/>
+          <class id="IPRequestAddressCreateV4"/>
+          <class id="IPRequestAddressCreateV6"/>
+          <class id="IPRequestAddressUpdate"/>
+          <class id="IPRequestAddressDelete"/>
+        </classes>
+      </group>
+    </groups>
+    <profiles>
+      <profile id="20" _delta="must_exist">
+        <groups>
+          <group id="IPRequest" _delta="define">
+            <actions>
+              <action xsi:type="write">allow</action>
+              <action xsi:type="delete">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+      <profile id="21" _delta="define">
+        <name>IP Helpdesk agent</name>
+        <description>Person processing the IP requests</description>
+        <groups>
+          <group id="IPRequest">
+            <actions>
+              <action xsi:type="write">allow</action>
+            </actions>
+          </group>
+          <group id="IPRequest">
+            <actions>
+              <action id="ev_reject" xsi:type="stimulus">allow</action>
+              <action id="ev_reopen" xsi:type="stimulus">allow</action>
+              <action id="ev_assign" xsi:type="stimulus">allow</action>
+              <action id="ev_resolve" xsi:type="stimulus">allow</action>
+              <action id="ev_close" xsi:type="stimulus">allow</action>
+            </actions>
+          </group>
+          <group id="*">
+            <actions>
+              <action xsi:type="read">allow</action>
+              <action xsi:type="bulk read">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+      <profile id="22" _delta="define">
+        <name>IP Portal user</name>
+        <description>Has the rights to access the IP portal. People having this profile will not be allowed to access the standard application, they will be automatically redirected to the default portal.</description>
+        <groups>
+          <group id="IPRequest">
+            <actions>
+              <action id="action:write">allow</action>
+              <action id="stimulus:ev_close">allow</action>
+              <action id="stimulus:ev_reopen">allow</action>
+            </actions>
+          </group>
+          <group id="*">
+            <actions>
+              <action xsi:type="read">allow</action>
+              <action xsi:type="bulk read">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+      <profile id="5323" _delta="must_exist">
+        <groups>
+          <group id="IPRequest" _delta="define">
+            <actions>
+              <action xsi:type="read">deny</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+    </profiles>
+  </user_rights>
+</itop_design>
