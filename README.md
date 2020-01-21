@@ -1,4 +1,4 @@
-# teemip-ip-request-mgmt
+# TeemIp IP Request Management
 TeemIp workflow to handle IPAM requests - Includes TeemIp portal
 
 
