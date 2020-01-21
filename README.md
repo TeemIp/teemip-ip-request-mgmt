@@ -1,4 +1,4 @@
-<img src="https://wiki.teemip.net/lib/exe/fetch.php?media=extensions:classicon_iprequest.png"># TeemIp IP Request Management
+# <img src="https://wiki.teemip.net/lib/exe/fetch.php?media=extensions:classicon_iprequest.png"> TeemIp IP Request Management
 TeemIp workflow to handle IPAM requests - Includes TeemIp portal
 
 
@@ -8,12 +8,16 @@ This extension allows Hostmasters to manage tickets that are specific to the IP 
 
 It provides the two following features :
 
-- IP Ticketing : Control IP and subnet creations, modifications or deletions through automated workflows.
-- User Portal : Provide to your end users an easy to use web interface to simply manage their IP requests.
+- [IP Ticketing][1] : Control IP and subnet creations, modifications or deletions through automated workflows.
+- [User Portal][2] : Provide to your end users an easy to use web interface to simply manage their IP requests.
 
 
 ## Documentation
 
 Comprehensive documentation can be found on TeemIp’s wiki, namely in the chapter dedicated to the extension:
 
-- IP Request Management
+- [IP Request Management][3]
+
+[1]: https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt
+[2]: https://wiki.teemip.net/doku.php?id=2_x:portal:start
+[3]: https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt
