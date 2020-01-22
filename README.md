@@ -14,10 +14,11 @@ It provides the two following features :
 
 ## Documentation
 
-Comprehensive documentation can be found on TeemIp’s wiki, namely in the chapter dedicated to the extension:
+Comprehensive documentation can be found on TeemIp’s [wiki][3], namely in the chapter dedicated to the extension:
 
 - [IP Request Management][3]
 
 [1]: https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt
 [2]: https://wiki.teemip.net/doku.php?id=2_x:portal:start
-[3]: https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt
+[3]: https://wiki.teemip.net
+[4]: https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt
