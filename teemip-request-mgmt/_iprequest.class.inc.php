@@ -174,7 +174,7 @@ class _IPRequest extends Ticket
 
 		if (!$bEditMode)
 		{
-			$oP->RemoveTab(Dict::S('Ticket:ImpactAnalysis'));
+			$oP->RemoveTab('Ticket:ImpactAnalysis');
 		}
 	}
 
