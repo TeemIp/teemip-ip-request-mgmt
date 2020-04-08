@@ -21,8 +21,16 @@
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
+/**
+ * Class _IPRequest
+ */
 class _IPRequest extends Ticket
 {
+	/**
+	 * @param $sStimulusCode
+	 *
+	 * @return bool
+	 */
 	public function SetClosureDate($sStimulusCode)
 	{
 		$this->Set('close_date', time());
