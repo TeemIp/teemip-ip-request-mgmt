@@ -96,6 +96,8 @@ Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPRequestAddressCreate/Attribute:connectableci_id+' => 'EC Funcional a la que la IP debe estár ligada',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name' => 'Nombre EC Funcional',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name+' => '',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute' => 'Atributo IP de CI',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute+' => 'El atributo IP de CI al que se debe vincular la IP',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link' => 'Liga entre IP y EC',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link+' => 'Tipo de liga entre dirección IP y EC conectable',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link/Value:managementip' => 'IP Administrable',

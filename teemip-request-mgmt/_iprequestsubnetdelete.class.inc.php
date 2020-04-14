@@ -21,10 +21,22 @@
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
+/**
+ * Class _IPRequestSubnetDelete
+ */
 class _IPRequestSubnetDelete extends IPRequestSubnet
 {
 	/**
 	 * Apply stimulus to object
+	 *
+	 * @param $sStimulusCode
+	 * @param bool $bDoNotWrite
+	 *
+	 * @return bool
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
 	{

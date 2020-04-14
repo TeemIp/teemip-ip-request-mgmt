@@ -21,10 +21,19 @@
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
+/**
+ * Class _IPRequestSubnetCreateV4
+ */
 class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 {
 	/**
 	 * Check validity of stimulus before allowing it to be applied
+	 *
+	 * @param $sStimulusCode
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
 	 */
 	public function CheckStimulus($sStimulusCode)
 	{
@@ -53,7 +62,16 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 	
 	/**
 	 * Display attributes associated operation
-	 */      
+	 *
+	 * @param \WebPage $oP
+	 * @param $sOperation
+	 * @param $m_iFormId
+	 * @param array $aDefault
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 */
 	function DisplayActionFieldsForOperation(WebPage $oP, $sOperation, $m_iFormId, $aDefault = array())
 	{
 		$sStimulus = $aDefault['stimulus'];
@@ -120,6 +138,13 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 	
 	/**
 	 * Apply stimulus to object
+	 *
+	 * @param $sStimulusCode
+	 * @param bool $bDoNotWrite
+	 *
+	 * @return bool
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
 	{
@@ -161,6 +186,10 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 						$oSubnet->Set('status', $this->Get('status_subnet'));
 						$oSubnet->Set('type', $this->Get('type'));
 						$oSubnet->Set('requestor_id', $this->Get('caller_id'));
+						if ($this->Get('status_subnet') == 'allocated')
+						{
+							$oSubnet->Set('allocation_date', time());
+						}
 						$oSubnet->DBInsert();
 						
 						if (!$this->Get('location_id') <= 0)

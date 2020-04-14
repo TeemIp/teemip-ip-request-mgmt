@@ -96,6 +96,8 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:IPRequestAddressCreate/Attribute:connectableci_id+' => 'CI fonctionnel auquel l\'IP doit être attachée.',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name' => 'Nom du CI fonctionnel',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name+' => '',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute' => 'Attribut IP du CI',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute+' => 'Attribut IP du CI auquel l\'IP doit être attachée.',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link' => 'Lien entre l\'IP et le CI',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link+' => 'Type de lien entre l\'adresse IP et le CI connecté',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link/Value:managementip' => 'IP de Management',

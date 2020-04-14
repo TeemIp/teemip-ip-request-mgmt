@@ -149,7 +149,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 					// Found free IP. If required, make sure it doesn't ping (well... locally)
 					if ($sPingBeforeAssign == 'ping_yes')
 					{
-						$aOutput = IpPings($sAnIp, TIME_TO_WAIT_FOR_PING_SHORT);
+						$aOutput = IPv4Address::DoCheckIpPings($sAnIp, TIME_TO_WAIT_FOR_PING_SHORT);
 						if (empty($aOutput))
 						{
 							// IP doesn't ping
@@ -276,11 +276,16 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 					$oFunctionalCI = MetaModel::GetObject($sCIClass, $iFunctionalCIid, false /* MustBeFound */);
 					if (!is_null($oFunctionalCI))
 					{
-						$sIPAttribute = $this->Get('ip_device_link');
+						$sIPAttribute = $this->Get('ci_ip_attribute');
 						if (MetaModel::IsValidAttCode($sCIClass, $sIPAttribute))
 						{
-							$oFunctionalCI->Set($sIPAttribute, $oIp->GetKey());
-							$oFunctionalCI->DBUpdate();
+							// Check if attribute can be written
+							$iFlags = $oFunctionalCI->GetFormAttributeFlags($sIPAttribute);
+							if (!($iFlags & (OPT_ATT_READONLY | OPT_ATT_SLAVE)))
+							{
+								$oFunctionalCI->Set($sIPAttribute, $oIp->GetKey());
+								$oFunctionalCI->DBUpdate();
+							}
 						}
 					}
 				}
