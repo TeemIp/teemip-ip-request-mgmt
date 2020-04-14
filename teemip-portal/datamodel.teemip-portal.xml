@@ -240,7 +240,7 @@
                         <div class="form_field" data-field-id="connectableci_id" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_device_link" />
+                        <div class="form_field" data-field-id="ci_ip_attribute" />
                      </div>
                   </div>
                </twig>
@@ -253,41 +253,50 @@
                <class>IPRequestAddressCreateV4</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only" />
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="status_ip" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="usage_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="usage_id_friendlyname" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="range_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="range_id_friendlyname" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="short_name" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="domain_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="domain_id_friendlyname" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div class="row">
@@ -295,10 +304,10 @@
                         <div class="form_field" data-field-id="ciclass" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="connectableci_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="connectableci_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_device_link" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="ci_ip_attribute" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div>
@@ -366,7 +375,7 @@
                         <div class="form_field" data-field-id="connectableci_id" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_device_link" />
+                        <div class="form_field" data-field-id="ci_ip_attribute" />
                      </div>
                   </div>
                </twig>
@@ -379,41 +388,50 @@
                <class>IPRequestAddressCreateV6</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="status_ip" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="usage_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="usage_id_friendlyname" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="range_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="range_id_friendlyname" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="short_name" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="domain_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="domain_id_friendlyname" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div class="row">
@@ -421,10 +439,10 @@
                         <div class="form_field" data-field-id="ciclass" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="connectableci_id" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="connectableci_id_friendlyname" data-field-flags="read_only" />
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_device_link" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="ci_ip_attribute" data-field-flags="read_only" />
                      </div>
                   </div>
                   <div>
@@ -485,13 +503,22 @@
                <class>IPRequestAddressUpdate</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="ip_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -504,12 +531,12 @@
                         <div class="form_field" data-field-id="new_short_name" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_domain_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="new_domain_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_usage_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="new_usage_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div>
@@ -548,12 +575,25 @@
                <class>IPRequestAddressDelete</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="ip_id" data-field-flags="read_only"/>
-                 </div>
-                  <div>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only"/>
+                     </div>
+                  </div>
+                  <div>S
                      <div class="form_field" data-field-id="public_log"/>
                   </div>
                </twig>
@@ -614,21 +654,30 @@
                <class>IPRequestSubnetCreateV4</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="status_subnet" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="mask" data-field-flags="read_only"/>
@@ -636,7 +685,7 @@
                   </div>
                   <div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="name" data-field-flags="read_only"/>
@@ -708,21 +757,30 @@
                <class>IPRequestSubnetCreateV6</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="status_subnet" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="mask" data-field-flags="read_only"/>
@@ -730,7 +788,7 @@
                   </div>
                   <div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="name" data-field-flags="read_only"/>
@@ -802,13 +860,22 @@
                <class>IPRequestSubnetUpdate</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -818,10 +885,10 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="old_location_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="old_location_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="new_location_id" data-field-flags="read_only"/>
+                        <div class="form_field" data-field-id="new_location_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
                         <div class="form_field" data-field-id="new_name" data-field-flags="read_only"/>
@@ -868,10 +935,23 @@
                <class>IPRequestSubnetDelete</class>
                <fields />
                <twig>
-                  <div>
-                     <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
-                     <div class="form_field" data-field-id="subnet_id" data-field-flags="read_only"/>
+                  <div class="row">
+                     <div class="col-sm-8">
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only"/>
+                     </div>
                   </div>
                   <div>
                      <div class="form_field" data-field-id="public_log"/>
@@ -891,7 +971,7 @@
             <scopes>
                <scope id="all">
                   <oql_view><![CDATA[SELECT FunctionalCI WHERE org_id = :current_contact->org_id]]></oql_view>
-                  <oql_edit><![CDATA[SELECT FunctionalCI]]></oql_edit>
+                  <!-- oql_edit><![CDATA[SELECT FunctionalCI]]></oql_edit -->
                </scope>
             </scopes>
          </class>
