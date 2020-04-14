@@ -97,6 +97,8 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'Class:IPRequestAddressCreate/Attribute:connectableci_id+' => 'Verknüpfbares CI das mit der IP verknüpft ist',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name' => 'Verknüpfbares CI Name',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name+' => '',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute' => 'IP-Attribut von CI',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute+' => 'Das IP-Attribut von CI, an das die IP gebunden werden muss',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link' => 'Verknüpfung zwischen IP und CI',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link+' => 'Typ der Verknüpfung zwischen IP Adresse und Verknüpfbarem CI',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link/Value:managementip' => 'Management-IP',

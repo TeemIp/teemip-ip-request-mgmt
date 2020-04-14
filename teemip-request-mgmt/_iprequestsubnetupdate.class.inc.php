@@ -25,6 +25,12 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 {
 	/**
 	 * Check validity of stimulus before allowing it to be applied
+	 *
+	 * @param $sStimulusCode
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
 	 */
 	public function CheckStimulus($sStimulusCode)
 	{
@@ -42,6 +48,20 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 	
 	/**
 	 * Apply stimulus to object
+	 *
+	 * @param $sStimulusCode
+	 * @param bool $bDoNotWrite
+	 *
+	 * @return bool
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \DeleteException
+	 * @throws \MissingQueryArgument
+	 * @throws \MySQLException
+	 * @throws \MySQLHasGoneAwayException
+	 * @throws \OQLException
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
 	{
@@ -59,7 +79,7 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 					$sNewName = $this->Get('new_name');
 					if ($sNewName != '')
 					{
-						$oSubnet->Set('type', $sNewName);
+						$oSubnet->Set('name', $sNewName);
 					}
 					$sNewStatusSubnet = $this->Get('new_status_subnet');
 					if (($sNewStatusSubnet != '') && ($sNewStatusSubnet != $oSubnet->Get('status')))
@@ -83,19 +103,19 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 						{
 							// A geography needs to be removed
 							
-							$oLocationSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT lnkIPSubnetToLocation AS l WHERE l.location_id = $iOldLocationId AND l.ipsubnet_id = $iKey"));
-							while ($oLocation = $oLocationSet->Fetch())
+							$oLocationLinkSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT lnkIPSubnetToLocation AS l WHERE l.location_id = $iOldLocationId AND l.ipsubnet_id = $iKey"));
+							while ($oLocationLink = $oLocationLinkSet->Fetch())
 							{
-								$oLocation->DBDelete();
+								$oLocationLink->DBDelete();
 							}
 						}
 						if (!$iNewLocationId <= 0)
 						{
 							// A new geography has been selected.
 							// Create link if it doesn't already exist
-							
-							$oLocationSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT lnkIPSubnetToLocation AS l WHERE l.location_id = $iNewLocationId AND l.ipsubnet_id = $iKey"));
-							if ($oLocationSet->Count() == 0)
+
+							$oLocationLinkSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT lnkIPSubnetToLocation AS l WHERE l.location_id = $iNewLocationId AND l.ipsubnet_id = $iKey"));
+							if (!$oLocationLinkSet->CountExceeds(0))
 							{
 								$oNewLocationLink = MetaModel::NewObject('lnkIPSubnetToLocation');
 								$oNewLocationLink->Set('ipsubnet_id', $iKey);

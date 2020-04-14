@@ -96,6 +96,8 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 	'Class:IPRequestAddressCreate/Attribute:connectableci_id+' => 'CI funzionale a cui deve essere collegato l\'IP',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name' => 'Nome del CI funzionale ',
 	'Class:IPRequestAddressCreate/Attribute:connectableci_name+' => '',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute' => 'Attributo IP del CI',
+	'Class:IPRequestAddressCreate/Attribute:ci_ip_attribute+' => 'L\'attributo IP CI a cui deve essere associato l\'IP',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link' => 'Collegamento tra IP e CI',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link+' => 'Tipo di collegamento tra indirizzo IP e CI collegabile',
 	'Class:IPRequestAddressCreate/Attribute:ip_device_link/Value:managementip' => 'IP di Gestione',

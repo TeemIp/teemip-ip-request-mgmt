@@ -255,11 +255,11 @@
           <extkey_attcode>connectableci_id</extkey_attcode>
           <target_attcode>name</target_attcode>
         </field>
-        <field id="ip_device_link" xsi:type="AttributeIPFieldInClass">
+        <field id="ci_ip_attribute" xsi:type="AttributeIPFieldInClass">
           <dependencies>
             <attribute id="ciclass"/>
           </dependencies>
-          <sql>ip_device_link</sql>
+          <sql>ci_ip_attribute</sql>
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
           <display_style>list</display_style>
@@ -499,7 +499,7 @@
               <attribute id="connectableci_id">
                 <read_only/>
               </attribute>
-              <attribute id="ip_device_link">
+              <attribute id="ci_ip_attribute">
                 <read_only/>
               </attribute>
               <attribute id="block_id">
@@ -581,7 +581,7 @@
               <attribute id="connectableci_id">
                 <read_only/>
               </attribute>
-              <attribute id="ip_device_link">
+              <attribute id="ci_ip_attribute">
                 <read_only/>
               </attribute>
               <attribute id="block_id">
@@ -674,7 +674,7 @@
               <attribute id="connectableci_id">
                 <read_only/>
               </attribute>
-              <attribute id="ip_device_link">
+              <attribute id="ci_ip_attribute">
                 <read_only/>
               </attribute>
               <attribute id="block_id">
@@ -784,7 +784,7 @@
                     <item id="connectableci_id">
                       <rank>20</rank>
                     </item>
-                    <item id="ip_device_link">
+                    <item id="ci_ip_attribute">
                       <rank>30</rank>
                     </item>
                   </items>
@@ -1043,7 +1043,7 @@
               <attribute id="connectableci_id">
                 <read_only/>
               </attribute>
-              <attribute id="ip_device_link">
+              <attribute id="ci_ip_attribute">
                 <read_only/>
               </attribute>
               <attribute id="block_id">
@@ -1125,7 +1125,7 @@
               <attribute id="connectableci_id">
                 <read_only/>
               </attribute>
-              <attribute id="ip_device_link">
+              <attribute id="ci_ip_attribute">
                 <read_only/>
               </attribute>
               <attribute id="block_id">
@@ -1218,7 +1218,7 @@
               <attribute id="connectableci_id">
                 <read_only/>
               </attribute>
-              <attribute id="ip_device_link">
+              <attribute id="ci_ip_attribute">
                 <read_only/>
               </attribute>
               <attribute id="block_id">
@@ -1328,7 +1328,7 @@
                     <item id="connectableci_id">
                       <rank>20</rank>
                     </item>
-                    <item id="ip_device_link">
+                    <item id="ci_ip_attribute">
                       <rank>30</rank>
                     </item>
                   </items>
