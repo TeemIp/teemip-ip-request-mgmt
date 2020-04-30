@@ -235,7 +235,7 @@
             <attribute id="org_id"/>
           </dependencies>
           <sql>ciclass</sql>
-          <default_value/>
+          <default_value></default_value>
           <is_null_allowed>true</is_null_allowed>
           <display_style>list</display_style>
         </field>
@@ -260,7 +260,7 @@
             <attribute id="ciclass"/>
           </dependencies>
           <sql>ci_ip_attribute</sql>
-          <default_value/>
+          <default_value></default_value>
           <is_null_allowed>true</is_null_allowed>
           <display_style>list</display_style>
         </field>
@@ -4345,8 +4345,8 @@
         <groups>
           <group id="IPRequest" _delta="define">
             <actions>
-              <action xsi:type="write">allow</action>
-              <action xsi:type="delete">allow</action>
+              <action id="action:write">allow</action>
+              <action id="action:delete">allow</action>
             </actions>
           </group>
         </groups>
@@ -4357,22 +4357,22 @@
         <groups>
           <group id="IPRequest">
             <actions>
-              <action xsi:type="write">allow</action>
+              <action id="action:write">allow</action>
             </actions>
           </group>
           <group id="IPRequest">
             <actions>
-              <action id="ev_reject" xsi:type="stimulus">allow</action>
-              <action id="ev_reopen" xsi:type="stimulus">allow</action>
-              <action id="ev_assign" xsi:type="stimulus">allow</action>
-              <action id="ev_resolve" xsi:type="stimulus">allow</action>
-              <action id="ev_close" xsi:type="stimulus">allow</action>
+              <action id="stimulus:ev_reject">allow</action>
+              <action id="stimulus:ev_reopen">allow</action>
+              <action id="stimulus:ev_assign">allow</action>
+              <action id="stimulus:ev_resolve">allow</action>
+              <action id="stimulus:ev_close">allow</action>
             </actions>
           </group>
           <group id="*">
             <actions>
-              <action xsi:type="read">allow</action>
-              <action xsi:type="bulk read">allow</action>
+              <action id="action:read">allow</action>
+              <action id="action:bulk read">allow</action>
             </actions>
           </group>
         </groups>
@@ -4390,8 +4390,8 @@
           </group>
           <group id="*">
             <actions>
-              <action xsi:type="read">allow</action>
-              <action xsi:type="bulk read">allow</action>
+              <action id="action:read">allow</action>
+              <action id="action:bulk read">allow</action>
             </actions>
           </group>
         </groups>
@@ -4400,7 +4400,7 @@
         <groups>
           <group id="IPRequest" _delta="define">
             <actions>
-              <action xsi:type="read">deny</action>
+              <action id="action:read">allow</action>
             </actions>
           </group>
         </groups>
