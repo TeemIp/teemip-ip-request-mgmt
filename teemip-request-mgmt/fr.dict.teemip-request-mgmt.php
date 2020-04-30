@@ -162,7 +162,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:IPRequestAddressCreateV6/Stimulus:ev_assign+' => '',
 	'Class:IPRequestAddressCreateV6/Stimulus:ev_resolve' => 'Effectuer',
 	'Class:IPRequestAddressCreateV6/Stimulus:ev_resolve+' => '',
-	'Class:IPRequestAddressCreateV6/Stimulus:ev_close' => 'Clore',
+	'Class:IPRequestAddressCreateV6/Stimulus:ev_close' => 'Fermer',
 	'Class:IPRequestAddressCreateV6/Stimulus:ev_close+' => '',
 ));           
 
