@@ -56,13 +56,12 @@ class _IPRequestSubnetDelete extends IPRequestSubnet
 				}
 				if (!is_null($oSubnet))
 				{
-					$oSubnet->Set('status', 'released');
+					$oSubnet->Set('status', 'released');    // release_date is managed at IPObject level
 					$iCallerId = $this->Get('caller_id');
 					if (! is_null($iCallerId ))
 					{
 						$oSubnet->Set('requestor_id', $iCallerId);
 					}
-					$oSubnet->Set('release_date', time());
 					$oSubnet->DBUpdate();
 					return true;
 				}

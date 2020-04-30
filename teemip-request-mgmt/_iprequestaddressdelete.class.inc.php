@@ -44,13 +44,12 @@ class _IPRequestAddressDelete extends IPRequestAddress
 				}
 				if (!is_null($oIp))
 				{
-					$oIp->Set('status', 'released');
+					$oIp->Set('status', 'released');    // release_date is managed at IPObject level
 					$iCallerId = $this->Get('caller_id');
 					if (! is_null($iCallerId ))
 					{
 						$oIp->Set('requestor_id', $iCallerId);
 					}
-					$oIp->Set('release_date', time());
 					$oIp->DBUpdate();
 					return true;
 				}
