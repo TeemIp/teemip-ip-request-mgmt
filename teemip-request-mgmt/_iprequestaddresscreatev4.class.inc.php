@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,14 +17,66 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 {
 	/**
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	public function AfterInsert()
+	{
+		parent::AfterInsert();
+
+		// Has the user the right profile for auto registration ?
+		$aProfiles = UserRights::ListProfiles();
+		if (in_array('IP Portal Automation user', $aProfiles))
+		{
+			// Can the stimulus be applied ?
+			$sResCheck = $this->CheckStimulus('ev_resolve');
+			if ($sResCheck == '')
+			{
+				// If the subnet exists...
+				$oIPSubnet = MetaModel::GetObject('IPv4Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
+				if (!is_null($oIPSubnet))
+				{
+					// ... and allows auto registration
+					if ($oIPSubnet->Get('allow_automatic_ip_creation') == "yes")
+					{
+						// If there is as least one Ip available
+						$aFreeIPs = $this->GetFreeIPs();
+						if (count($aFreeIPs) > 0)
+						{
+							// Register IP
+							if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
+							{
+								$this->RegisterIp(true,$aFreeIPs[0]);
+								$this->DBUpdate();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Check validity of stimulus before allowing it to be applied
+	 *
+	 * @param $sStimulusCode
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
 	 */
 	public function CheckStimulus($sStimulusCode)
 	{
@@ -72,7 +124,20 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 	
 	/**
 	 * Display attributes associated operation
-	 */      
+	 *
+	 * @param \WebPage $oP
+	 * @param $sOperation
+	 * @param $m_iFormId
+	 * @param array $aDefault
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \DictExceptionMissingString
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
 	function DisplayActionFieldsForOperation(WebPage $oP, $sOperation, $m_iFormId, $aDefault = array())
 	{
 		$sStimulus = $aDefault['stimulus'];
@@ -84,86 +149,15 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 		$oP->add("<table>");
 		$oP->add("<input type=\"hidden\" name=\"stimulus\" value=\"$sStimulus\">\n");
 		$oP->add('<tr><td style="vertical-align:top">');
-		$sOrgId = $this->Get('org_id');
 
 		// Check if IP has already been manually allocated
 		if ($this->Get('ip_id') <= 0)
 		{
 			// No IP has already been manually allocated, offer some
-			// Create array of free IPs
+			// Get array of free IPs
 			$sLabelOfAction1 = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp');
-
-			$iSubnetId = $this->Get('subnet_id');
-			$oIpContainer = MetaModel::GetObject('IPv4Range', $this->Get('range_id'), false /* MustBeFound */); 
-			if (is_null($oIpContainer))
-			{
-				$bWithRanges = true;
-				$oIpContainer = MetaModel::GetObject('IPv4Subnet', $iSubnetId, true /* MustBeFound */); 
-				$sIpContainerClass = 'IPv4Subnet';
-				$sFirstIp = $oIpContainer->Get('ip');
-				$sLastIp = $oIpContainer->Get('broadcastip');
-				$oIpRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Range AS r WHERE r.subnet_id = $iSubnetId"));
-				$aRangeIPs = $oIpRangeSet->GetColumnAsArray('firstip', false);
-				$oIpRangeSet->Rewind();
-			}
-			else
-			{
-				$bWithRanges = false;
-				$sFirstIp = $oIpContainer->Get('firstip');
-				$sLastIp = $oIpContainer->Get('lastip');
-			}
-			$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Address AS i WHERE i.subnet_id = $iSubnetId"));
-			$aRegisteredIPs = $oIpRegisteredSet->GetColumnAsArray('ip', false);
-			$iFirstIp = myip2long($sFirstIp);
-			$iLastIp = myip2long($sLastIp);
-			$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $sOrgId);
-			$iCreationOffset = IPConfig::GetFromGlobalIPConfig('request_creation_ipv4_offset', $sOrgId);
-			if ($iFirstIp + $iCreationOffset <= $iLastIp)
-			{
-				$iFirstIp += $iCreationOffset;
-			}
-						
-			$iAnIp = $bWithRanges ? ($iFirstIp + 1) : $iFirstIp;
-			$i = 0;
-			$iNumberOfFreeIps = 0;
-			$iMaxFreeOffers = ($sPingBeforeAssign == 'ping_yes') ? DEFAULT_MAX_FREE_IP_OFFERS_WITH_PING_REQ : DEFAULT_MAX_FREE_IP_OFFERS_REQ;
-			while (($iAnIp <= $iLastIp) && ($i < $iMaxFreeOffers))
-			{
-				$sAnIp = mylong2ip($iAnIp);
-				if ($bWithRanges)
-				{
-					// If IP belongs to a range, skip range
-					if (in_array($sAnIp, $aRangeIPs))
-					{ 
-						$oIpRangeSet->Rewind();
-						$oIpRange = $oIpRangeSet->Fetch();
-						while ($oIpRange->Get('firstip') != $sAnIp)
-						{
-							$oIpRange = $oIpRangeSet->Fetch();
-						}
-						$iAnIp = myip2long($oIpRange->Get('lastip'));
-					}
-				}
-				if (!in_array($sAnIp, $aRegisteredIPs))
-				{
-					// Found free IP. If required, make sure it doesn't ping (well... locally)
-					if ($sPingBeforeAssign == 'ping_yes')
-					{
-						$aOutput = IPv4Address::DoCheckIpPings($sAnIp, TIME_TO_WAIT_FOR_PING_SHORT);
-						if (empty($aOutput))
-						{
-							// IP doesn't ping
-							$aFreeIPs [$i++] = $sAnIp;
-						}
-					}
-					else
-					{
-						$aFreeIPs [$i++] = $sAnIp;
-					}
-				}
-				$iAnIp++;
-			}
-			$iNumberOfFreeIps = $i;
+			$aFreeIPs = $this->GetFreeIPs();
+			$iNumberOfFreeIps = count($aFreeIPs);
 						
 			// There is at least an IP free. Check has been done before...
 			// ... unless pings has been required and all IPs ping
@@ -208,6 +202,18 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 	
 	/**
 	 * Apply stimulus to object
+	 *
+	 * @param string $sStimulusCode
+	 * @param false $bDoNotWrite
+	 *
+	 * @return bool
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
 	{
@@ -237,58 +243,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 		{
 			if (parent::ApplyStimulus($sStimulusCode, true /* $bDoNotWrite */))
 			{
-				// Prepare IP
-				// Update CI
-				// Register IP with final information
-				if ($bRegisterNewIp)
-				{
-					// Create IP
-					$oIp = MetaModel::NewObject('IPv4Address');
-					$oIp->Set('org_id', $this->Get('org_id'));
-					$oIp->Set('status', $this->Get('status_ip'));
-					$oIp->Set('short_name', $this->Get('short_name'));
-					$oIp->Set('domain_id', $this->Get('domain_id'));
-					$oIp->Set('usage_id', $this->Get('usage_id'));
-					$oIp->Set('requestor_id', $this->Get('caller_id'));
-																	   
-					$oIp->Set('subnet_id', $this->Get('subnet_id'));
-					$oIp->Set('range_id', $this->Get('range_id'));
-					$oIp->Set('ip', $sIp);
-					$oIp->DBInsert();
-
-					// Update ticket with IP
-					$this->Set('ip_id', $oIp->GetKey());
-				}
-				else
-				{
-					$iIpId = $this->Get('ip_id');
-					$oIp = MetaModel::GetObject('IPv4Address', $iIpId, true /* MustBeFound */);
-					$oIp->Set('status', $this->Get('status_ip'));
-
-					$oIp->DBUpdate();
-				}
-				
-				// Update FunctionalCI, if any
-				$sCIClass = $this->Get('ciclass');
-				if ($sCIClass != '')
-				{
-					$iFunctionalCIid = $this->Get('connectableci_id');
-					$oFunctionalCI = MetaModel::GetObject($sCIClass, $iFunctionalCIid, false /* MustBeFound */);
-					if (!is_null($oFunctionalCI))
-					{
-						$sIPAttribute = $this->Get('ci_ip_attribute');
-						if (MetaModel::IsValidAttCode($sCIClass, $sIPAttribute))
-						{
-							// Check if attribute can be written
-							$iFlags = $oFunctionalCI->GetFormAttributeFlags($sIPAttribute);
-							if (!($iFlags & (OPT_ATT_READONLY | OPT_ATT_SLAVE)))
-							{
-								$oFunctionalCI->Set($sIPAttribute, $oIp->GetKey());
-								$oFunctionalCI->DBUpdate();
-							}
-						}
-					}
-				}
+				$this->RegisterIp($bRegisterNewIp, $sIp);
 
 				// Update ticket
 				$this->DBUpdate();
@@ -296,6 +251,169 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Build array containing free IPs that can be allocated within requested subnet or range
+	 *
+	 * @return mixed
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	private function GetFreeIPs()
+	{
+		$aFreeIPs = array();
+
+		// Make sure specified subnet exists
+		$iSubnetId = $this->Get('subnet_id');
+		$oSubnet = MetaModel::GetObject('IPv4Subnet', $iSubnetId, true /* MustBeFound */);
+		if (is_null($oSubnet))
+		{
+			return $aFreeIPs;
+		}
+
+		// Define search interval
+		$oIpContainer = MetaModel::GetObject('IPv4Range', $this->Get('range_id'), false /* MustBeFound */);
+		if (is_null($oIpContainer))
+		{
+			$bWithRanges = true;
+			$oIpContainer = $oSubnet;
+			$sFirstIp = $oIpContainer->Get('ip');
+			$sLastIp = $oIpContainer->Get('broadcastip');
+			$oIpRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Range AS r WHERE r.subnet_id = $iSubnetId"));
+			$aRangeIPs = $oIpRangeSet->GetColumnAsArray('firstip', false);
+			$oIpRangeSet->Rewind();
+		}
+		else
+		{
+			$bWithRanges = false;
+			$sFirstIp = $oIpContainer->Get('firstip');
+			$sLastIp = $oIpContainer->Get('lastip');
+		}
+		$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Address AS i WHERE i.subnet_id = $iSubnetId"));
+		$aRegisteredIPs = $oIpRegisteredSet->GetColumnAsArray('ip', false);
+		$iFirstIp = myip2long($sFirstIp);
+		$iLastIp = myip2long($sLastIp);
+		$iOrgId = $this->Get('org_id');
+		$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $iOrgId);
+		$iCreationOffset = IPConfig::GetFromGlobalIPConfig('request_creation_ipv4_offset', $iOrgId);
+		if ($iFirstIp + $iCreationOffset <= $iLastIp)
+		{
+			$iFirstIp += $iCreationOffset;
+		}
+
+		// Launch search
+		$iAnIp = $bWithRanges ? ($iFirstIp + 1) : $iFirstIp;
+		$i = 0;
+		$iMaxFreeOffers = ($sPingBeforeAssign == 'ping_yes') ? DEFAULT_MAX_FREE_IP_OFFERS_WITH_PING_REQ : DEFAULT_MAX_FREE_IP_OFFERS_REQ;
+		while (($iAnIp <= $iLastIp) && ($i < $iMaxFreeOffers))
+		{
+			$sAnIp = mylong2ip($iAnIp);
+			if ($bWithRanges)
+			{
+				// If IP belongs to a range, skip range
+				if (in_array($sAnIp, $aRangeIPs))
+				{
+					$oIpRangeSet->Rewind();
+					$oIpRange = $oIpRangeSet->Fetch();
+					while ($oIpRange->Get('firstip') != $sAnIp)
+					{
+						$oIpRange = $oIpRangeSet->Fetch();
+					}
+					$iAnIp = myip2long($oIpRange->Get('lastip'));
+				}
+			}
+			if (!in_array($sAnIp, $aRegisteredIPs))
+			{
+				// Found free IP. If required, make sure it doesn't ping (well... locally)
+				if ($sPingBeforeAssign == 'ping_yes')
+				{
+					$aOutput = IPv4Address::DoCheckIpPings($sAnIp, TIME_TO_WAIT_FOR_PING_SHORT);
+					if (empty($aOutput))
+					{
+						// IP doesn't ping
+						$aFreeIPs [$i++] = $sAnIp;
+					}
+				}
+				else
+				{
+					$aFreeIPs [$i++] = $sAnIp;
+				}
+			}
+			$iAnIp++;
+		}
+
+		return $aFreeIPs;
+	}
+
+	/**
+	 * Create new IP or update existing one
+	 * Update functional CI, if any
+	 *
+	 * @param $bNewIp = is this a new IP ?
+	 * @param $sIp = IP to be created
+	 *
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	private function RegisterIp($bNewIp, $sIp)
+	{
+		if ($bNewIp)
+		{
+			// Create IP
+			$oIp = MetaModel::NewObject('IPv4Address');
+			$oIp->Set('org_id', $this->Get('org_id'));
+			$oIp->Set('status', $this->Get('status_ip'));
+			$oIp->Set('short_name', $this->Get('short_name'));
+			$oIp->Set('domain_id', $this->Get('domain_id'));
+			$oIp->Set('usage_id', $this->Get('usage_id'));
+			$oIp->Set('requestor_id', $this->Get('caller_id'));
+
+			$oIp->Set('subnet_id', $this->Get('subnet_id'));
+			$oIp->Set('range_id', $this->Get('range_id'));
+			$oIp->Set('ip', $sIp);
+			$oIp->DBInsert();
+
+			// Update ticket with IP
+			$this->Set('ip_id', $oIp->GetKey());
+		}
+		else
+		{
+			$iIpId = $this->Get('ip_id');
+			$oIp = MetaModel::GetObject('IPv4Address', $iIpId, true /* MustBeFound */);
+			$oIp->Set('status', $this->Get('status_ip'));
+			$oIp->DBUpdate();
+		}
+
+		// Update FunctionalCI, if any
+		$sCIClass = $this->Get('ciclass');
+		if ($sCIClass != '')
+		{
+			$iFunctionalCIid = $this->Get('connectableci_id');
+			$oFunctionalCI = MetaModel::GetObject($sCIClass, $iFunctionalCIid, false /* MustBeFound */);
+			if (!is_null($oFunctionalCI))
+			{
+				$sIPAttribute = $this->Get('ci_ip_attribute');
+				if (MetaModel::IsValidAttCode($sCIClass, $sIPAttribute))
+				{
+					// Check if attribute can be written
+					$iFlags = $oFunctionalCI->GetFormAttributeFlags($sIPAttribute);
+					if (!($iFlags & (OPT_ATT_READONLY | OPT_ATT_SLAVE)))
+					{
+						$oFunctionalCI->Set($sIPAttribute, $oIp->GetKey());
+						$oFunctionalCI->DBUpdate();
+					}
+				}
+			}
+		}
 	}
 
 }

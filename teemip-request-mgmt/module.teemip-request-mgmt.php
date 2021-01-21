@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,13 +17,13 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'teemip-request-mgmt/2.6.1',
+	'teemip-request-mgmt/2.7.0',
 	array(
 		// Identification
 		//
@@ -34,8 +34,8 @@ SetupWebPage::AddModule(
 		//
 		'dependencies' => array(
 			'itop-tickets/2.7.0',
-			'teemip-ip-mgmt/2.6.1',
-			'teemip-network-mgmt/2.6.1',
+			'teemip-ip-mgmt/2.7.0',
+			'teemip-network-mgmt/2.7.0',
 		),
 		'mandatory' => false,
 		'visible' => true,

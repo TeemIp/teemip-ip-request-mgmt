@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -53,6 +53,12 @@ class _IPRequest extends Ticket
 	 */
 	protected function OnUpdate()
 	{
+		// Auto assign if possible
+		if (($this->Get('status') == 'new') && ($this->Get('team_id') > 0) && ($this->Get('agent_id') > 0))
+		{
+			$this->ApplyStimulus('ev_auto_assign');
+		}
+
 		$this->Set('last_update', time());
 	}
 

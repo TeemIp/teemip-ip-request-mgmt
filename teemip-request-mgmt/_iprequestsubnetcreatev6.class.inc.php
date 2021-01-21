@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,12 +17,49 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate
 {
+	/**
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 */
+	public function AfterInsert()
+	{
+		parent::AfterInsert();
+
+		// Has the user the right profile for auto registration ?
+		$aProfiles = UserRights::ListProfiles();
+		if (in_array('IP Portal Automation user', $aProfiles))
+		{
+			// CheckStimulus is not called as all check operations need to be replayed here
+			// If the block exists...
+			$oBlock = MetaModel::GetObject('IPv6Block', $this->Get('block_id'), false /* MustBeFound */);
+			if (!is_null($oBlock))
+			{
+				// ... and allows auto registration
+				if ($oBlock->Get('allow_automatic_subnet_creation') == "yes")
+				{
+					// Check if there is some space available
+					$iPrefix = $this->Get('mask');
+					$aFreeSpace = $oBlock->GetFreeSpace($iPrefix, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
+					if (count($aFreeSpace) > 0)
+					{
+						// If yes, register first subnet
+						if (parent::ApplyStimulus('ev_resolve',true /* $bDoNotWrite */))
+						{
+							$this->RegisterSubnet(true, $aFreeSpace[0]['firstip']->ToString());
+							$this->DBUpdate();
+						}
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Check validity of stimulus before allowing it to be applied
 	 */
@@ -130,7 +167,7 @@ class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate
 		else
 		{
 			$bProceedWithChange = false;
-			if (!$this->Get('subnet_id') <= 0)
+			if ($this->Get('subnet_id') > 0)
 			{
 				// A subnet has already been manually allocated
 				$bProceedWithChange = true;
@@ -150,32 +187,7 @@ class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate
 			{
 				if (parent::ApplyStimulus($sStimulusCode, true /* $bDoNotWrite */))
 				{
-					if ($bRegisterNewSubnet)
-					{
-						$oSubnet = MetaModel::NewObject('IPv6Subnet');
-						$oSubnet->Set('org_id', $this->Get('org_id'));
-						$oSubnet->Set('block_id', $this->Get('block_id'));
-						$oIp = new ormIPv6($sIp);
-						$oSubnet->Set('ip', $oIp);
-						$oSubnet->Set('mask', $this->Get('mask'));
-						$oSubnet->Set('name', $this->Get('name'));
-						$oSubnet->Set('status', $this->Get('status_subnet'));
-						$oSubnet->Set('type', $this->Get('type'));
-						$oSubnet->Set('requestor_id', $this->Get('caller_id'));
-						$oSubnet->DBInsert();
-						
-						if (!$this->Get('location_id') <= 0)
-						{
-							// A geography has been selected.
-							$oNewLocationLink = MetaModel::NewObject('lnkIPSubnetToLocation');
-							$oNewLocationLink->Set('ipsubnet_id', $oSubnet->GetKey());
-							$oNewLocationLink->Set('location_id', $this->Get('location_id'));
-							$oNewLocationLink->DBInsert();
-						}
-						
-						$this->Set('subnet_id', $oSubnet->GetKey());
-					}
-					
+					$this->RegisterSubnet($bRegisterNewSubnet, $sIp);
 					$this->DBUpdate();
 					return true;
 				}
@@ -183,5 +195,49 @@ class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Create new subnet or update existing one
+	 *
+	 * @param $bNewIp = is this a new subnet ?
+	 * @param $sSubnetIp = Subnet to be created
+	 *
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	private function RegisterSubnet($bNewSubnet, $sSubnetIp)
+	{
+		// Prepare and register subnet
+		if ($bNewSubnet)
+		{
+			$oSubnet = MetaModel::NewObject('IPv6Subnet');
+			$oSubnet->Set('org_id', $this->Get('org_id'));
+			$oSubnet->Set('block_id', $this->Get('block_id'));
+			$oIp = new ormIPv6($sSubnetIp);
+			$oSubnet->Set('ip', $oIp);
+			$oSubnet->Set('mask', $this->Get('mask'));
+			$oSubnet->Set('name', $this->Get('name'));
+			$oSubnet->Set('status', $this->Get('status_subnet'));
+			$oSubnet->Set('type', $this->Get('type'));
+			$oSubnet->Set('requestor_id', $this->Get('caller_id'));
+			$oSubnet->DBInsert();
+
+			if (!$this->Get('location_id') <= 0)
+			{
+				// A geography has been selected.
+				$oNewLocationLink = MetaModel::NewObject('lnkIPSubnetToLocation');
+				$oNewLocationLink->Set('ipsubnet_id', $oSubnet->GetKey());
+				$oNewLocationLink->Set('location_id', $this->Get('location_id'));
+				$oNewLocationLink->DBInsert();
+			}
+
+			$this->Set('subnet_id', $oSubnet->GetKey());
+		}
+	}
+
 }

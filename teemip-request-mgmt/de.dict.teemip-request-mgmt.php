@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @copyright   Copyright (C) 2014 ITOMIG GmbH (deutsche Übersetzung)
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
@@ -456,6 +456,30 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 ));
 
 //
+// Class: IPSubnet
+//
+
+Dict::Add('DE DE', 'German', 'Deutsch', array(
+	'Class:IPSubnet:automation' => 'Automatisierung',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Automatische IP-Erstellung zulassen',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'IP Erstellen Anforderungen können für dieses Subnetz automatisch verarbeitet werden',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Ja',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:no' => 'Nein',
+));
+
+//
+// Class: IPBlock
+//
+
+Dict::Add('DE DE', 'German', 'Deutsch', array(
+	'Class:IPBlock:automation' => 'Automatisierung',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Automatische Subnetz-Erstellung zulassen',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Subnetz Erstellen Anforderungen können für diesen Block automatisch verarbeitet werden',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Ja',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:no' => 'Nein',
+));
+
+//
 // Application Menu
 //
 
@@ -511,6 +535,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'Adresse %1$s wurde schon ausgewählt.',
 	
 	// Implement IP Address Update
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'Es wurde keine IP-Adresse ausgewählt!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Der Short Name existiert bereits in der Domain!',
 
 	// Implement Subnet Create

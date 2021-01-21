@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -457,6 +457,30 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 ));
 
 //
+// Class: IPSubnet
+//
+
+Dict::Add('IT IT', 'Italian', 'Italiano', array(
+	'Class:IPSubnet:automation' => 'Automazione',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Consenti la creazione automatica dell\'IP',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'Le richieste di creazione IP possono essere elaborate automaticamente per quella sottorete',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Si',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:no' => 'No',
+));
+
+//
+// Class: IPBlock
+//
+
+Dict::Add('IT IT', 'Italian', 'Italiano', array(
+	'Class:IPBlock:automation' => 'Automazione',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Consenti la creazione automatica della sottorete',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Le richieste di creazione della sottorete potrebbero essere elaborate automaticamente per questo blocco',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Si',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:no' => 'No',
+));
+
+//
 // Application Menu
 //
 
@@ -512,6 +536,7 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'L\'indirizzo %1$s Þ giÓ stato selezionato.',
 	
 	// Implement IP Address Update
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'Non è stato selezionato alcun indirizzo IP!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Il nome breve esiste giÓ nel dominio!',
 
 	// Implement Subnet Create

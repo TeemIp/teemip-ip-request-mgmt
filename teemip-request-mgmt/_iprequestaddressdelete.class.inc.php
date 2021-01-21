@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,14 +17,43 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 class _IPRequestAddressDelete extends IPRequestAddress
 {
 	/**
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 */
+	public function AfterInsert()
+	{
+		parent::AfterInsert();
+
+		// If user profile allows it and if parameter allows automatic processing, try to release IP straight away
+		$aProfiles = UserRights::ListProfiles();
+		if (in_array('IP Portal Automation user', $aProfiles))
+		{
+			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
+			{
+				$this->ReleaseIP();
+				$this->DBUpdate();
+			}
+		}
+	}
+
+	/**
 	 * Apply stimulus to object
+	 *
+	 * @param string $sStimulusCode
+	 * @param false $bDoNotWrite
+	 *
+	 * @return bool
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
 	{
@@ -36,26 +65,33 @@ class _IPRequestAddressDelete extends IPRequestAddress
 		{
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
 			{
-				$iIpId = $this->Get('ip_id');
-				$oIp = MetaModel::GetObject('IPv4Address', $iIpId, false /* MustBeFound */);
-				if (is_null($oIp))
-				{
-					$oIp = MetaModel::GetObject('IPv6Address', $iIpId, false /* MustBeFound */);
-				}
-				if (!is_null($oIp))
-				{
-					$oIp->Set('status', 'released');    // release_date is managed at IPObject level
-					$iCallerId = $this->Get('caller_id');
-					if (! is_null($iCallerId ))
-					{
-						$oIp->Set('requestor_id', $iCallerId);
-					}
-					$oIp->DBUpdate();
-					return true;
-				}
+				return $this->ReleaseIP();
 			}
 			return false;
 		}
 	}
-	
+
+	/**
+	 * @return bool
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 */
+	private function ReleaseIP()
+	{
+		$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+		if (!is_null($oIp))
+		{
+			$oIp->Set('status', 'released');    // release_date is managed at IPObject level
+			$iCallerId = $this->Get('caller_id');
+			if (!is_null($iCallerId ))
+			{
+				$oIp->Set('requestor_id', $iCallerId);
+			}
+			$oIp->DBUpdate();
+			return true;
+		}
+		return false;
+	}
 }

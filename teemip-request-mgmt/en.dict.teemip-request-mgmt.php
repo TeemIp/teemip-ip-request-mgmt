@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -457,6 +457,30 @@ Dict::Add('EN US', 'English', 'English', array(
 ));
 
 //
+// Class: IPSubnet
+//
+
+Dict::Add('EN US', 'English', 'English', array(
+	'Class:IPSubnet:automation' => 'Automation',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Allow automatic IP creation',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'IP creation requests may be automatically processed for that subnet',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Yes',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:no' => 'No',
+));
+
+//
+// Class: IPBlock
+//
+
+Dict::Add('EN US', 'English', 'English', array(
+	'Class:IPBlock:automation' => 'Automation',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Allow automatic subnet creation',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Subnet creation requests may be automatically processed for that block',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Yes',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:no' => 'No',
+));
+
+//
 // Application Menu
 //
 
@@ -512,6 +536,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'Address %1$s has already been selected.',
 	
 	// Implement IP Address Update
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'No IP address has been selected!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Short name already exists within domain!',
 
 	// Implement Subnet Create

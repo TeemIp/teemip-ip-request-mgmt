@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,14 +17,66 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 {
 	/**
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	public function AfterInsert()
+	{
+		parent::AfterInsert();
+
+		// Has the user the right profile for auto registration ?
+		$aProfiles = UserRights::ListProfiles();
+		if (in_array('IP Portal Automation user', $aProfiles))
+		{
+			// Can the stimulus be applied ?
+			$sResCheck = $this->CheckStimulus('ev_resolve');
+			if ($sResCheck == '')
+			{
+				// If the subnet exists...
+				$oIPSubnet = MetaModel::GetObject('IPv6Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
+				if (!is_null($oIPSubnet))
+				{
+					// ... and allows auto registration
+					if ($oIPSubnet->Get('allow_automatic_ip_creation') == "yes")
+					{
+						// If there is as least one Ip available
+						$aFreeIPs = $this->GetFreeIPs();
+						if (count($aFreeIPs) > 0)
+						{
+							// Register IP
+							if (parent::ApplyStimulus('ev_resolve',true /* $bDoNotWrite */))
+							{
+								$this->RegisterIp(true,$aFreeIPs[0]);
+								$this->DBUpdate();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Check validity of stimulus before allowing it to be applied
+	 *
+	 * @param $sStimulusCode
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
 	 */
 	public function CheckStimulus($sStimulusCode)
 	{
@@ -34,7 +86,7 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 			if ($this->Get('ip_id') <= 0)
 			{
 				// Check that range or subnet is not full already
-				$oIpContainer = MetaModel::GetObject('IPv6Range', $this->Get('range_id'), false /* MustBeFound */); 
+				$oIpContainer = MetaModel::GetObject('IPv6Range', $this->Get('range_id'), false /* MustBeFound */);
 				if (is_null($oIpContainer))
 				{
 					$oIpContainer = MetaModel::GetObject('IPv6Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
@@ -50,25 +102,39 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 						return (Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullRange'));
 					}
 				}
-				
+
 				// Check that an IP address can be created with given parameters
 				$oIp = MetaModel::NewObject('IPv6Address');
 				$oIp->Set('org_id', $this->Get('org_id'));
 				$oIp->Set('short_name', $this->Get('short_name'));
 				$oIp->Set('domain_id', $this->Get('domain_id'));
 				$oIp->ComputeValues();
-				if (! $oIp->IsFqdnUnique())
+				if (!$oIp->IsFqdnUnique())
 				{
 					return (Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision'));
 				}
 			}
 		}
+
 		return '';
 	}
-	
+
 	/**
 	 * Display attributes associated operation
-	 */      
+	 *
+	 * @param \WebPage $oP
+	 * @param $sOperation
+	 * @param $m_iFormId
+	 * @param array $aDefault
+	 *
+	 * @return string
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \DictExceptionMissingString
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
 	function DisplayActionFieldsForOperation(WebPage $oP, $sOperation, $m_iFormId, $aDefault = array())
 	{
 		$sStimulus = $aDefault['stimulus'];
@@ -76,11 +142,10 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 		{
 			return '';
 		}
-		
+
 		$oP->add("<table>");
 		$oP->add("<input type=\"hidden\" name=\"stimulus\" value=\"$sStimulus\">\n");
 		$oP->add('<tr><td style="vertical-align:top">');
-		$sOrgId = $this->Get('org_id');
 
 		// Check if IP has already been manually allocated
 		if ($this->Get('ip_id') <= 0)
@@ -88,85 +153,13 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 			// No IP has already been manually allocated, offer some
 			// Create array of free IPs
 			$sLabelOfAction1 = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp');
+			$aFreeIPs = $this->GetFreeIPs();
+			$iNumberOfFreeIps = count($aFreeIPs);
 
-			$iSubnetId = $this->Get('subnet_id');
-			$oIpContainer = MetaModel::GetObject('IPv6Range', $this->Get('range_id'), false /* MustBeFound */); 
-			if (is_null($oIpContainer))
-			{
-				$bWithRanges = true;
-				$oIpContainer = MetaModel::GetObject('IPv6Subnet', $iSubnetId, true /* MustBeFound */); 
-				$sIpContainerClass = 'IPv6Subnet';
-				$oFirstIp = $oIpContainer->Get('ip');
-				$oLastIp = $oIpContainer->Get('lastip');
-				$oIpRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Range AS r WHERE r.subnet_id = $iSubnetId"));
-				$aRangeIPs = $oIpRangeSet->GetColumnAsArray('firstip', false);
-				$oIpRangeSet->Rewind();
-			}
-			else
-			{
-				$bWithRanges = false;
-				$oFirstIp = $oIpContainer->Get('firstip');
-				$oLastIp = $oIpContainer->Get('lastip');
-			}
-			$sFirstIp = $oFirstIp->ToString();
-			$sLastIp = $oLastIp->ToString();
-
-			$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Address AS i WHERE i.subnet_id = $iSubnetId"));
-			$aRegisteredIPs = $oIpRegisteredSet->GetColumnAsArray('ip', false);
-			$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $sOrgId);
-			$iCreationOffset = IPConfig::GetFromGlobalIPConfig('request_creation_ipv6_offset', $sOrgId);
-			// Note: because of the size of an Ipv6 subnet, subnet IP + offset (which is less than 10K) < last IP
-			for ($i = 0; $i < $iCreationOffset; $i++)
-			{
-				$oFirstIp = $oFirstIp->GetNextIp();
-			}	
-						
-			$oAnIp = $bWithRanges ? ($oFirstIp->GetNextIp()) : $oFirstIp;
-			$i = 0;
-			$iNumberOfFreeIps = 0;
-			$iMaxFreeOffers = ($sPingBeforeAssign == 'ping_yes') ? DEFAULT_MAX_FREE_IP_OFFERS_WITH_PING_REQ : DEFAULT_MAX_FREE_IP_OFFERS_REQ;
-			while ($oAnIp->IsSmallerOrEqual($oLastIp) && ($i < $iMaxFreeOffers))
-			{
-				$sAnIp = $oAnIp->ToString();
-				if ($bWithRanges)
-				{
-					// If IP belongs to a range, skip range
-					if (in_array($oAnIp, $aRangeIPs))
-					{
-						$oIpRangeSet->Rewind();
-						$oIpRange = $oIpRangeSet->Fetch();
-						while (! $oIpRange->Get('firstip')->IsEqual($oAnIp))
-						{
-							$oIpRange = $oIpRangeSet->Fetch();
-						}
-						$oAnIp = $oIpRange->Get('lastip');
-					}
-				}          
-				if (!in_array($oAnIp, $aRegisteredIPs))
-				{
-					// Found free IP. If required, make sure it doesn't ping (well... locally)
-					if ($sPingBeforeAssign == 'ping_yes')
-					{
-						$aOutput = IPv6Address::DoCheckIpPings($sAnIp, TIME_TO_WAIT_FOR_PING_SHORT);
-						if (empty($aOutput))
-						{
-							// IP doesn't ping
-							$aFreeIPs [$i++] = $sAnIp;
-						}
-					}
-					else
-					{
-						$aFreeIPs [$i++] = $sAnIp;
-					}
-				}
-				$oAnIp = $oAnIp->GetNextIp();
-			} 
-			$iNumberOfFreeIps = $i;
-						
 			// There is at least an IP free. Check has been done before...
 			// ... unless pings has been required and all IPs ping
 			if ($iNumberOfFreeIps != 0)
-			{ 
+			{
 				// Translate it into select box
 				$sInputId = $m_iFormId.'_'.'ip';
 				$sHTMLValue = "<select id=\"$sInputId\" name=\"ip\">\n";
@@ -182,30 +175,42 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 			{
 				$sHTMLValue = "";
 			}
-		}	
+		}
 		else
 		{
 			// AnIP has already been manually allocated
 			$sLabelOfAction1 = Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP', $this->GetAsHTML('ip_id'));
 			$sHTMLValue = "";
 		}
-		
+
 		$aDetails[] = array('label' => '<span title="">'.$sLabelOfAction1.'</span>', 'value' => $sHTMLValue);
 		$oP->Details($aDetails);
 		$oP->add('</td></tr>');
-				
+
 		// Cancel button
-		$iObjId = $this->GetKey();                                                         
+		$iObjId = $this->GetKey();
 		$oP->add("<tr><td><button type=\"button\" class=\"action\" onClick=\"BackToDetails('IPRequestAddressCreateV6', $iObjId)\"><span>".Dict::S('UI:Button:Cancel')."</span></button>&nbsp;&nbsp;");
-				
+
 		// Implement button
 		$oP->add("&nbsp;&nbsp<button type=\"submit\" class=\"action\"><span>".Dict::S('UI:IPManagement:Action:Implement:IPRequest:Button')."</span></button></td></tr>");
-	
+
 		$oP->add("</table>");
 	}
-	
+
 	/**
 	 * Apply stimulus to object
+	 *
+	 * @param string $sStimulusCode
+	 * @param false $bDoNotWrite
+	 *
+	 * @return bool
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
 	{
@@ -213,13 +218,13 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 		{
 			return parent::ApplyStimulus($sStimulusCode);
 		}
-		
+
 		$bProceedWithChange = false;
 		if ($this->Get('ip_id') != 0)
 		{
 			// An IP has already been manually allocated
 			$bProceedWithChange = true;
-			$bRegisterNewIp = false; 
+			$bRegisterNewIp = false;
 		}
 		else
 		{
@@ -235,59 +240,7 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 		{
 			if (parent::ApplyStimulus($sStimulusCode, true /* $bDoNotWrite */))
 			{
-				// Prepare IP
-				// Update CI
-				// Register IP with final information
-				if ($bRegisterNewIp)
-				{
-					// Create IP
-					$oIpv6 = MetaModel::NewObject('IPv6Address');
-					$oIpv6->Set('org_id', $this->Get('org_id'));
-					$oIpv6->Set('status', $this->Get('status_ip'));
-					$oIpv6->Set('short_name', $this->Get('short_name'));
-					$oIpv6->Set('domain_id', $this->Get('domain_id'));
-					$oIpv6->Set('usage_id', $this->Get('usage_id'));
-					$oIpv6->Set('requestor_id', $this->Get('caller_id'));
-																	   
-					$oIpv6->Set('subnet_id', $this->Get('subnet_id'));
-					$oIpv6->Set('range_id', $this->Get('range_id'));
-					$oIp = new ormIPv6($sIp);
-					$oIpv6->Set('ip', $oIp);
-					$oIpv6->DBInsert();
-
-					// Update ticket with IP
-					$this->Set('ip_id', $oIpv6->GetKey());
-				}
-				else
-				{
-					$iIpId = $this->Get('ip_id');
-					$oIpv6 = MetaModel::GetObject('IPv6Address', $iIpId, true /* MustBeFound */);
-					$oIpv6->Set('status', $this->Get('status_ip'));
-
-					$oIpv6->DBUpdate();
-				}
-
-				// Update FunctionalCI, if any
-				$sCIClass = $this->Get('ciclass');
-				if ($sCIClass != '')
-				{
-					$iFunctionalCIid = $this->Get('connectableci_id');
-					$oFunctionalCI = MetaModel::GetObject($sCIClass, $iFunctionalCIid, false /* MustBeFound */);
-					if (!is_null($oFunctionalCI))
-					{
-						$sIPAttribute = $this->Get('ci_ip_attribute');
-						if (MetaModel::IsValidAttCode($sCIClass, $sIPAttribute))
-						{
-							// Check if attribute can be written
-							$iFlags = $oFunctionalCI->GetFormAttributeFlags($sIPAttribute);
-							if (!($iFlags & (OPT_ATT_READONLY | OPT_ATT_SLAVE)))
-							{
-								$oFunctionalCI->Set($sIPAttribute, $oIpv6->GetKey());
-								$oFunctionalCI->DBUpdate();
-							}
-						}
-					}
-				}
+				$this->RegisterIp($bRegisterNewIp, $sIp);
 
 				// Update ticket
 				$this->DBUpdate();
@@ -295,6 +248,173 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Build array containing free IPs that can be allocated within requested subnet or range
+	 *
+	 * @return mixed
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	private function GetFreeIPs()
+	{
+		$aFreeIPs = array();
+
+		// Make sure specified subnet exists
+		$iSubnetId = $this->Get('subnet_id');
+		$oSubnet = MetaModel::GetObject('IPv6Subnet', $iSubnetId, true /* MustBeFound */);
+		if (is_null($oSubnet))
+		{
+			return $aFreeIPs;
+		}
+
+		// Define search interval
+		$oIpContainer = MetaModel::GetObject('IPv6Range', $this->Get('range_id'), false /* MustBeFound */);
+		if (is_null($oIpContainer))
+		{
+			$bWithRanges = true;
+			$oIpContainer = $oSubnet;
+			$oFirstIp = $oIpContainer->Get('ip');
+			$oLastIp = $oIpContainer->Get('lastip');
+			$oIpRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Range AS r WHERE r.subnet_id = $iSubnetId"));
+			$aRangeIPs = $oIpRangeSet->GetColumnAsArray('firstip', false);
+			$oIpRangeSet->Rewind();
+		}
+		else
+		{
+			$bWithRanges = false;
+			$oFirstIp = $oIpContainer->Get('firstip');
+			$oLastIp = $oIpContainer->Get('lastip');
+		}
+		$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Address AS i WHERE i.subnet_id = $iSubnetId"));
+		$aRegisteredIPs = $oIpRegisteredSet->GetColumnAsArray('ip', false);
+		$iOrgId = $this->Get('org_id');
+		$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $iOrgId);
+		$iCreationOffset = IPConfig::GetFromGlobalIPConfig('request_creation_ipv6_offset',$iOrgId);
+		// Note: because of the size of an Ipv6 subnet, subnet IP + offset (which is less than 10K) < last IP
+		for($i = 0; $i < $iCreationOffset; $i++)
+		{
+			$oFirstIp = $oFirstIp->GetNextIp();
+		}
+
+		// Launch search
+		$oAnIp = $bWithRanges ? ($oFirstIp->GetNextIp()) : $oFirstIp;
+		$i = 0;
+		$iNumberOfFreeIps = 0;
+		$iMaxFreeOffers = ($sPingBeforeAssign == 'ping_yes') ? DEFAULT_MAX_FREE_IP_OFFERS_WITH_PING_REQ : DEFAULT_MAX_FREE_IP_OFFERS_REQ;
+		while ($oAnIp->IsSmallerOrEqual($oLastIp) && ($i < $iMaxFreeOffers))
+		{
+			$sAnIp = $oAnIp->ToString();
+			if ($bWithRanges)
+			{
+				// If IP belongs to a range, skip range
+				if (in_array($oAnIp, $aRangeIPs))
+				{
+					$oIpRangeSet->Rewind();
+					$oIpRange = $oIpRangeSet->Fetch();
+					while (!$oIpRange->Get('firstip')->IsEqual($oAnIp))
+					{
+						$oIpRange = $oIpRangeSet->Fetch();
+					}
+					$oAnIp = $oIpRange->Get('lastip');
+				}
+			}
+			if (!in_array($oAnIp, $aRegisteredIPs))
+			{
+				// Found free IP. If required, make sure it doesn't ping (well... locally)
+				if ($sPingBeforeAssign == 'ping_yes')
+				{
+					$aOutput = IPv6Address::DoCheckIpPings($sAnIp, TIME_TO_WAIT_FOR_PING_SHORT);
+					if (empty($aOutput))
+					{
+						// IP doesn't ping
+						$aFreeIPs [$i++] = $sAnIp;
+					}
+				}
+				else
+				{
+					$aFreeIPs [$i++] = $sAnIp;
+				}
+			}
+			$oAnIp = $oAnIp->GetNextIp();
+		}
+
+		return $aFreeIPs;
+	}
+
+	/**
+	 * Create new IP or update existing one
+	 * Update functional CI, if any
+	 *
+	 * @param $bNewIp = is this a new IP ?
+	 * @param $sIp = IP to be created
+	 *
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 * @throws \CoreWarning
+	 * @throws \MySQLException
+	 * @throws \OQLException
+	 */
+	private function RegisterIP($bNewIp, $sIp)
+	{
+		// Prepare IP
+		// Update CI
+		// Register IP with final information
+		if ($bNewIp)
+		{
+			// Create IP
+			$oIpv6 = MetaModel::NewObject('IPv6Address');
+			$oIpv6->Set('org_id', $this->Get('org_id'));
+			$oIpv6->Set('status', $this->Get('status_ip'));
+			$oIpv6->Set('short_name', $this->Get('short_name'));
+			$oIpv6->Set('domain_id', $this->Get('domain_id'));
+			$oIpv6->Set('usage_id', $this->Get('usage_id'));
+			$oIpv6->Set('requestor_id', $this->Get('caller_id'));
+
+			$oIpv6->Set('subnet_id', $this->Get('subnet_id'));
+			$oIpv6->Set('range_id', $this->Get('range_id'));
+			$oIp = new ormIPv6($sIp);
+			$oIpv6->Set('ip', $oIp);
+			$oIpv6->DBInsert();
+
+			// Update ticket with IP
+			$this->Set('ip_id', $oIpv6->GetKey());
+		}
+		else
+		{
+			$iIpId = $this->Get('ip_id');
+			$oIpv6 = MetaModel::GetObject('IPv6Address', $iIpId, true /* MustBeFound */);
+			$oIpv6->Set('status', $this->Get('status_ip'));
+			$oIpv6->DBUpdate();
+		}
+
+		// Update FunctionalCI, if any
+		$sCIClass = $this->Get('ciclass');
+		if ($sCIClass != '')
+		{
+			$iFunctionalCIid = $this->Get('connectableci_id');
+			$oFunctionalCI = MetaModel::GetObject($sCIClass, $iFunctionalCIid, false /* MustBeFound */);
+			if (!is_null($oFunctionalCI))
+			{
+				$sIPAttribute = $this->Get('ci_ip_attribute');
+				if (MetaModel::IsValidAttCode($sCIClass, $sIPAttribute))
+				{
+					// Check if attribute can be written
+					$iFlags = $oFunctionalCI->GetFormAttributeFlags($sIPAttribute);
+					if (!($iFlags & (OPT_ATT_READONLY | OPT_ATT_SLAVE)))
+					{
+						$oFunctionalCI->Set($sIPAttribute, $oIpv6->GetKey());
+						$oFunctionalCI->DBUpdate();
+					}
+				}
+			}
+		}
 	}
 
 }

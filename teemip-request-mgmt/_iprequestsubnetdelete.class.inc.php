@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -26,6 +26,28 @@
  */
 class _IPRequestSubnetDelete extends IPRequestSubnet
 {
+	/**
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 */
+	public function AfterInsert()
+	{
+		parent::AfterInsert();
+
+		// If user profile allows it and if parameter allows automatic processing, try to release subnet straight away
+		$aProfiles = UserRights::ListProfiles();
+		if (in_array('IP Portal Automation user', $aProfiles))
+		{
+			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
+			{
+				$this->ReleaseSubnet();
+				$this->DBUpdate();
+			}
+		}
+	}
+
 	/**
 	 * Apply stimulus to object
 	 *
@@ -48,26 +70,42 @@ class _IPRequestSubnetDelete extends IPRequestSubnet
 		{
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
 			{
-				$iSubnetId = $this->Get('subnet_id');
-				$oSubnet = MetaModel::GetObject('IPv4Subnet', $iSubnetId, false /* MustBeFound */);
-				if (is_null($oSubnet))
-				{
-					$oSubnet = MetaModel::GetObject('IPv6Subnet', $iSubnetId, false /* MustBeFound */);
-				}
-				if (!is_null($oSubnet))
-				{
-					$oSubnet->Set('status', 'released');    // release_date is managed at IPObject level
-					$iCallerId = $this->Get('caller_id');
-					if (! is_null($iCallerId ))
-					{
-						$oSubnet->Set('requestor_id', $iCallerId);
-					}
-					$oSubnet->DBUpdate();
-					return true;
-				}
+				return  $this->ReleaseSubnet();
 			}
 			return false;
 		}
 	}
-	
+
+	/**
+	 * @return bool
+	 * @throws \ArchivedObjectException
+	 * @throws \CoreCannotSaveObjectException
+	 * @throws \CoreException
+	 * @throws \CoreUnexpectedValue
+	 */
+	private function ReleaseSubnet()
+	{
+		$iSubnetId = $this->Get('subnet_id');
+		$oSubnet = MetaModel::GetObject('IPv4Subnet', $iSubnetId, false /* MustBeFound */);
+		if (is_null($oSubnet))
+		{
+			$oSubnet = MetaModel::GetObject('IPv6Subnet', $iSubnetId, false /* MustBeFound */);
+		}
+		if (!is_null($oSubnet))
+		{
+			$oSubnet->Set('status', 'released');    // release_date is managed at IPObject level
+			$iCallerId = $this->Get('caller_id');
+			if (!is_null($iCallerId ))
+			{
+				$oSubnet->Set('requestor_id', $iCallerId);
+			}
+			$oSubnet->DBUpdate();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 }

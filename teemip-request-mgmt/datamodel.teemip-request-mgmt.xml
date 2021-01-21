@@ -1,6 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
   <classes>
+    <class id="IPSubnet" _delta="must_exist">
+      <fields>
+        <field id="allow_automatic_ip_creation" xsi:type="AttributeEnum" _delta="define">
+          <values>
+            <value>yes</value>
+            <value>no</value>
+          </values>
+          <sql>allow_automatic_ip_creation</sql>
+          <default_value>yes</default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+      </fields>
+    </class>
+    <class id="IPv4Subnet" _delta="must_exist">
+      <presentation>
+        <details _delta="must_exist">
+          <items>
+            <item id="col:col1" _delta="must_exist">
+              <items>
+                <item id="fieldset:Class:IPSubnet:automation" _delta="define">
+                  <rank>20</rank>
+                  <items>
+                    <item id="allow_automatic_ip_creation" _delta="define">
+                      <rank>90</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPv6Subnet" _delta="must_exist">
+      <presentation>
+        <details _delta="must_exist">
+          <items>
+            <item id="col:col1" _delta="must_exist">
+              <items>
+                <item id="fieldset:Class:IPSubnet:automation" _delta="define">
+                  <rank>20</rank>
+                  <items>
+                    <item id="allow_automatic_ip_creation" _delta="define">
+                      <rank>90</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPBlock" _delta="must_exist">
+      <fields>
+        <field id="allow_automatic_subnet_creation" xsi:type="AttributeEnum" _delta="define">
+          <values>
+            <value>yes</value>
+            <value>no</value>
+          </values>
+        <sql>allow_automatic_subnet_creation</sql>
+        <default_value>yes</default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+      </fields>
+    </class>
+    <class id="IPv4Block" _delta="must_exist">
+      <presentation>
+        <details _delta="must_exist">
+          <items>
+            <item id="col:col1" _delta="must_exist">
+              <items>
+                <item id="fieldset:Class:IPBlock:automation" _delta="define">
+                  <rank>20</rank>
+                  <items>
+                    <item id="allow_automatic_subnet_creation" _delta="define">
+                      <rank>10</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="IPv6Block" _delta="must_exist">
+      <presentation>
+        <details _delta="must_exist">
+          <items>
+            <item id="col:col1" _delta="must_exist">
+              <items>
+                <item id="fieldset:Class:IPBlock:automation" _delta="define">
+                  <rank>30</rank>
+                  <items>
+                    <item id="allow_automatic_subnet_creation" _delta="define">
+                      <rank>10</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
     <class id="IPRequest" _delta="define">
       <parent>Ticket</parent>
       <php_parent>
@@ -351,6 +457,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -391,13 +498,31 @@
                 <hidden/>
               </attribute>
               <attribute id="ip_id">
-                <hidden/>
+                <read_only/>
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -442,7 +567,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -516,12 +641,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -598,7 +723,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -607,9 +732,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -895,6 +1020,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -939,9 +1065,27 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -986,7 +1130,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -1060,12 +1204,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -1142,7 +1286,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -1151,9 +1295,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -1437,6 +1581,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -1481,9 +1626,27 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -1528,7 +1691,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -1587,12 +1750,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -1651,7 +1814,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -1660,9 +1823,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -1856,6 +2019,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -1900,9 +2064,27 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -1944,7 +2126,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -1991,12 +2173,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -2043,7 +2225,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -2052,9 +2234,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -2359,6 +2541,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -2402,13 +2585,31 @@
                 <hidden/>
               </attribute>
               <attribute id="subnet_id">
-                <hidden/>
+                <read_only/>
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -2453,7 +2654,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -2481,7 +2682,7 @@
                 <read_only/>
               </attribute>
               <attribute id="team_id">
-                <must_prompt/>
+                <mandatory/>
               </attribute>
               <attribute id="agent_id">
                 <mandatory/>
@@ -2515,12 +2716,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -2579,7 +2780,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -2588,9 +2789,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -2888,6 +3089,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -2931,13 +3133,31 @@
                 <hidden/>
               </attribute>
               <attribute id="subnet_id">
-                <hidden/>
+                <read_only/>
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -2982,7 +3202,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -3010,7 +3230,7 @@
                 <read_only/>
               </attribute>
               <attribute id="team_id">
-                <must_prompt/>
+                <mandatory/>
               </attribute>
               <attribute id="agent_id">
                 <mandatory/>
@@ -3044,12 +3264,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -3108,7 +3328,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -3117,9 +3337,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -3364,6 +3584,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -3411,9 +3632,27 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -3455,7 +3694,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -3483,7 +3722,7 @@
                 <read_only/>
               </attribute>
               <attribute id="team_id">
-                <must_prompt/>
+                <mandatory/>
               </attribute>
               <attribute id="agent_id">
                 <mandatory/>
@@ -3517,12 +3756,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -3584,7 +3823,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -3593,9 +3832,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -3792,6 +4031,7 @@
           <stimulus id="ev_reject" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
           <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
@@ -3839,9 +4079,27 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_assign">
                 <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
+                <flags>
+                  <attribute id="team_id">
+                    <must_prompt/>
+                  </attribute>
+                  <attribute id="agent_id">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+                <actions/>
+              </transition>
+              <transition id="ev_auto_assign">
+                <stimulus>ev_auto_assign</stimulus>
+                <target>assigned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_resolve">
+                <stimulus>ev_resolve</stimulus>
+                <target>resolved</target>
                 <actions/>
               </transition>
             </transitions>
@@ -3883,7 +4141,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
@@ -3911,7 +4169,7 @@
                 <read_only/>
               </attribute>
               <attribute id="team_id">
-                <must_prompt/>
+                <mandatory/>
               </attribute>
               <attribute id="agent_id">
                 <mandatory/>
@@ -3930,12 +4188,12 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_resolve">
                 <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
-              <transition>
+              <transition id="ev_reject">
                 <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
@@ -3982,7 +4240,7 @@
               </attribute>
             </flags>
             <transitions>
-              <transition>
+              <transition id="ev_close">
                 <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
@@ -3991,9 +4249,9 @@
                   </action>
                 </actions>
               </transition>
-              <transition>
+              <transition id="ev_reopen">
                 <stimulus>ev_reopen</stimulus>
-                <target>assigned</target>
+                <target>new</target>
                 <actions>
                 </actions>
               </transition>
@@ -4339,6 +4597,11 @@
           <class id="IPRequestAddressDelete"/>
         </classes>
       </group>
+      <group id="IPRequestFunctionalCI" _delta="define">
+        <classes>
+          <class id="FunctionalCI"/>
+        </classes>
+      </group>
     </groups>
     <profiles>
       <profile id="20" _delta="must_exist">
@@ -4404,6 +4667,39 @@
             </actions>
           </group>
         </groups>
+      </profile>
+      <profile id="5326" _delta="define">
+        <name>IP Portal Automation user</name>
+        <description>Is elligible to have its IP requests automatically processed. Must be used in conjunction with "IP Portal user" profile.</description>
+        <groups>
+          <group id="IPAddress">
+            <actions>
+              <action id="action:write">allow</action>
+            </actions>
+          </group>
+          <group id="IPSubnet">
+            <actions>
+              <action id="action:write">allow</action>
+            </actions>
+          </group>
+          <group id="LnkToIPObject">
+            <actions>
+              <action id="action:write">allow</action>
+              <action id="action:delete">allow</action>
+            </actions>
+          </group>
+          <group id="IPRequestFunctionalCI">
+            <actions>
+              <action id="action:write">allow</action>
+            </actions>
+          </group>
+          <group id="DNSObject">
+            <actions>
+              <action id="action:write">allow</action>
+              <action id="action:delete">allow</action>
+            </actions>
+          </group>
+         </groups>
       </profile>
     </profiles>
   </user_rights>

@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2020 TeemIp
+// Copyright (C) 2021 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2020 TeemIp
+ * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -457,6 +457,30 @@ Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 ));
 
 //
+// Class: IPSubnet
+//
+
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
+	'Class:IPSubnet:automation' => 'Automatización',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Permitir la creación automática de IP',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'Las solicitudes de creación de IP pueden procesarse automáticamente para esa subred',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Si',
+	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:no' => 'No',
+));
+
+//
+// Class: IPBlock
+//
+
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
+	'Class:IPBlock:automation' => 'Automatización',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Permitir la creación automática de subred',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Las solicitudes de creación de subred pueden procesarse automáticamente para esa bloque',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Si',
+	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:no' => 'No',
+));
+
+//
 // Application Menu
 //
 
@@ -512,6 +536,7 @@ Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'Address %1$s has already been selected.',
 	
 	// Implement IP Address Update
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'No se ha seleccionado ninguna dirección IP !',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Short name already exists within domain!',
 
 	// Implement Subnet Create
