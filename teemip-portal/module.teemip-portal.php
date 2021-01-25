@@ -23,7 +23,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'teemip-portal/2.6.1',
+	'teemip-portal/2.7.0',
 	array(
 		// Identification
 		'label' => 'Enhanced Portal for TeemIp',
@@ -38,7 +38,7 @@ SetupWebPage::AddModule(
 		
 		// Components
 		'datamodel' => array(
-			'main.teemip-portal.php'
+			'model.teemip-portal.php'
 		),
 		
 		'webservice' => array(

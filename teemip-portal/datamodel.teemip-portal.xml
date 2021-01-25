@@ -44,6 +44,7 @@
             <attachments>
                <allow_delete>true</allow_delete>
             </attachments>
+            <urlmaker_class>TeemIpPortalURLMaker</urlmaker_class>
          </properties>
          <bricks>
             <brick id="user-profile" xsi:type="Combodo\iTop\Portal\Brick\UserProfileBrick">
@@ -1090,4 +1091,42 @@
          <lazy_loading_threshold>500</lazy_loading_threshold><!-- Will be placed in the conf/<env>/config-itop.php file under the itop-portal module's settings  -->
       </parameters>
    </module_parameters>
+   <snippets>
+      <snippet id="TeemIpPortalURLMaker" _delta="define">
+         <placement>module</placement>
+         <rank>3</rank>
+         <module>teemip-portal</module>
+         <content><![CDATA[
+use Combodo\iTop\Portal\UrlMaker\AbstractPortalUrlMaker;
+
+require_once APPROOT.'/lib/autoload.php';
+
+/**
+* Hyperlinks to the "edition" of the object (vs view)
+*/
+class TeemIpPortalEditURLMaker extends AbstractPortalUrlMaker
+{
+    const PORTAL_ID = 'teemip-portal';
+}
+
+/**
+ * Hyperlinks to the "view" of the object (vs edition)
+ */
+class TeemIpPortalViewUrlMaker extends TeemIpPortalEditUrlMaker
+{
+    /**
+     * @inheritDoc
+     */
+    public static function MakeObjectURL($sClass, $iId)
+    {
+        return static::PrepareObjectURL($sClass, $iId, 'view');
+
+    }
+}
+
+// Default portal hyperlink (for notifications) is the edit hyperlink
+DBObject::RegisterURLMakerClass('teemip-portal', 'TeemIpPortalViewUrlMaker');
+]]></content>
+      </snippet>
+   </snippets>
 </itop_design>
