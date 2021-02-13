@@ -4430,6 +4430,9 @@
       <rank>30</rank>
       <enable_class>IPRequest</enable_class>
       <enable_action>UR_ACTION_READ</enable_action>
+      <style>
+        <decoration_classes>fas fa-users-cog</decoration_classes>
+      </style>
     </menu>
     <menu id="IPRequestManagement:Overview" xsi:type="DashboardMenuNode" _delta="define">
       <rank>0</rank>

@@ -201,14 +201,23 @@ class AttributeIPFieldInClass extends AttributeString
 
 class IPRequestPlugIn implements iApplicationUIExtension
 {
+	/**
+	 * @inheritdoc
+	 */
 	public function OnDisplayProperties($oObject, WebPage $oPage, $bEditMode = false)
 	{
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 */
 	public function OnDisplayRelations($oObject, WebPage $oPage, $bEditMode = false)
 	{
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 */
 	public function OnFormSubmit($oObject, $sFormPrefix = '')
 	{
 	}
@@ -216,22 +225,34 @@ class IPRequestPlugIn implements iApplicationUIExtension
 	public function OnFormCancel($sTempId)
 	{
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 */
 	public function EnumUsedAttributes($oObject)
 	{
 		return array();
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 */
 	public function GetIcon($oObject)
 	{
 		return '';
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 */
 	public function GetHilightClass($oObject)
 	{
 		return HILIGHT_CLASS_NONE;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 */
 	public function EnumAllowedActions(DBObjectSet $oSet)
 	{
 		$oObj = $oSet->Fetch();
