@@ -55,10 +55,16 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 						$aFreeIPs = $this->GetFreeIPs();
 						if (count($aFreeIPs) > 0)
 						{
-							// Register IP
 							if (parent::ApplyStimulus('ev_resolve',true /* $bDoNotWrite */))
 							{
+								// Register IP and update public log
 								$this->RegisterIp(true,$aFreeIPs[0]);
+
+								$oLog = $this->Get('public_log');
+								$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+								$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation', $aFreeIPs[0], $this->Get('status_ip'));
+								$oLog->AddLogEntry($sLogEntry);
+								$this->Set('public_log', $oLog);
 								$this->DBUpdate();
 							}
 						}
@@ -361,11 +367,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 	 * @throws \MySQLException
 	 * @throws \OQLException
 	 */
-	private function RegisterIP($bNewIp, $sIp)
+	private function RegisterIp($bNewIp, $sIp)
 	{
-		// Prepare IP
-		// Update CI
-		// Register IP with final information
 		if ($bNewIp)
 		{
 			// Create IP
@@ -384,7 +387,7 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
 			$oIpv6->DBInsert();
 
 			// Update ticket with IP
-			$this->Set('ip_id', $oIpv6->GetKey());
+			$this->Set('ip_id', $oIp->GetKey());
 		}
 		else
 		{

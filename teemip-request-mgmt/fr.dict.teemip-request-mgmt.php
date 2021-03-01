@@ -461,7 +461,6 @@ Dict::Add('FR FR', 'French', 'Français', array(
 //
 
 Dict::Add('FR FR', 'French', 'Français', array(
-	'Class:IPSubnet:automation' => 'Automatisation',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Création automatique des IPs',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'Le traitement automatique des demandes de création d\'IPs sont autorisées',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Oui',

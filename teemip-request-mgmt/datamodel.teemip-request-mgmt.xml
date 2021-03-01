@@ -20,8 +20,7 @@
           <items>
             <item id="col:col1" _delta="must_exist">
               <items>
-                <item id="fieldset:Class:IPSubnet:automation" _delta="define">
-                  <rank>20</rank>
+                <item id="fieldset:Class:IPSubnet:automation" _delta="must_exist">
                   <items>
                     <item id="allow_automatic_ip_creation" _delta="define">
                       <rank>90</rank>
@@ -40,8 +39,7 @@
           <items>
             <item id="col:col1" _delta="must_exist">
               <items>
-                <item id="fieldset:Class:IPSubnet:automation" _delta="define">
-                  <rank>20</rank>
+                <item id="fieldset:Class:IPSubnet:automation" _delta="must_exist">
                   <items>
                     <item id="allow_automatic_ip_creation" _delta="define">
                       <rank>90</rank>

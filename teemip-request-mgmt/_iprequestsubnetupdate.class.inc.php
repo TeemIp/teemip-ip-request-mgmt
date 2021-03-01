@@ -43,7 +43,17 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 			{
 				if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */))
 				{
-					$this->UpdateSubnet();
+					// Update subnet and update public log
+					$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
+					$sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip').' /'.$oSubnet->Get('mask');
+					$this->UpdateSubnet($oSubnet);
+
+
+					$oLog = $this->Get('public_log');
+					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+					$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation', $sSubnet);
+					$oLog->AddLogEntry($sLogEntry);
+					$this->Set('public_log', $oLog);
 					$this->DBUpdate();
 				}
 			}
@@ -100,7 +110,8 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 		{
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
 			{
-				return $this->UpdateSubnet();
+				$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
+				return $this->UpdateSubnet($oSubnet);
 			}
 			return false;
 		}
@@ -113,9 +124,8 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function UpdateSubnet()
+	private function UpdateSubnet($oSubnet)
 	{
-		$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
 		if (!is_null($oSubnet))
 		{
 			$sNewName = $this->Get('new_name');

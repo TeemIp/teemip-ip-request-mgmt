@@ -461,7 +461,6 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 //
 
 Dict::Add('IT IT', 'Italian', 'Italiano', array(
-	'Class:IPSubnet:automation' => 'Automazione',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Consenti la creazione automatica dell\'IP',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'Le richieste di creazione IP possono essere elaborate automaticamente per quella sottorete',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Si',

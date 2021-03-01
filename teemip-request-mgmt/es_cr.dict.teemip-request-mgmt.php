@@ -461,7 +461,6 @@ Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 //
 
 Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
-	'Class:IPSubnet:automation' => 'Automatización',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Permitir la creación automática de IP',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'Las solicitudes de creación de IP pueden procesarse automáticamente para esa subred',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Si',

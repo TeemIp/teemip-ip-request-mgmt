@@ -460,7 +460,6 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 //
 
 Dict::Add('DE DE', 'German', 'Deutsch', array(
-	'Class:IPSubnet:automation' => 'Automatisierung',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Automatische IP-Erstellung zulassen',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'IP Erstellen Anforderungen können für dieses Subnetz automatisch verarbeitet werden',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Ja',

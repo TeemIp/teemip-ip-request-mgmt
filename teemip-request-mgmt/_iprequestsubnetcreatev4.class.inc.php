@@ -51,10 +51,16 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 					$aFreeSpace = $oBlock->GetFreeSpace($iSize, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
 					if (count($aFreeSpace) > 0)
 					{
-						// If yes, register first subnet
+						// Register subnet and update public log
 						if (parent::ApplyStimulus('ev_resolve',true /* $bDoNotWrite */))
 						{
 							$this->RegisterSubnet(true, $aFreeSpace[0]['firstip']);
+
+							$oLog = $this->Get('public_log');
+							$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+							$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation', $aFreeSpace[0]['firstip'].' /'.$this->Get('mask'), $this->Get('status_subnet'));
+							$oLog->AddLogEntry($sLogEntry);
+							$this->Set('public_log', $oLog);
 							$this->DBUpdate();
 						}
 					}

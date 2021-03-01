@@ -55,10 +55,16 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 						$aFreeIPs = $this->GetFreeIPs();
 						if (count($aFreeIPs) > 0)
 						{
-							// Register IP
 							if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
 							{
+								// Register IP and update public log
 								$this->RegisterIp(true,$aFreeIPs[0]);
+
+								$oLog = $this->Get('public_log');
+								$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+								$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation', $aFreeIPs[0], $this->Get('status_ip'));
+								$oLog->AddLogEntry($sLogEntry);
+								$this->Set('public_log', $oLog);
 								$this->DBUpdate();
 							}
 						}

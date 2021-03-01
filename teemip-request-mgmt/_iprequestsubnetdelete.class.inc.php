@@ -42,7 +42,16 @@ class _IPRequestSubnetDelete extends IPRequestSubnet
 		{
 			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
 			{
-				$this->ReleaseSubnet();
+				// Release subnet and update public log
+				$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
+				$sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip').' /'.$oSubnet->Get('mask');
+				$this->ReleaseSubnet($oSubnet);
+
+				$oLog = $this->Get('public_log');
+				$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+				$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetRelease:Confirmation', $sSubnet);
+				$oLog->AddLogEntry($sLogEntry);
+				$this->Set('public_log', $oLog);
 				$this->DBUpdate();
 			}
 		}
@@ -70,7 +79,8 @@ class _IPRequestSubnetDelete extends IPRequestSubnet
 		{
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
 			{
-				return  $this->ReleaseSubnet();
+				$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
+				return  $this->ReleaseSubnet($oSubnet);
 			}
 			return false;
 		}
@@ -83,14 +93,8 @@ class _IPRequestSubnetDelete extends IPRequestSubnet
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function ReleaseSubnet()
+	private function ReleaseSubnet($oSubnet)
 	{
-		$iSubnetId = $this->Get('subnet_id');
-		$oSubnet = MetaModel::GetObject('IPv4Subnet', $iSubnetId, false /* MustBeFound */);
-		if (is_null($oSubnet))
-		{
-			$oSubnet = MetaModel::GetObject('IPv6Subnet', $iSubnetId, false /* MustBeFound */);
-		}
 		if (!is_null($oSubnet))
 		{
 			$oSubnet->Set('status', 'released');    // release_date is managed at IPObject level

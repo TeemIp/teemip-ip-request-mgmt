@@ -461,7 +461,6 @@ Dict::Add('EN US', 'English', 'English', array(
 //
 
 Dict::Add('EN US', 'English', 'English', array(
-	'Class:IPSubnet:automation' => 'Automation',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation' => 'Allow automatic IP creation',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation+' => 'IP creation requests may be automatically processed for that subnet',
 	'Class:IPSubnet/Attribute:allow_automatic_ip_creation/Value:yes' => 'Yes',
@@ -522,7 +521,10 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:IPManagement:Action:Implement:IPRequest' => 'Process...',
 	'UI:IPManagement:Action:Implement:IPRequest:Button' => 'Process',
 	'UI:IPManagement:Action:Implement:IPRequest:CannotBeImplemented' => 'Request cannot be processed: %1$s',
-	
+
+	// Automation processes
+	'UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed' => 'Thanks to your privileges, your ticket has been automatically processed.<br><br>',
+
 	// Display details of IP Address Create
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate' => 'Details',
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate+' => '',
@@ -534,20 +536,30 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Short name already exists within domain!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp' => 'Select a free IP',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'Address %1$s has already been selected.',
-	
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation' => 'Address <b>%1$s</b> has been created with status <b>%2$s</b>.',
+
 	// Implement IP Address Update
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'No IP address has been selected!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Short name already exists within domain!',
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation' => 'Address <b>%1$s</b> has been updated with status <b>%2$s</b>.',
+
+	// Implement IP Address Release
+	'UI:IPManagement:Action:Implement:IPRequestAddressRelease:Confirmation' => 'Address <b>%1$s</b> has been released.',
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'Subnet block doesn\'t exist!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'There is no more room in the block for a network with a %1$s mask !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Select a free subnet',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'Subnet %1$s has already been selected.',
-	
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation' => 'Subnet <b>%1$s</b> has been created with status <b>%2$s</b>.',
+
 	// Implement Subnet Update
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:NoSuchSubnet' => 'Subnet doesn\'t exist!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:ChangeSizeManually' => 'Change of mask should be done through subnet menu first.',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation' => 'Subnet <b>%1$s</b> has been updated with status <b>%2$s</b>.',
+
+	// Implement subnet Release
+	'UI:IPManagement:Action:Implement:IPRequestSubnetRelease:Confirmation' => 'Subnet <b>%1$s</b> has been released.',
 
 	// Portal actions
 	'UI:IPManagement:Action:Portal:IPRequestAddressCreateV4' => 'IPv4 creation',

@@ -43,7 +43,16 @@ class _IPRequestAddressUpdate extends IPRequestAddress
 			{
 				if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */))
 				{
-					$this->UpdateIP();
+					// Update IP and update public log
+					$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+					$sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
+					$this->UpdateIP($oIp);
+
+					$oLog = $this->Get('public_log');
+					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+					$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation', $sIp, $this->Get('status_ip'));
+					$oLog->AddLogEntry($sLogEntry);
+					$this->Set('public_log', $oLog);
 					$this->DBUpdate();
 				}
 			}
@@ -110,7 +119,8 @@ class _IPRequestAddressUpdate extends IPRequestAddress
 		{
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
 			{
-				return $this->UpdateIP();
+				$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+				return $this->UpdateIP($oIp);
 			}
 			return false;
 		}
@@ -123,9 +133,8 @@ class _IPRequestAddressUpdate extends IPRequestAddress
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function UpdateIP()
+	private function UpdateIP($oIp)
 	{
-		$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
 		if (!is_null($oIp))
 		{
 			$sNewStatusIp = $this->Get('new_status_ip');

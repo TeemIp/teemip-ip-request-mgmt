@@ -39,7 +39,16 @@ class _IPRequestAddressDelete extends IPRequestAddress
 		{
 			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
 			{
-				$this->ReleaseIP();
+				// Release IP and update public log
+				$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+				$sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
+				$this->ReleaseIP($oIp);
+
+				$oLog = $this->Get('public_log');
+				$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+				$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressRelease:Confirmation', $sIp);
+				$oLog->AddLogEntry($sLogEntry);
+				$this->Set('public_log', $oLog);
 				$this->DBUpdate();
 			}
 		}
@@ -65,7 +74,8 @@ class _IPRequestAddressDelete extends IPRequestAddress
 		{
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
 			{
-				return $this->ReleaseIP();
+				$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+				return $this->ReleaseIP($oIp);
 			}
 			return false;
 		}
@@ -78,9 +88,8 @@ class _IPRequestAddressDelete extends IPRequestAddress
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function ReleaseIP()
+	private function ReleaseIP($oIp)
 	{
-		$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
 		if (!is_null($oIp))
 		{
 			$oIp->Set('status', 'released');    // release_date is managed at IPObject level
