@@ -23,7 +23,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'teemip-request-mgmt/2.7.0',
+	'teemip-request-mgmt/2.7.1',
 	array(
 		// Identification
 		//
@@ -34,8 +34,9 @@ SetupWebPage::AddModule(
 		//
 		'dependencies' => array(
 			'itop-tickets/2.7.0',
-			'teemip-ip-mgmt/2.7.0',
-			'teemip-network-mgmt/2.7.0',
+			'teemip-ip-mgmt/2.7.1',
+			'teemip-ipv6-mgmt/2.7.1',
+			'teemip-network-mgmt/2.7.1',
 		),
 		'mandatory' => false,
 		'visible' => true,
@@ -44,8 +45,11 @@ SetupWebPage::AddModule(
 		// Components
 		//
 		'datamodel' => array(
+			'vendor/autoload.php',
+			'src/Hook/IPRequestPlugIn.php',
+			'src/Model/AttributeClassWithIP.php',
+			'src/Model/AttributeIPFieldInClass.php',
 			'model.teemip-request-mgmt.php',
-			'main.teemip-request-mgmt.php',
 		),
 		'data.struct' => array(
 			//'data.struct.teemip-change-mgmt.xml',

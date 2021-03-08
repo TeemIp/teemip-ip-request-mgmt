@@ -1,28 +1,15 @@
 <?php
-// Copyright (C) 2021 TeemIp
-//
-//   This file is part of TeemIp.
-//
-//   TeemIp is free software; you can redistribute it and/or modify
-//   it under the terms of the GNU Affero General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   TeemIp is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU Affero General Public License for more details.
-//
-//   You should have received a copy of the GNU Affero General Public License
-//   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
-
-/**
+/*
  * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
-/*******************
- * Set page titles.
+/**
+ * @param \WebPage $oP
+ * @param $sUIPath
+ * @param $oObj
+ * @param $sClassLabel
+ * @param bool $bIcon
  */
 function SetPageTitles(WebPage $oP, $sUIPath, $oObj, $sClassLabel, $bIcon = true)
 {
@@ -39,12 +26,19 @@ function SetPageTitles(WebPage $oP, $sUIPath, $oObj, $sClassLabel, $bIcon = true
 	$oP->add("</div>\n");
 }
 
-/**************************************
- * Displays choices related to action. 
+/**
+ * @param \WebPage $oP
+ * @param $oAppContext
+ * @param $sOperation
+ * @param $sClass
+ * @param $id
+ * @param $oObj
+ * @param array $aDefault
+ *
+ * @throws \CoreException
  */
 function DisplayActionForm(WebPage $oP, $oAppContext, $sOperation, $sClass, $id, $oObj, $aDefault = array())
 {
-	$sClassLabel = MetaModel::GetName($sClass);
 	$sUIPath = $oObj->MakeUIPath($sOperation);
 
 	// Set page titles
@@ -95,16 +89,17 @@ EOF
 /*************************************************************
  * Main user interface pages for IP Request module starts here
  */
+if (!defined('__DIR__')) define('__DIR__', dirname(__FILE__));
+if (!defined('APPROOT')) require_once(__DIR__.'/../../approot.inc.php');
+require_once(APPROOT.'/application/application.inc.php');
+require_once(APPROOT.'/application/displayblock.class.inc.php');
+require_once(APPROOT.'/application/itopwebpage.class.inc.php');
+require_once(APPROOT.'/application/startup.inc.php');
+require_once(APPROOT.'/application/wizardhelper.class.inc.php');
+
 try
 {
-	require_once('../../approot.inc.php');
-	require_once(APPROOT.'/application/application.inc.php');
-	require_once(APPROOT.'/application/displayblock.class.inc.php');
-	require_once(APPROOT.'/application/itopwebpage.class.inc.php');
 	require_once(APPROOT.'/application/loginwebpage.class.inc.php');
-	require_once(APPROOT.'/application/startup.inc.php');
-	require_once(APPROOT.'/application/wizardhelper.class.inc.php');
-	
 	$sLoginMessage = LoginWebPage::DoLogin(); // Check user rights and prompt if needed
 	$oAppContext = new ApplicationContext();
 	
