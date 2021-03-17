@@ -68,39 +68,22 @@ class _IPRequest extends Ticket
 		switch($this->GetState())
 		{
 			case 'closed':
-				$sIcon = self::MakeIconFromName('iprequest-closed.png');
-			break;
-			
-			default:
-				$sIcon = self::MakeIconFromName('iprequest.png');
-			break;
-		}
-		return $sIcon;
-	}
+				$sIconFile = 'iprequest-closed.png';
+				break;
 
-	/**
-	 * @param $sIconName
-	 * @param bool $bImgTag
-	 *
-	 * @return string
-	 * @throws \Exception
-	 */
-	protected static function MakeIconFromName($sIconName, $bImgTag = true)
-	{
-		$sIcon = '';
-		if ($sIconName != '')
-		{
-			$sPath = utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/img/'.$sIconName;
-			if ($bImgTag)
-			{
-				$sIcon = "<img src=\"$sPath\" style=\"vertical-align:middle;\" alt=\"\"/>";
-			}
-			else
-			{
-				$sIcon = $sPath;
-			}
+			default:
+				$sIconFile = 'iprequest.png';
+				break;
 		}
-		return $sIcon;
+		$sPath = utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/img/'.$sIconFile;
+		if ($bImgTag)
+		{
+			return "<img src=\"$sPath\" style=\"vertical-align:middle;\" alt=\"\"/>";
+		}
+		else
+		{
+			return $sPath;
+		}
 	}
 
 	/**
