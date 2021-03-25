@@ -9,4 +9,6 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Brick:Portal:QuickNewTicket:Title' => 'Créer un ticket IP',
 	'Brick:Portal:QuickNewTicket:Title+' => '<p>Besoin d\'aide ?</p><p>Selectionnez un type de ticket, renseignez le et soumettez le à notre équipe de support.</p>',
 	'Brick:Portal:OngoingRequests:Tab:Recent' => 'Récentes',
+	'Brick:Portal:ClosedRequests:Tab:Recent' => 'Récentes',
+	'Brick:Portal:ClosedRequests:Tab:Closed' => 'Fermées',
 ));

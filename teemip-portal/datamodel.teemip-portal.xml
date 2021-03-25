@@ -200,13 +200,13 @@
                            the generated query. -->
                         <group id="recent">
                            <rank>1</rank>
-                           <title>Brick:Portal:OngoingRequests:Tab:Recent</title>
-                           <condition><![CDATA[SELECT IPRequest WHERE (status = 'resolved') AND (start_date > DATE(DATE_SUB(NOW(), INTERVAL 7 DAY))) ]]></condition>
+                           <title>Brick:Portal:ClosedRequests:Tab:Recent</title>
+                           <condition><![CDATA[SELECT IPRequest WHERE (status = 'closed') AND (start_date > DATE(DATE_SUB(NOW(), INTERVAL 7 DAY))) ]]></condition>
                         </group>
-                        <group id="resolved">
+                        <group id="closed">
                            <rank>2</rank>
-                           <title>Brick:Portal:OngoingRequests:Tab:Resolved</title>
-                           <condition><![CDATA[SELECT IPRequest WHERE status = 'resolved']]></condition>
+                           <title>Brick:Portal:ClosedRequests:Tab:Closed</title>
+                           <condition><![CDATA[SELECT IPRequest WHERE status = 'closed']]></condition>
                         </group>
                      </groups>
                   </tabs>

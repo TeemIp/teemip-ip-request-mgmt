@@ -10,4 +10,6 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 	'Brick:Portal:QuickNewTicket:Title' => 'Crea un ticket IP',
 	'Brick:Portal:QuickNewTicket:Title+' => '<p>Hai bisogno di aiuto?</p><p>Seleziona un tipo di richiesta, compila e inviala ai nostri team di supporto.</p>',
 	'Brick:Portal:OngoingRequests:Tab:Recent' => 'Recente',
+	'Brick:Portal:ClosedRequests:Tab:Recent' => 'Recente',
+	'Brick:Portal:ClosedRequests:Tab:Closed' => 'Chiuso',
 ));
