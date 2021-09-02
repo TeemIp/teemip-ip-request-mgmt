@@ -8,8 +8,8 @@ namespace TeemIp\TeemIp\Extension\IPRequestManagement\Model;
 
 use Dict;
 use IPRequestSubnetCreate;
-use IPv4Subnet;
 use MetaModel;
+use TeemIp\TeemIp\Extension\Framework\Helper\IPUtils;
 use UserRights;
 use utils;
 use WebPage;
@@ -37,7 +37,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 				if ($oBlock->Get('allow_automatic_subnet_creation') == "yes")
 				{
 					// Check if there is some space available
-					$iSize = IPv4Subnet::MaskToSize($this->Get('mask'));
+					$iSize = IPUtils::MaskToSize($this->Get('mask'));
 					$aFreeSpace = $oBlock->GetFreeSpace($iSize, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
 					if (count($aFreeSpace) > 0)
 					{
@@ -81,7 +81,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 				{
 					return (Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock', $this->Get('block_id')));
 				}
-				$iSize = IPv4Subnet::MaskToSize($this->Get('mask'));
+				$iSize = IPUtils::MaskToSize($this->Get('mask'));
 				$aFreeSpace = $oBlock->GetFreeSpace($iSize, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
 				$iSizeFreeArray = sizeof ($aFreeSpace);
 				if ($iSizeFreeArray == 0)
@@ -124,7 +124,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate
 			$sLabelOfAction1 = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet');
 
 			$oBlock = MetaModel::GetObject('IPv4Block', $this->Get('block_id'), true /* MustBeFound */);
-			$iSize = IPv4Subnet::MaskToSize($this->Get('mask'));
+			$iSize = IPUtils::MaskToSize($this->Get('mask'));
 			$aFreeSpace = $oBlock->GetFreeSpace($iSize, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
 			$iSizeFreeArray = sizeof ($aFreeSpace);
 			if ($iSizeFreeArray != 0)

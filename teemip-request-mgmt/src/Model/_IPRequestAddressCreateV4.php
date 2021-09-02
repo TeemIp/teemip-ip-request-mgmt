@@ -13,7 +13,7 @@ use IPConfig;
 use IPRequestAddressCreate;
 use IPv4Address;
 use MetaModel;
-use TeemIp\TeemIp\Extension\IPManagement\Controller\TeemIpUtils;
+use TeemIp\TeemIp\Extension\Framework\Helper\IPUtils;
 use UserRights;
 use utils;
 use WebPage;
@@ -298,8 +298,8 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 		}
 		$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Address AS i WHERE i.subnet_id = $iSubnetId"));
 		$aRegisteredIPs = $oIpRegisteredSet->GetColumnAsArray('ip', false);
-		$iFirstIp = TeemIpUtils::myip2long($sFirstIp);
-		$iLastIp = TeemIpUtils::myip2long($sLastIp);
+		$iFirstIp = IPUtils::myip2long($sFirstIp);
+		$iLastIp = IPUtils::myip2long($sLastIp);
 		$iOrgId = $this->Get('org_id');
 		$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $iOrgId);
 		$iCreationOffset = IPConfig::GetFromGlobalIPConfig('request_creation_ipv4_offset', $iOrgId);
@@ -314,7 +314,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 		$iMaxFreeOffers = ($sPingBeforeAssign == 'ping_yes') ? DEFAULT_MAX_FREE_IP_OFFERS_WITH_PING_REQ : DEFAULT_MAX_FREE_IP_OFFERS_REQ;
 		while (($iAnIp <= $iLastIp) && ($i < $iMaxFreeOffers))
 		{
-			$sAnIp = TeemIpUtils::mylong2ip($iAnIp);
+			$sAnIp = IPUtils::mylong2ip($iAnIp);
 			if ($bWithRanges)
 			{
 				// If IP belongs to a range, skip range
@@ -326,7 +326,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate
 					{
 						$oIpRange = $oIpRangeSet->Fetch();
 					}
-					$iAnIp = TeemIpUtils::myip2long($oIpRange->Get('lastip'));
+					$iAnIp = IPUtils::myip2long($oIpRange->Get('lastip'));
 				}
 			}
 			if (!in_array($sAnIp, $aRegisteredIPs))
