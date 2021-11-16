@@ -113,8 +113,11 @@ if (!class_exists('IPRequestManagementInstaller'))
 			{
 				SetupPage::log_info("Module teemip-request-mgmt: copy ip_device_link attribute to ci_ip_attribute attribute in ip_req_add_create table");
 
-				CMDBSource::Query("UPDATE ip_req_add_create SET ci_ip_attribute = ip_device_link");
-				CMDBSource::Query("ALTER TABLE ip_req_add_create DROP COLUMN ip_device_link ");
+				$sDBSubname = $oConfiguration->Get('db_subname');
+				$sUpdate = "UPDATE ".$sDBSubname."ip_req_add_create SET ci_ip_attribute = ip_device_link";
+				CMDBSource::Query($sUpdate);
+				$sAlter = "ALTER TABLE ".$sDBSubname."ip_req_add_create DROP COLUMN ip_device_link";
+				CMDBSource::Query($sAlter);
 
 				SetupPage::log_info("Module teemip-request-mgmt: copy done");
 			}
