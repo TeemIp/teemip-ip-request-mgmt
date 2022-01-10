@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.3">
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.7">
    <portals>
       <portal id="backoffice" _delta="must_exist">
          <deny>
@@ -9,7 +9,7 @@
       <portal id="teemip-portal" _delta="define">
          <rank>1.0</rank>
          <url>pages/exec.php?exec_module=itop-portal-base&amp;exec_page=index.php&amp;portal_id=teemip-portal</url>
-         <handler />
+         <handler/>
          <allow>
             <profile id="IP Portal user"/>
             <profile id="Administrator"/>
