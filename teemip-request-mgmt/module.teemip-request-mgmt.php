@@ -23,20 +23,20 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'teemip-request-mgmt/2.7.1',
+	'teemip-request-mgmt/3.0.0',
 	array(
 		// Identification
 		//
 		'label' => 'IP Request Management',
 		'category' => 'business',
-		
+
 		// Setup
 		//
 		'dependencies' => array(
 			'itop-tickets/2.7.0',
-			'teemip-ip-mgmt/2.7.1',
-			'teemip-ipv6-mgmt/2.7.1',
-			'teemip-network-mgmt/2.7.1',
+			'teemip-ip-mgmt/3.0.0',
+			'teemip-ipv6-mgmt/3.0.0',
+			'teemip-network-mgmt/3.0.0',
 		),
 		'mandatory' => false,
 		'visible' => true,
@@ -111,7 +111,7 @@ if (!class_exists('IPRequestManagementInstaller'))
 
 			if (($sPreviousVersion == '2.5.1') || ($sPreviousVersion == '2.5.0') || ($sPreviousVersion == '2.4.1') || ($sPreviousVersion == '2.4.0'))
 			{
-				SetupPage::log_info("Module teemip-request-mgmt: copy ip_device_link attribute to ci_ip_attribute attribute in ip_req_add_create table");
+				SetupLog::Info("Module teemip-request-mgmt: copy ip_device_link attribute to ci_ip_attribute attribute in ip_req_add_create table");
 
 				$sDBSubname = $oConfiguration->Get('db_subname');
 				$sUpdate = "UPDATE ".$sDBSubname."ip_req_add_create SET ci_ip_attribute = ip_device_link";
@@ -119,7 +119,7 @@ if (!class_exists('IPRequestManagementInstaller'))
 				$sAlter = "ALTER TABLE ".$sDBSubname."ip_req_add_create DROP COLUMN ip_device_link";
 				CMDBSource::Query($sAlter);
 
-				SetupPage::log_info("Module teemip-request-mgmt: copy done");
+				SetupLog::Info("Module teemip-request-mgmt: copy done");
 			}
 		}
 	}
