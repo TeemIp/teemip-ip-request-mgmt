@@ -1,24 +1,6 @@
 <?php
-// Copyright (C) 2021 TeemIp
-//
-//   This file is part of TeemIp.
-//
-//   TeemIp is free software; you can redistribute it and/or modify
-//   it under the terms of the GNU Affero General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   TeemIp is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU Affero General Public License for more details.
-//
-//   You should have received a copy of the GNU Affero General Public License
-//   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
-
-/**
+/*
  * @copyright   Copyright (C) 2021 TeemIp
- * @copyright   Copyright (C) 2014 ITOMIG GmbH (deutsche Übersetzung)
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -408,6 +390,8 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'Class:IPRequestSubnetUpdate/Attribute:new_status_subnet/Value:allocated+' => '',
 	'Class:IPRequestSubnetUpdate/Attribute:new_type' => 'Neuere Typ',
 	'Class:IPRequestSubnetUpdate/Attribute:new_type+' => '',
+	'Class:IPRequestSubnetUpdate/Attribute:old_location_id' => 'Alter Standort',
+	'Class:IPRequestSubnetUpdate/Attribute:old_location_id+' => '',
 	'Class:IPRequestSubnetUpdate/Attribute:new_location_id' => 'Neuer Standort',
 	'Class:IPRequestSubnetUpdate/Attribute:new_location_id+' => '',
 	'Class:IPRequestSubnetUpdate/Stimulus:ev_reject' => 'Zurückweisen',
@@ -488,43 +472,44 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'Menu:IPRequestManagement:Overview' => 'Überblick',
 	'Menu:IPRequestManagement:Overview+' => '',
 	'Menu:IPRequestManagement:ShortCut' => 'Shortcuts',
-	'Menu:IPRequestManagement:ShortCut+' => '',  
+	'Menu:IPRequestManagement:ShortCut+' => '',
 	'Menu:IPRequestManagement:OpenRequests' => 'Offene IP Anforderungen',
 	'Menu:IPRequestManagement:OpenRequests+' => 'Alle offenen Anforderungen für IP Objekte anzeigen',
 	'Menu:IPRequestManagement:MyRequests' => 'Meine IP Anforderungen',
-	'Menu:IPRequestManagement:MyRequests+' => 'IP Anforderungen, die mir zugewiesen sind',  
-	'Menu:IPRequestManagement:MyOpenRequests'=> 'Meine Offenen IP Anforderungen',	
-	'Menu:IPRequestManagement:MyOpenRequests+'=> 'Alle mir zugewiesenen offenen Anforderungen für IP Objekte anzeigen',	
+	'Menu:IPRequestManagement:MyRequests+' => 'IP Anforderungen, die mir zugewiesen sind',
+	'Menu:IPRequestManagement:MyOpenRequests' => 'Meine Offenen IP Anforderungen',
+	'Menu:IPRequestManagement:MyOpenRequests+' => 'Alle mir zugewiesenen offenen Anforderungen für IP Objekte anzeigen',
 	'Menu:IPRequestManagement:New' => 'Neue IP Anforderung',
 	'Menu:IPRequestManagement:New+' => 'Eine neue Anforderung für ein IP Objekt erstellen',
 	'Menu:IPRequestManagement:Search' => 'Nach IP Anforderungen suchen',
 	'Menu:IPRequestManagement:Search+' => 'Nach IP-Objekt Anforderungen suchen',
 	'Menu:IPRequestManagement:Overview:Requests' => 'IP Anforderungen: %1s',
 	'Menu:IPRequestManagement:Overview:Requests+' => 'Alle Anforderungen für IP-Objekte',
-	
 	'UI:IPRequestManagement:Overview:Title' => 'Dashboard für IP Anforderungs Management',
 	'UI:IPRequestManagement:Overview:RequestByType-last-14-days' => 'IP Anforderungen der letzten 14 Tage (pro Typ)',
 	'UI:IPRequestManagement:Overview:Last-14-days' => 'IP Anforderungen der letzten 14 Tage (pro Tag)',
 	'UI:IPRequestManagement:Overview:OpenRequestByStatus' => 'Offene IP Anforderungen nach Status',
-	'UI:IPRequestManagement:Overview:OpenRequestByAgent' =>'Offene IP Anforderungen nach Bearbeiter',
+	'UI:IPRequestManagement:Overview:OpenRequestByAgent' => 'Offene IP Anforderungen nach Bearbeiter',
 	'UI:IPRequestManagement:Overview:OpenRequestByType' => 'Offene IP Anforderungen nach Typ',
 	'UI:IPRequestManagement:Overview:OpenRequestByCustomer' => 'Offene IP Anforderungen nach Organisation',
-	
+
 //
 // Management of IP requests
 //
 	// Implement new IP Request
 	'UI:IPManagement:Action:Implement:IPRequest' => 'Bearbeitung...',
 	'UI:IPManagement:Action:Implement:IPRequest:PageTitle_Object_Class' => 'Bearbeiten',
-	'UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object' => 'Bearbeitung - <span class="hilite">%2$s</span>',
-	'UI:IPManagement:Action:Implement:IPRequest' => 'Bearbeitung...',
+	'UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object' => 'Bearbeitung - %2$s',
 	'UI:IPManagement:Action:Implement:IPRequest:Button' => 'Bearbeiten',
 	'UI:IPManagement:Action:Implement:IPRequest:CannotBeImplemented' => 'Anforderungen kann nicht bearbeitet werden: %1$s',
-	
+
+	// Automation processes
+	'UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed' => 'Dank Ihrer Privilegien wurde Ihr Ticket automatisch verarbeitet. ',
+
 	// Display details of IP Address Create
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate' => 'Details',
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate+' => '',
-	
+
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'Subnetz existiert nicht!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'Subnetz ist voll!',
@@ -532,20 +517,30 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Der Short Name existiert bereits in der Domain!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp' => 'Wählen Sie eine freie IP aus',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'Adresse %1$s wurde schon ausgewählt.',
-	
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation' => 'Adresse %1$s wurde mit Status %2$s erstellt.',
+
 	// Implement IP Address Update
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'Es wurde keine IP-Adresse ausgewählt!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Der Short Name existiert bereits in der Domain!',
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation' => 'Adresse %1$s wurde mit Status %2$s aktualisiert.',
+
+	// Implement IP Address Release
+	'UI:IPManagement:Action:Implement:IPRequestAddressRelease:Confirmation' => 'Adresse %1$s wurde freigegeben.',
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'Subnetz Block existiert nicht!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'Es gibt keinen Platz in diesem Block für ein Netzwerk mit der Maske %1$s !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Wählen Sie ein freies Subnetz aus',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'Subnetz %1$s wurde bereits ausgewählt.',
-	
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation' => 'Subnetz %1$s wurde mit Status %2$s erstellt.',
+
 	// Implement Subnet Update
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:NoSuchSubnet' => 'Subnetz existiert nicht!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:ChangeSizeManually' => 'Die Änderung der Maske sollte zunächste im Subnetz Menu durchgeführt werden.',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation' => 'Subnetz %1$s wurde mit Status %2$s aktualisiert.',
+
+	// Implement subnet Release
+	'UI:IPManagement:Action:Implement:IPRequestSubnetRelease:Confirmation' => 'Subnetz %1$s wurde freigegeben.',
 
 	// Portal actions
 	'UI:IPManagement:Action:Portal:IPRequestAddressCreateV4' => 'IPv4 Adresse erzeugen',
@@ -556,5 +551,5 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:Portal:IPRequestSubnetCreateV6' => 'IPv6 Subnetz erzeugen',
 	'UI:IPManagement:Action:Portal:IPRequestSubnetUpdate' => 'Subnetz Update',
 	'UI:IPManagement:Action:Portal:IPRequestSubnetDelete' => 'Subnetz Löschen',
-	
+
 ));

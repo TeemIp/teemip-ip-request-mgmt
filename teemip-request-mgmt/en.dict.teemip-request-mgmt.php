@@ -1,22 +1,5 @@
 <?php
-// Copyright (C) 2021 TeemIp
-//
-//   This file is part of TeemIp.
-//
-//   TeemIp is free software; you can redistribute it and/or modify
-//   it under the terms of the GNU Affero General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   TeemIp is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU Affero General Public License for more details.
-//
-//   You should have received a copy of the GNU Affero General Public License
-//   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
-
-/**
+/*
  * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
@@ -502,7 +485,6 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Menu:IPRequestManagement:Search+' => 'Search for IP Object Requests',
 	'Menu:IPRequestManagement:Overview:Requests' => 'IP Requests: %1s',
 	'Menu:IPRequestManagement:Overview:Requests+' => 'List Requests for IP Objects',
-	
 	'UI:IPRequestManagement:Overview:Title' => 'Dashboard for IP Request Management',
 	'UI:IPRequestManagement:Overview:RequestByType-last-14-days' => 'IP Requests of the last 14 days (per type)',
 	'UI:IPRequestManagement:Overview:Last-14-days' => 'IP Requests of the last 14 days (per day)',
@@ -510,25 +492,24 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:IPRequestManagement:Overview:OpenRequestByAgent' => 'Open IP Requests by Agent',
 	'UI:IPRequestManagement:Overview:OpenRequestByType' => 'Open IP Requests by Type',
 	'UI:IPRequestManagement:Overview:OpenRequestByCustomer' => 'Open requests by organization',
-	
+
 //
 // Management of IP requests
 //
 	// Implement new IP Request
 	'UI:IPManagement:Action:Implement:IPRequest' => 'Process...',
 	'UI:IPManagement:Action:Implement:IPRequest:PageTitle_Object_Class' => 'Process',
-	'UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object' => 'Process - <span class="hilite">%2$s</span>',
-	'UI:IPManagement:Action:Implement:IPRequest' => 'Process...',
+	'UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object' => 'Process - %1$s',
 	'UI:IPManagement:Action:Implement:IPRequest:Button' => 'Process',
 	'UI:IPManagement:Action:Implement:IPRequest:CannotBeImplemented' => 'Request cannot be processed: %1$s',
 
 	// Automation processes
-	'UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed' => 'Thanks to your privileges, your ticket has been automatically processed.<br><br>',
+	'UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed' => 'Thanks to your privileges, your ticket has been automatically processed. ',
 
 	// Display details of IP Address Create
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate' => 'Details',
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate+' => '',
-	
+
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'Subnet doesn\'t exist!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'Subnet is full!',
@@ -536,30 +517,30 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Short name already exists within domain!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp' => 'Select a free IP',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'Address %1$s has already been selected.',
-	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation' => 'Address <b>%1$s</b> has been created with status <b>%2$s</b>.',
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation' => 'Address %1$s has been created with status %2$s.',
 
 	// Implement IP Address Update
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'No IP address has been selected!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Short name already exists within domain!',
-	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation' => 'Address <b>%1$s</b> has been updated with status <b>%2$s</b>.',
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation' => 'Address %1$s has been updated with status %2$s.',
 
 	// Implement IP Address Release
-	'UI:IPManagement:Action:Implement:IPRequestAddressRelease:Confirmation' => 'Address <b>%1$s</b> has been released.',
+	'UI:IPManagement:Action:Implement:IPRequestAddressRelease:Confirmation' => 'Address %1$s has been released.',
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'Subnet block doesn\'t exist!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'There is no more room in the block for a network with a %1$s mask !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Select a free subnet',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'Subnet %1$s has already been selected.',
-	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation' => 'Subnet <b>%1$s</b> has been created with status <b>%2$s</b>.',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation' => 'Subnet %1$s has been created with status %2$s.',
 
 	// Implement Subnet Update
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:NoSuchSubnet' => 'Subnet doesn\'t exist!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:ChangeSizeManually' => 'Change of mask should be done through subnet menu first.',
-	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation' => 'Subnet <b>%1$s</b> has been updated with status <b>%2$s</b>.',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation' => 'Subnet %1$s has been updated with status %2$s.',
 
 	// Implement subnet Release
-	'UI:IPManagement:Action:Implement:IPRequestSubnetRelease:Confirmation' => 'Subnet <b>%1$s</b> has been released.',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetRelease:Confirmation' => 'Subnet %1$s has been released.',
 
 	// Portal actions
 	'UI:IPManagement:Action:Portal:IPRequestAddressCreateV4' => 'IPv4 creation',

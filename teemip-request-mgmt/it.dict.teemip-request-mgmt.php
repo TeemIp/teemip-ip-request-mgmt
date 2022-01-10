@@ -1,21 +1,4 @@
 <?php
-// Copyright (C) 2021 TeemIp
-//
-//   This file is part of TeemIp.
-//
-//   TeemIp is free software; you can redistribute it and/or modify
-//   it under the terms of the GNU Affero General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   TeemIp is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU Affero General Public License for more details.
-//
-//   You should have received a copy of the GNU Affero General Public License
-//   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
-
 /**
  * @copyright   Copyright (C) 2021 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
@@ -502,7 +485,6 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 	'Menu:IPRequestManagement:Search+' => 'Cerca richieste per oggetti IP',
 	'Menu:IPRequestManagement:Overview:Requests' => 'IP Richieste: %1s',
 	'Menu:IPRequestManagement:Overview:Requests+' => 'Elenca richieste per oggetti IP',
-	
 	'UI:IPRequestManagement:Overview:Title' => 'Cruscotto per la gestione delle richieste IP',
 	'UI:IPRequestManagement:Overview:RequestByType-last-14-days' => 'Richieste IP degli ultimi 14 giorni (per tipo)',
 	'UI:IPRequestManagement:Overview:Last-14-days' => 'IP Richieste IP degli ultimi 14 giorni(per giorno)',
@@ -510,22 +492,24 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 	'UI:IPRequestManagement:Overview:OpenRequestByAgent' => 'Richieste IP aperte per agente',
 	'UI:IPRequestManagement:Overview:OpenRequestByType' => 'Richieste IP aperte per tipo',
 	'UI:IPRequestManagement:Overview:OpenRequestByCustomer' => 'Richieste IP aperte per Organizzazione',
-	
+
 //
 // Management of IP requests
 //
 	// Implement new IP Request
 	'UI:IPManagement:Action:Implement:IPRequest' => 'Process...',
 	'UI:IPManagement:Action:Implement:IPRequest:PageTitle_Object_Class' => 'Process',
-	'UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object' => 'Process - <span class="hilite">%2$s</span>',
-	'UI:IPManagement:Action:Implement:IPRequest' => 'Process...',
+	'UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object' => 'Process - %2$s',
 	'UI:IPManagement:Action:Implement:IPRequest:Button' => 'Process',
 	'UI:IPManagement:Action:Implement:IPRequest:CannotBeImplemented' => 'La richiesta non pu‗ essere elaborata: %1$s',
-	
+
+	// Automation processes
+	'UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed' => 'Grazie ai tuoi privilegi, il tuo biglietto è stato elaborato automaticamente. ',
+
 	// Display details of IP Address Create
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate' => 'Dettagli',
 	'UI:IPManagement:Action:Details:IPRequestAddressCreate+' => '',
-	
+
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'La sottorete non esiste!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'La sottorete Þ piena!',
@@ -533,20 +517,30 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Il nome breve esiste giÓ nel dominio!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp' => 'Selezione un IP libero',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP' => 'L\'indirizzo %1$s Þ giÓ stato selezionato.',
-	
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation' => 'L\'indirizzo %1$s è stato creato con lo stato %2$s.',
+
 	// Implement IP Address Update
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:NoSelectedIP' => 'Non è stato selezionato alcun indirizzo IP!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:IPNameCollision' => 'Il nome breve esiste giÓ nel dominio!',
+	'UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation' => 'L\'indirizzo %1$s è stato aggiornato con lo stato %2$s.',
+
+	// Implement IP Address Release
+	'UI:IPManagement:Action:Implement:IPRequestAddressRelease:Confirmation' => 'L\'indirizzo %1$s è stato rilasciato.',
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'La sottorete non esiste!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'Non c\'è più spazio nel blocco per una rete con una maschera %1$s !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Selezione una sottorete libera',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'La sottorete %1$s Þ giÓ stata selezionata.',
-	
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation' => 'La sottorete %1$s è stato creato con lo stato %2$s.',
+
 	// Implement Subnet Update
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:NoSuchSubnet' => 'La sottorete non esiste!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:ChangeSizeManually' => 'Il cambio di maschera dovrebbe essere fatto prima attraverso il menu sottorete.',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation' => 'La sottorete %1$s è stato aggiornato con lo stato %2$s.',
+
+	// Implement subnet Release
+	'UI:IPManagement:Action:Implement:IPRequestSubnetRelease:Confirmation' => 'La sottorete %1$s è stato rilasciato.',
 
 	// Portal actions
 	'UI:IPManagement:Action:Portal:IPRequestAddressCreateV4' => 'Creazionde di IPv4',
