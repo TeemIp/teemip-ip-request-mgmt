@@ -15,77 +15,66 @@ use UserRights;
 use utils;
 use WebPage;
 
-class IPRequestPlugIn implements iApplicationUIExtension
-{
+class IPRequestPlugIn implements iApplicationUIExtension {
 	/**
 	 * @inheritdoc
 	 */
-	public function OnDisplayProperties($oObject, WebPage $oPage, $bEditMode = false)
-	{
+	public function OnDisplayProperties($oObject, WebPage $oPage, $bEditMode = false) {
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function OnDisplayRelations($oObject, WebPage $oPage, $bEditMode = false)
-	{
+	public function OnDisplayRelations($oObject, WebPage $oPage, $bEditMode = false) {
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function OnFormSubmit($oObject, $sFormPrefix = '')
-	{
+	public function OnFormSubmit($oObject, $sFormPrefix = '') {
 	}
-	
-	public function OnFormCancel($sTempId)
-	{
+
+	public function OnFormCancel($sTempId) {
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function EnumUsedAttributes($oObject)
-	{
+	public function EnumUsedAttributes($oObject) {
 		return array();
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function GetIcon($oObject)
-	{
+	public function GetIcon($oObject) {
 		return '';
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function GetHilightClass($oObject)
-	{
+	public function GetHilightClass($oObject) {
 		return HILIGHT_CLASS_NONE;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function EnumAllowedActions(DBObjectSet $oSet)
-	{
+	public function EnumAllowedActions(DBObjectSet $oSet) {
 		$oObj = $oSet->Fetch();
-		
+
 		// Additional actions for IPRequest
-		if ($oObj instanceof IPRequest)
-		{
-			// Add action if in new state only
-			if ($oObj->Get('status') == 'assigned')
-			{
+		if ($oObj instanceof IPRequest) {
+			// Add action if in assigned state only
+			if ($oObj->Get('status') == 'assigned') {
 				$oAppContext = new ApplicationContext();
 				$sContext = $oAppContext->GetForLink();
-			
+
 				$sClass = get_class($oObj);
-				if (UserRights::IsStimulusAllowed($sClass, 'ev_resolve'))
-				{
+				if (UserRights::IsStimulusAllowed($sClass, 'ev_resolve')) {
 					$id = $oObj->GetKey();
+
 					return array(Dict::S('UI:IPManagement:Action:Implement:IPRequest') => utils::GetAbsoluteUrlModulesRoot()."teemip-request-mgmt/ui.teemip-request-mgmt.php?operation=stimulus&stimulus=ev_resolve&class=$sClass&id=$id&$sContext");
 				}
 			}

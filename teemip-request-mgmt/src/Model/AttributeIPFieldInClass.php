@@ -10,25 +10,18 @@
  *   - that point to an IPAddress or to an IPvnAddress (n = 4 or 6)
  */
 
-class AttributeIPFieldInClass extends AttributeString
-{
-	public function GetAllowedValues($aArgs = array(), $sContains = '')
-	{
+class AttributeIPFieldInClass extends AttributeString {
+	public function GetAllowedValues($aArgs = array(), $sContains = '') {
 		$oHostObj = null;
 		$aValues = array();
-		if (isset($aArgs['this']))
-		{
+		if (isset($aArgs['this'])) {
 			$oHostObj = $aArgs['this'];
-		}
-		elseif (isset($aArgs['this->object()']))
-		{
+		} elseif (isset($aArgs['this->object()'])) {
 			$oHostObj = $aArgs['this->object()'];
 		}
-		if ($oHostObj != null)
-		{
+		if ($oHostObj != null) {
 			$sThisClass = get_class($oHostObj);
-			switch ($sThisClass)
-			{
+			switch ($sThisClass) {
 				case 'IPRequestAddressCreateV6':
 					$sClass = 'IPv6Address';
 					break;
@@ -39,44 +32,38 @@ class AttributeIPFieldInClass extends AttributeString
 					break;
 			}
 			$sCiClass = $oHostObj->Get('ciclass');
-			if ($sCiClass != '')
-			{
+			if ($sCiClass != '') {
 				$aCIClassesWithIp = IPAddress::GetListOfClassesWIthIP('leaf');
-				foreach($aCIClassesWithIp[$sCiClass]['IPAddress'] as $sKey => $sAttribute)
-				{
+				foreach ($aCIClassesWithIp[$sCiClass]['IPAddress'] as $sKey => $sAttribute) {
 					$oAttDef = MetaModel::GetAttributeDef($sCiClass, $sAttribute);
 					$aValues[$oAttDef->GetCode()] = $oAttDef->GetLabel();
 				}
-				foreach($aCIClassesWithIp[$sCiClass][$sClass] as $sKey => $sAttribute)
-				{
+				foreach ($aCIClassesWithIp[$sCiClass][$sClass] as $sKey => $sAttribute) {
 					$oAttDef = MetaModel::GetAttributeDef($sCiClass, $sAttribute);
 					$aValues[$oAttDef->GetCode()] = $oAttDef->GetLabel();
 				}
 			}
 		}
+
 		return $aValues;
 	}
 
-	public function GetAsHTML($sValue, $oHostObject = null, $bLocalize = true)
-	{
-		if (empty($sValue) || is_null($oHostObject))
-		{
+	public function GetAsHTML($sValue, $oHostObject = null, $bLocalize = true) {
+		if (empty($sValue) || is_null($oHostObject)) {
 			return '';
 		}
 		$sCiClass = $oHostObject->Get('ciclass');
 		$oAttDef = MetaModel::GetAttributeDef($sCiClass, $sValue);
+
 		return $oAttDef->GetLabel();
 	}
 
-	static public function GetFormFieldClass()
-	{
+	static public function GetFormFieldClass() {
 		return '\\Combodo\\iTop\\Form\\Field\\SelectField';
 	}
 
-	public function MakeFormField(DBObject $oObject, $oFormField = null)
-	{
-		if ($oFormField === null)
-		{
+	public function MakeFormField(DBObject $oObject, $oFormField = null) {
+		if ($oFormField === null) {
 			// Later : We should check $this->Get('display_style') and create a Radio / Select / ... regarding its value
 			$sFormFieldClass = static::GetFormFieldClass();
 			$oFormField = new $sFormFieldClass($this->GetCode());

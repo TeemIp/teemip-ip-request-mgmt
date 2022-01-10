@@ -11,24 +11,17 @@ use IPRequestAddress;
 use MetaModel;
 use UserRights;
 
-class _IPRequestAddressDelete extends IPRequestAddress
-{
+class _IPRequestAddressDelete extends IPRequestAddress {
 	/**
-	 * @throws \ArchivedObjectException
-	 * @throws \CoreCannotSaveObjectException
-	 * @throws \CoreException
-	 * @throws \CoreUnexpectedValue
+	 * @inheritdoc
 	 */
-	public function AfterInsert()
-	{
+	public function AfterInsert() {
 		parent::AfterInsert();
 
 		// If user profile allows it and if parameter allows automatic processing, try to release IP straight away
 		$aProfiles = UserRights::ListProfiles();
-		if (in_array('IP Portal Automation user', $aProfiles))
-		{
-			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */))
-			{
+		if (in_array('IP Portal Automation user', $aProfiles)) {
+			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */)) {
 				// Release IP and update public log
 				$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
 				$sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
@@ -45,30 +38,18 @@ class _IPRequestAddressDelete extends IPRequestAddress
 	}
 
 	/**
-	 * Apply stimulus to object
-	 *
-	 * @param string $sStimulusCode
-	 * @param false $bDoNotWrite
-	 *
-	 * @return bool
-	 * @throws \CoreException
-	 * @throws \CoreUnexpectedValue
+	 * @inheritdoc
 	 */
-	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false)
-	{
-		if ($sStimulusCode != 'ev_resolve')
-		{
+	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
+		if ($sStimulusCode != 'ev_resolve') {
 			return parent::ApplyStimulus($sStimulusCode);
+		} elseif (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */)) {
+			$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+
+			return $this->ReleaseIP($oIp);
 		}
-		else
-		{
-			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */))
-			{
-				$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
-				return $this->ReleaseIP($oIp);
-			}
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -78,17 +59,15 @@ class _IPRequestAddressDelete extends IPRequestAddress
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function ReleaseIP($oIp)
-	{
-		if (!is_null($oIp))
-		{
+	private function ReleaseIP($oIp) {
+		if (!is_null($oIp)) {
 			$oIp->Set('status', 'released');    // release_date is managed at IPObject level
 			$iCallerId = $this->Get('caller_id');
-			if (!is_null($iCallerId ))
-			{
+			if (!is_null($iCallerId)) {
 				$oIp->Set('requestor_id', $iCallerId);
 			}
 			$oIp->DBUpdate();
+
 			return true;
 		}
 		return false;
