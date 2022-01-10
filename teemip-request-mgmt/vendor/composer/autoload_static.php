@@ -21,6 +21,7 @@ class ComposerStaticInitce01e99e89ed61deaf4b4b7f15ca1c6f
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Hook\\IPRequestPlugIn' => __DIR__ . '/../..' . '/src/Hook/IPRequestPlugIn.php',
         'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Model\\_IPRequest' => __DIR__ . '/../..' . '/src/Model/_IPRequest.php',
         'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Model\\_IPRequestAddressCreateV4' => __DIR__ . '/../..' . '/src/Model/_IPRequestAddressCreateV4.php',
