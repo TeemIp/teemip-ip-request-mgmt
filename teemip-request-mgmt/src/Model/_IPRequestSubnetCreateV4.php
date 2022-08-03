@@ -147,13 +147,13 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 	/**
 	 * @inheritdoc
 	 */
-	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oForm, $sOperation, $aDefault) {
+	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault) {
 		$sStimulus = $aDefault['stimulus'];
 		if ($sStimulus != 'ev_resolve') {
 			return;
 		}
 
-		$oForm->AddSubBlock(InputUIBlockFactory::MakeForHidden('stimulus', 'ev_resolve'));
+		$oObjectDetails->AddSubBlock(InputUIBlockFactory::MakeForHidden('stimulus', 'ev_resolve'));
 
 		$oMultiColumn = new MultiColumn();
 		$oP->AddUIBlock($oMultiColumn);
