@@ -5,9 +5,9 @@
 	<author><![CDATA[Christophe Naud]]></author>
 	<label><![CDATA[IP request management]]></label>
 	<description><![CDATA[TeemIp workflow to handle IPAM requests - Includes TeemIp portal]]></description>
-	<version>3.0.0</version>
-	<release_date>2022-01-10</release_date>
-	<version_description><![CDATA[Enhancements and adaptations for TeemIp 3.0 - See wiki at https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt]]></version_description>
+	<version>3.0.1</version>
+	<release_date>2022-09-09</release_date>
+	<version_description><![CDATA[Enhancements from TeemIp 3.0.0 - See wiki at https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt]]></version_description>
 	<itop_version_min>2.7.0</itop_version_min>
 	<status>stable</status>
 	<mandatory>false</mandatory>
