@@ -23,8 +23,6 @@ if (!defined('APPROOT')) {
 	}
 }
 require_once(APPROOT.'/application/application.inc.php');
-require_once(APPROOT.'/application/displayblock.class.inc.php');
-require_once(APPROOT.'/application/itopwebpage.class.inc.php');
 require_once(APPROOT.'/application/startup.inc.php');
 require_once(APPROOT.'/application/wizardhelper.class.inc.php');
 
@@ -110,10 +108,10 @@ try {
 					}
 				}
 			}
-		break; // End case stimulus
-		
+			break; // End case stimulus
+
 		///////////////////////////////////////////////////////////////////////////////////////////
-		
+
 		case 'apply_stimulus': // Apply stimulus
 			$sClass = utils::ReadPostedParam('class', '', 'class');
 			$id = utils::ReadPostedParam('id', '');
