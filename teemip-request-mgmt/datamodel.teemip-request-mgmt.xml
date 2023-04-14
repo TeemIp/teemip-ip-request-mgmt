@@ -71,8 +71,7 @@
           <items>
             <item id="col:col1" _delta="must_exist">
               <items>
-                <item id="fieldset:Class:IPBlock:automation" _delta="define">
-                  <rank>20</rank>
+                <item id="fieldset:Class:IPBlock:automation" _delta="must_exist">
                   <items>
                     <item id="allow_automatic_subnet_creation" _delta="define">
                       <rank>10</rank>

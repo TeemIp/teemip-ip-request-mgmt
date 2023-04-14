@@ -455,7 +455,6 @@ Dict::Add('FR FR', 'French', 'Français', array(
 //
 
 Dict::Add('FR FR', 'French', 'Français', array(
-	'Class:IPBlock:automation' => 'Automatisation',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Création automatique des sous-réseaux',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Le traitement automatique des demandes de création de sous-réseaux sont autorisées',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Oui',

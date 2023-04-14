@@ -455,7 +455,6 @@ Dict::Add('EN US', 'English', 'English', array(
 //
 
 Dict::Add('EN US', 'English', 'English', array(
-	'Class:IPBlock:automation' => 'Automation',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Allow automatic subnet creation',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Subnet creation requests may be automatically processed for that block',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Yes',

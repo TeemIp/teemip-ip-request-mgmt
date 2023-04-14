@@ -455,7 +455,6 @@ Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 //
 
 Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
-	'Class:IPBlock:automation' => 'Automatización',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Permitir la creación automática de subred',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Las solicitudes de creación de subred pueden procesarse automáticamente para esa bloque',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Si',

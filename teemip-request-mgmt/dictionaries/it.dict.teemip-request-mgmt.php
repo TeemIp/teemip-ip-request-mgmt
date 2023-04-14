@@ -455,7 +455,6 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 //
 
 Dict::Add('IT IT', 'Italian', 'Italiano', array(
-	'Class:IPBlock:automation' => 'Automazione',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation' => 'Consenti la creazione automatica della sottorete',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation+' => 'Le richieste di creazione della sottorete potrebbero essere elaborate automaticamente per questo blocco',
 	'Class:IPBlock/Attribute:allow_automatic_subnet_creation/Value:yes' => 'Si',
