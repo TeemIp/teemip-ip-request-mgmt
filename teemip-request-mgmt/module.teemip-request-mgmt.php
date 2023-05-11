@@ -30,8 +30,6 @@ SetupWebPage::AddModule(
 		'datamodel' => array(
 			'vendor/autoload.php',
 			'src/Hook/IPRequestPlugIn.php',
-			'src/Model/AttributeClassWithIP.php',
-			'src/Model/AttributeIPFieldInClass.php',
 			'model.teemip-request-mgmt.php',
 		),
 		'data.struct' => array(
