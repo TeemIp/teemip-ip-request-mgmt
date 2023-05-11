@@ -21,26 +21,26 @@
       <module_design id="teemip-portal" xsi:type="portal" _delta="define">
          <properties>
             <name>portal:teemip-portal</name>
-            <!-- Can be either a fileref or a relative path to the file (To 
-               be tested). Takes over env-xxx/branding/portal-logo.png -->
-            <!--<fileref ref="brt_6a2be154b2a62659d3332c513bdad715"/> -->
-            <!--<logo>../images/itop-logo.png</logo> -->
-            <!-- Can be either a fileref or a relative path to the file from 
-               /env-xxx -->
-            <!-- Available themes must have a unique id. Some ids are loaded 
-               in a specific order : bootstrap/portal/custom. Other ids are loaded after 
-               them, but their order cannot be predicted -->
-            <themes />
-            <!-- Can be either a fileref or a relative path to the file from 
-               /env-xxx -->
-            <!-- Available templates are id="layout|home" -->
-            <templates />
-            <!-- An OQL query to determine which TriggerOnPortalUpdate to 
-               use within THIS instance of the portal. This is mostly needed to enable different 
-               triggers on several portal instances -->
-            <!-- Note : ":parent_classes" parameter is a reserved name that 
-               will be used for the current object class name (and its ancestors) -->
-            <triggers_query><![CDATA[SELECT TriggerOnPortalUpdate AS t WHERE t.target_class IN (:parent_classes)]]></triggers_query>
+	         <!-- Can be either a fileref or a relative path to the file (To
+							be tested). Takes over env-xxx/branding/portal-logo.png -->
+	         <!--<fileref ref="brt_6a2be154b2a62659d3332c513bdad715"/> -->
+	         <!--<logo>../img/itop-logo.png</logo> -->
+	         <!-- Can be either a fileref or a relative path to the file from
+							/env-xxx -->
+	         <!-- Available themes must have a unique id. Some ids are loaded
+							in a specific order : bootstrap/portal/custom. Other ids are loaded after
+							them, but their order cannot be predicted -->
+	         <themes/>
+	         <!-- Can be either a fileref or a relative path to the file from
+							/env-xxx -->
+	         <!-- Available templates are id="layout|home" -->
+	         <templates/>
+	         <!-- An OQL query to determine which TriggerOnPortalUpdate to
+							use within THIS instance of the portal. This is mostly needed to enable different
+							triggers on several portal instances -->
+	         <!-- Note : ":parent_classes" parameter is a reserved name that
+							will be used for the current object class name (and its ancestors) -->
+	         <triggers_query><![CDATA[SELECT TriggerOnPortalUpdate AS t WHERE t.target_class IN (:parent_classes)]]></triggers_query>
             <attachments>
                <allow_delete>true</allow_delete>
             </attachments>
@@ -59,15 +59,15 @@
                </decoration_class>
                <form>
                   <!-- Optionnal tag to list the fields -->
-                  <fields />
-                  <!-- Optionnal tag to specify the form layout. Fields that 
-                     are not positionned in the layout will be placed at the end of the form -->
-                  <twig>
+	               <fields/>
+	               <!-- Optionnal tag to specify the form layout. Fields that
+										are not positionned in the layout will be placed at the end of the form -->
+	               <twig>
                      <!-- data-field-id attribute must be an attribute code 
                         of the class -->
-                     <!-- data-field-flags attribute contains flags among 
-                        read_only/hidden/mandatory/must_prompt/must_change -->
-                     <div class="form_field" data-field-id="first_name" data-field-flags="read_only"/>
+		               <!-- data-field-flags attribute contains flags among
+											read_only/hidden/mandatory/must_prompt/must_change -->
+		               <div class="form_field" data-field-id="first_name" data-field-flags="read_only"/>
                      <div class="form_field" data-field-id="name" data-field-flags="read_only"/>
                      <div class="form_field" data-field-id="org_id" data-field-flags="read_only"/>
                      <div class="form_field" data-field-id="email" data-field-flags="read_only"/>
@@ -95,8 +95,8 @@
                <decoration_class>
                   <default>fa fa-bolt fa-2x fa-fw</default>
                </decoration_class>
-               <!-- Class that will be create created with the form -->
-               <class>IPRequest</class>
+	            <!-- Class that will be create created with the form -->
+	            <class>IPRequest</class>
                <rules>
                   <rule id="contact-to-iprequest"/>
                </rules>
@@ -115,33 +115,33 @@
                   <default>fc fc-ongoing-request fc-2x</default>
                </decoration_class>
                <oql><![CDATA[SELECT IPRequest]]></oql>
-               <!-- Optional tag to define the how the objects should be 
-                  opened. Values can be edit|view. Note that even if this is set to edit, objects 
-                  not allowed in edition mode for the user (cf. scopes and security layers) 
-                  will open in view mode -->
-               <!-- <opening_mode>edit</opening_mode> -->
-               <!-- Can be either a class tag with the class name or an oql 
-                  tag with the query -->
-               <!-- <class>Ticket</class> -->
-               <fields>  
+	            <!-- Optional tag to define the how the objects should be
+								 opened. Values can be edit|view. Note that even if this is set to edit, objects
+								 not allowed in edition mode for the user (cf. scopes and security layers)
+								 will open in view mode -->
+	            <!-- <opening_mode>edit</opening_mode> -->
+	            <!-- Can be either a class tag with the class name or an oql
+								 tag with the query -->
+	            <!-- <class>Ticket</class> -->
+	            <fields>
                   <field id="title"/>
                   <field id="start_date"/>
                   <field id="status"/>
                </fields>
-               <!-- Optional tag to add attributes to the table by their 
-                  code -->
-               <grouping>
+	            <!-- Optional tag to add attributes to the table by their
+								 code -->
+	            <grouping>
                   <!-- Optionnal -->
-                  <tabs>
+		            <tabs>
                      <!-- Optionnal. Grouping by tabs -->
-                     <!--<attribute>operational_status</attribute> -->
-                     <!-- attribute xor groups tag -->
-                     <groups>
+			            <!--<attribute>operational_status</attribute> -->
+			            <!-- attribute xor groups tag -->
+			            <groups>
                         <!-- Can be used only with ../oql tag, not ../class 
                            tag. Reason is that we can't know the class alias to apply to the condition's 
                            fields. We might have an exception saying that the field in ambigious for 
                            the generated query. -->
-                        <group id="recent">
+				            <group id="recent">
                            <rank>1</rank>
                            <title>Brick:Portal:OngoingRequests:Tab:Recent</title>
                            <condition><![CDATA[SELECT IPRequest WHERE (status != 'closed') AND (start_date > DATE(DATE_SUB(NOW(), INTERVAL 7 DAY))) ]]></condition>
@@ -158,7 +158,7 @@
                         </group>
                      </groups>
                   </tabs>
-                  <!-- Implicit grouping on y axis by finalclass -->
+		            <!-- Implicit grouping on y axis by finalclass -->
                </grouping>
                <data_loading>full</data_loading>
             </brick>
@@ -174,31 +174,31 @@
                <title>
                   <default>Brick:Portal:ClosedRequests:Title</default>
                </title>
-               <description />
+               <description/>
                <decoration_class>
                   <default>fc fc-closed-request fc-2x</default>
                </decoration_class>
                <oql><![CDATA[SELECT IPRequest WHERE org_id = :current_contact->org_id AND caller_id = :current_contact_id AND status = 'closed']]></oql>
-               <!-- Can be either a class tag with the class name or an oql 
-                  tag with the query -->
-               <!-- <class>Ticket</class> -->
-               <fields>  
+	            <!-- Can be either a class tag with the class name or an oql
+								 tag with the query -->
+	            <!-- <class>Ticket</class> -->
+	            <fields>
                   <field id="title"/>
                   <field id="start_date"/>
                   <field id="status"/>
                </fields>
                <grouping>
                   <!-- Optionnal -->
-                  <tabs>
+	               <tabs>
                      <!-- Optionnal. Grouping by tabs -->
-                     <!--<attribute>operational_status</attribute> -->
-                     <!-- attribute xor groups tag -->
-                     <groups>
+		               <!--<attribute>operational_status</attribute> -->
+		               <!-- attribute xor groups tag -->
+		               <groups>
                         <!-- Can be used only with ../oql tag, not ../class
                            tag. Reason is that we can't know the class alias to apply to the condition's
                            fields. We might have an exception saying that the field in ambigious for
                            the generated query. -->
-                        <group id="recent">
+			               <group id="recent">
                            <rank>1</rank>
                            <title>Brick:Portal:ClosedRequests:Tab:Recent</title>
                            <condition><![CDATA[SELECT IPRequest WHERE (status = 'closed') AND (start_date > DATE(DATE_SUB(NOW(), INTERVAL 7 DAY))) ]]></condition>
@@ -210,7 +210,7 @@
                         </group>
                      </groups>
                   </tabs>
-                  <!-- Implicit grouping on y axis by finalclass -->
+	               <!-- Implicit grouping on y axis by finalclass -->
                </grouping>
                <data_loading>auto</data_loading>
             </brick>
@@ -225,7 +225,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -233,121 +233,121 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status_ip" />
+                        <div class="form_field" data-field-id="status_ip"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id" data-field-flags="mandatory" />
+                        <div class="form_field" data-field-id="block_id" data-field-flags="mandatory"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="mandatory" />
+                        <div class="form_field" data-field-id="subnet_id" data-field-flags="mandatory"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="range_id" />
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="short_name" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="domain_id" />
+                        <div class="form_field" data-field-id="range_id"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="usage_id" />
+                        <div class="form_field" data-field-id="location_id"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="short_name"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="domain_id"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ciclass" />
+                        <div class="form_field" data-field-id="usage_id"/>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ciclass"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="connectableci_id" />
+                        <div class="form_field" data-field-id="connectableci_id"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ci_ip_attribute" />
+                        <div class="form_field" data-field-id="ci_ip_attribute"/>
                      </div>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create"/>
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestaddresscreatev4-edit">
                <class>IPRequestAddressCreateV4</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status_ip" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status_ip" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="usage_id_friendlyname" data-field-flags="read_only" />
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="range_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="usage_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="short_name" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="domain_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="range_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ciclass" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="connectableci_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="short_name" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ci_ip_attribute" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="domain_id_friendlyname" data-field-flags="read_only"/>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ciclass" data-field-flags="read_only"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="connectableci_id_friendlyname" data-field-flags="read_only"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ci_ip_attribute" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div>
-                     <div class="form_field" data-field-id="public_log" />
+                     <div class="form_field" data-field-id="public_log"/>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -360,7 +360,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -368,112 +368,112 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status_ip" />
+                        <div class="form_field" data-field-id="status_ip"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id" data-field-flags="mandatory" />
+                        <div class="form_field" data-field-id="block_id" data-field-flags="mandatory"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id" data-field-flags="mandatory" />
+                        <div class="form_field" data-field-id="subnet_id" data-field-flags="mandatory"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="range_id" />
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="short_name" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="domain_id" />
+                        <div class="form_field" data-field-id="range_id"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="usage_id" />
+                        <div class="form_field" data-field-id="location_id"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="short_name"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="domain_id"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ciclass" />
+                        <div class="form_field" data-field-id="usage_id"/>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ciclass"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="connectableci_id" />
+                        <div class="form_field" data-field-id="connectableci_id"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ci_ip_attribute" />
+                        <div class="form_field" data-field-id="ci_ip_attribute"/>
                      </div>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create"/>
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestaddresscreatev6-edit">
                <class>IPRequestAddressCreateV6</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="ip_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status_ip" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status_ip" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="usage_id_friendlyname" data-field-flags="read_only" />
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only" />
-                     </div>
-                     <div class="col-sm-4">
-                        <div class="form_field" data-field-id="range_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="usage_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="block_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="short_name" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="subnet_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="domain_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="range_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ciclass" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="location_id_friendlyname" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="connectableci_id_friendlyname" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="short_name" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="ci_ip_attribute" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="domain_id_friendlyname" data-field-flags="read_only"/>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ciclass" data-field-flags="read_only"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="connectableci_id_friendlyname" data-field-flags="read_only"/>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="form_field" data-field-id="ci_ip_attribute" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div>
@@ -482,7 +482,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -495,7 +495,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -508,43 +508,43 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_status_ip" />
+                        <div class="form_field" data-field-id="new_status_ip"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_short_name" />
+                        <div class="form_field" data-field-id="new_short_name"/>
                      </div>
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_domain_id" />
+                        <div class="form_field" data-field-id="new_domain_id"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_usage_id" />
+                        <div class="form_field" data-field-id="new_usage_id"/>
                      </div>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create" />
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestaddressupdate-edit">
                <class>IPRequestAddressUpdate</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -576,7 +576,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -589,7 +589,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -599,24 +599,24 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create" />
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestaddressdelete-edit">
                <class>IPRequestAddressDelete</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -630,7 +630,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -643,7 +643,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -651,7 +651,7 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status_subnet" />
+                        <div class="form_field" data-field-id="status_subnet"/>
                      </div>
                   </div>
                   <div class="row">
@@ -672,30 +672,30 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="type" />
+                        <div class="form_field" data-field-id="type"/>
                      </div>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create"/>
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestsubnetcreatev4-edit">
                <class>IPRequestSubnetCreateV4</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -733,7 +733,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -746,7 +746,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -754,7 +754,7 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status_subnet" />
+                        <div class="form_field" data-field-id="status_subnet"/>
                      </div>
                   </div>
                   <div class="row">
@@ -775,30 +775,30 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="type" />
+                        <div class="form_field" data-field-id="type"/>
                      </div>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create"/>
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestsubnetcreatev6-edit">
                <class>IPRequestSubnetCreateV6</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -836,7 +836,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -849,7 +849,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -862,46 +862,46 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_status_subnet" />
+                        <div class="form_field" data-field-id="new_status_subnet"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="old_location_id" />
+                        <div class="form_field" data-field-id="old_location_id"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="new_location_id" />
+                        <div class="form_field" data-field-id="new_location_id"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="new_name" />
+                        <div class="form_field" data-field-id="new_name"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form_field" data-field-id="new_type" />
+                        <div class="form_field" data-field-id="new_type"/>
                      </div>
                   </div>
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create" />
+	               <mode id="create"/>
                </modes>
              </form>
             <form id="iprequestsubnetupdate-edit">
                <class>IPRequestSubnetUpdate</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -936,7 +936,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -949,7 +949,7 @@
                      </submit>
                   </navigation_rules>
                </properties>
-               <fields />
+               <fields/>
                <twig>
                   <div>
                      <div class="form_field" data-field-id="title" data-field-flags="mandatory"/>
@@ -959,24 +959,24 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="create" />
+	               <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestsubnetdelete-edit">
                <class>IPRequestSubnetDelete</class>
-               <fields />
+               <fields/>
                <twig>
                   <div class="row">
                      <div class="col-sm-8">
-                        <div class="form_field" data-field-id="title" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="title" data-field-flags="read_only"/>
                      </div>
                      <div class="col-sm-4">
-                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="status" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                        <div class="form_field" data-field-id="description" data-field-flags="read_only"/>
                      </div>
                   </div>
                   <div class="row">
@@ -990,7 +990,7 @@
                </twig>
                <modes>
                   <!-- mode id can among create / edit / view -->
-                  <mode id="edit"/>
+	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -998,11 +998,11 @@
          <classes>
             <!-- Note : A class (or one of its ancestors) MUST be declared 
                      here to be displayed in the portal -->
-         <class id="FunctionalCI">
+	         <class id="FunctionalCI">
             <scopes>
                <scope id="all">
                   <oql_view><![CDATA[SELECT FunctionalCI WHERE org_id = :current_contact->org_id]]></oql_view>
-                  <!-- oql_edit><![CDATA[SELECT FunctionalCI]]></oql_edit -->
+	               <!-- oql_edit><![CDATA[SELECT FunctionalCI]]></oql_edit -->
                </scope>
             </scopes>
          </class>
@@ -1014,7 +1014,7 @@
                <scope id="all">
                   <oql_view><![CDATA[SELECT Contact]]></oql_view>
                   <allowed_profiles>
-                     <allowed_profile id="Administrator" />
+                     <allowed_profile id="Administrator"/>
                   </allowed_profiles>
                </scope>
             </scopes>
@@ -1044,7 +1044,7 @@
                   <oql_view><![CDATA[SELECT DNSObject WHERE org_id = :current_contact->org_id]]></oql_view>
                   <oql_edit><![CDATA[SELECT DNSObject]]></oql_edit>
                   <allowed_profiles>
-                     <allowed_profile id="Portal power user" />
+                     <allowed_profile id="Portal power user"/>
                   </allowed_profiles>
                </scope>
             </scopes>
@@ -1090,7 +1090,7 @@
          <class id="User">
             <scopes>
                <!-- Note : Silos apply to those scope queries -->
-               <scope id="all">
+	            <scope id="all">
                   <oql_view><![CDATA[SELECT User AS U JOIN Person AS P ON U.contactid=P.id WHERE P.id = :current_contact_id]]></oql_view>
                </scope>
             </scopes>
@@ -1100,13 +1100,13 @@
             <action_rule id="contact-to-iprequest">
                <!-- source_oql|source_class is only necessary if there is some 
                   copy preset|retrofit -->
-               <source_oql><![CDATA[SELECT Contact AS C WHERE C.id = :current_contact_id]]></source_oql>
+	            <source_oql><![CDATA[SELECT Contact AS C WHERE C.id = :current_contact_id]]></source_oql>
                <presets>
                   <!-- Only set() and copy() are supported for now -->
-                  <preset id="1">set(caller_id, $current_contact_id$)</preset>
+	               <preset id="1">set(caller_id, $current_contact_id$)</preset>
                   <preset id="2">copy(org_id, org_id)</preset>
                </presets>
-               <retrofits />
+               <retrofits/>
             </action_rule>
          </action_rules>
          <navigation_rules>
