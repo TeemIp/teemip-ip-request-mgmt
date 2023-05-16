@@ -29,7 +29,6 @@ SetupWebPage::AddModule(
 		//
 		'datamodel' => array(
 			'vendor/autoload.php',
-			'src/Hook/IPRequestPlugIn.php',
 			'model.teemip-request-mgmt.php',
 		),
 		'data.struct' => array(
