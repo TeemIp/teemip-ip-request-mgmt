@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -24,9 +24,9 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// Can the stimulus be applied ?
-			$sResCheck = $this->CheckStimulus('ev_resolve');
+			$sResCheck = $this->CheckStimulus('ev_auto_resolve');
 			if ($sResCheck == '') {
-				if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */)) {
+				if (parent::ApplyStimulus('ev_auto_resolve', false /* $bDoNotWrite */)) {
 					// Update subnet and update public log
 					$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
 					$sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip').' /'.$oSubnet->Get('mask');
@@ -54,7 +54,7 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 	 * @throws \CoreException
 	 */
 	public function CheckStimulus($sStimulusCode) {
-		if ($sStimulusCode == 'ev_resolve') {
+		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// If subnet mask has changed, request agent to change it through manual tools
 			$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
 			if (is_null($oSubnet)) {
@@ -69,7 +69,7 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 	 * @inheritdoc
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
-		if ($sStimulusCode != 'ev_resolve') {
+		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} elseif (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */)) {
 			$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);

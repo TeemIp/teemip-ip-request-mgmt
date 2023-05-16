@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -22,7 +22,7 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// Can the stimulus be applied ?
-			$sResCheck = $this->CheckStimulus('ev_resolve');
+			$sResCheck = $this->CheckStimulus('ev_auto_resolve');
 			if ($sResCheck == '') {
 				if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */)) {
 					// Update IP and update public log
@@ -52,7 +52,7 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 	 * @throws \CoreUnexpectedValue
 	 */
 	public function CheckStimulus($sStimulusCode) {
-		if ($sStimulusCode == 'ev_resolve') {
+		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// Check that an IP address can be created with given parameters
 			$sNewShortName = $this->Get('new_short_name');
 			if ($sNewShortName != '') {
@@ -79,7 +79,7 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 	 * @inheritdoc
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
-		if ($sStimulusCode != 'ev_resolve') {
+		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} else {
 			if (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */)) {

@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -21,7 +21,7 @@ class _IPRequestSubnetDelete extends IPRequestSubnet {
 		// If user profile allows it and if parameter allows automatic processing, try to release subnet straight away
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
-			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */)) {
+			if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
 				// Release subnet and update public log
 				$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
 				$sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip').' /'.$oSubnet->Get('mask');
@@ -41,7 +41,7 @@ class _IPRequestSubnetDelete extends IPRequestSubnet {
 	 * @inheritdoc
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
-		if ($sStimulusCode != 'ev_resolve') {
+		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} elseif (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */)) {
 			$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);

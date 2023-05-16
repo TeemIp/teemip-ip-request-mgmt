@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -41,7 +41,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 					$aFreeSpace = $oBlock->GetFreeSpace($iSize, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
 					if (count($aFreeSpace) > 0) {
 						// Register subnet and update public log
-						if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */)) {
+						if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
 							$this->RegisterSubnet(true, $aFreeSpace[0]['firstip']);
 
 							$oLog = $this->Get('public_log');
@@ -67,7 +67,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 	 * @throws \CoreException
 	 */
 	public function CheckStimulus($sStimulusCode) {
-		if ($sStimulusCode == 'ev_resolve') {
+		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// Run the check only if no subnet has been manually assigned yet !
 			if ($this->Get('subnet_id') <= 0) {
 				// Check that block is not full already for required size
@@ -85,63 +85,6 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 		}
 
 		return '';
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	protected function DisplayActionFieldsForOperation(iTopWebPage $oP, $sOperation, $m_iFormId, $aDefault = array()) {
-		$sStimulus = $aDefault['stimulus'];
-		if ($sStimulus != 'ev_resolve') {
-			return;
-		}
-
-		$oP->add("<table>");
-		$oP->add("<input type=\"hidden\" name=\"stimulus\" value=\"$sStimulus\">\n");
-		$oP->add('<tr><td style="vertical-align:top">');
-
-		// Check if Subnet has already been manually allocated
-		if ($this->Get('subnet_id') <= 0) {
-			// No subnet has already been manually allocated, offer some
-			$sLabelOfAction1 = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet');
-
-			$oBlock = MetaModel::GetObject('IPv4Block', $this->Get('block_id'), true /* MustBeFound */);
-			$iSize = IPUtils::MaskToSize($this->Get('mask'));
-			$aFreeSpace = $oBlock->GetFreeSpace($iSize, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
-			$iSizeFreeArray = sizeof($aFreeSpace);
-			if ($iSizeFreeArray != 0) {
-				// Translate list of spaces into select box
-				$sInputId = $m_iFormId.'_'.'ip';
-				$sHTMLValue = "<select id=\"$sInputId\" name=\"ip\">\n";
-				$sFirstIp = $aFreeSpace[0]['firstip'];
-				$sHTMLValue .= "<option selected='' value=\"$sFirstIp\">$sFirstIp</option>\n";
-				for ($i = 1; $i < sizeof($aFreeSpace); $i++) {
-					$sFirstIp = $aFreeSpace[$i]['firstip'];
-					$sHTMLValue .= "<option value=\"$sFirstIp\">$sFirstIp</option>\n";
-				}
-				$sHTMLValue .= "</select>";
-			} else {
-				$sHTMLValue = "";
-			}
-		} else {
-			// A subnet has already been manually allocated
-			$sLabelOfAction1 = Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet', $this->GetAsHTML('subnet_id'));
-			$sHTMLValue = "";
-		}
-
-		$aDetails[] = array('label' => '<span title="">'.$sLabelOfAction1.'</span>', 'value' => $sHTMLValue);
-		$oP->Details($aDetails);
-		$oP->add('</td></tr>');
-
-		// Cancel button
-		$iObjId = $this->GetKey();
-		$oP->add("<tr><td><button type=\"button\" class=\"action\" onClick=\"BackToDetails('IPRequestSubnetCreateV4', $iObjId)\"><span>".Dict::S('UI:Button:Cancel')."</span></button>&nbsp;&nbsp;");
-
-
-		// Implement button
-		$oP->add("&nbsp;&nbsp<button type=\"submit\" class=\"action\"><span>".Dict::S('UI:IPManagement:Action:Implement:IPRequest:Button')."</span></button></td></tr>");
-
-		$oP->add("</table>");
 	}
 
 	/**
@@ -194,7 +137,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 	 * @inheritdoc
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
-		if ($sStimulusCode != 'ev_resolve') {
+		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} else {
 			$bProceedWithChange = false;

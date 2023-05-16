@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -35,7 +35,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate {
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// Can the stimulus be applied ?
-			$sResCheck = $this->CheckStimulus('ev_resolve');
+			$sResCheck = $this->CheckStimulus('ev_auto_resolve');
 			if ($sResCheck == '') {
 				// If the subnet exists...
 				$oIPSubnet = MetaModel::GetObject('IPv4Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
@@ -45,7 +45,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate {
 						// If there is as least one Ip available
 						$aFreeIPs = $this->GetFreeIPs();
 						if (count($aFreeIPs) > 0) {
-							if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */)) {
+							if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
 								// Register IP and update public log
 								$this->RegisterIp(true, $aFreeIPs[0]);
 
@@ -67,7 +67,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate {
 	 * @inheritdoc
 	 */
 	public function CheckStimulus($sStimulusCode) {
-		if ($sStimulusCode == 'ev_resolve') {
+		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// Run the check only if no IP has been manually assigned yet !
 			if ($this->Get('ip_id') <= 0) {
 				// Check that range or subnet is not full already
@@ -95,64 +95,6 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate {
 			}
 		}
 		return '';
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	protected function DisplayActionFieldsForOperation(iTopWebPage $oP, $sOperation, $iFormId, $aDefault) {
-		$sStimulus = $aDefault['stimulus'];
-		if ($sStimulus != 'ev_resolve') {
-			return;
-		}
-
-		$oP->add("<table>");
-		$oP->add("<input type=\"hidden\" name=\"stimulus\" value=\"$sStimulus\">\n");
-		$oP->add('<tr><td style="vertical-align:top">');
-
-		// Check if IP has already been manually allocated
-		if ($this->Get('ip_id') <= 0) {
-			// No IP has already been manually allocated, offer some
-			// Get array of free IPs
-			$sLabelOfAction1 = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:PickAnIp');
-			$aFreeIPs = $this->GetFreeIPs();
-			$iNumberOfFreeIps = count($aFreeIPs);
-
-			// There is at least an IP free. Check has been done before...
-			// ... unless pings has been required and all IPs ping
-			if ($iNumberOfFreeIps != 0) {
-				// Translate it into select box
-				$sInputId = $iFormId.'_'.'ip';
-				$sHTMLValue = "<select id=\"$sInputId\" name=\"ip\">\n";
-				// There is at least an IP free. Check has been done before.
-				$sHTMLValue .= "<option selected='' value=\"$aFreeIPs[0]\">$aFreeIPs[0]</option>\n";
-				for ($i = 1; $i < $iNumberOfFreeIps; $i++) {
-					$sHTMLValue .= "<option value=\"$aFreeIPs[$i]\">$aFreeIPs[$i]</option>\n";
-				}
-				$sHTMLValue .= "</select>";
-			} else {
-				$sHTMLValue = "";
-			}
-		}	
-		else
-		{
-			// AnIP has already been manually allocated
-			$sLabelOfAction1 = Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:ConfirmSelectedIP', $this->GetAsHTML('ip_id'));
-			$sHTMLValue = "";
-		}
-		
-		$aDetails[] = array('label' => '<span title="">'.$sLabelOfAction1.'</span>', 'value' => $sHTMLValue);
-		$oP->Details($aDetails);
-		$oP->add('</td></tr>');
-
-		// Cancel button
-		$iObjId = $this->GetKey();
-		$oP->add("<tr><td><button type=\"button\" class=\"action\" onClick=\"BackToDetails('IPRequestAddressCreateV4', $iObjId)\"><span>".Dict::S('UI:Button:Cancel')."</span></button>&nbsp;&nbsp;");
-
-		// Implement button
-		$oP->add("&nbsp;&nbsp<button type=\"submit\" class=\"action\"><span>".Dict::S('UI:IPManagement:Action:Implement:IPRequest:Button')."</span></button></td></tr>");
-
-		$oP->add("</table>");
 	}
 
 	/**
@@ -205,7 +147,7 @@ class _IPRequestAddressCreateV4 extends IPRequestAddressCreate {
 	 * @inheritdoc
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
-		if ($sStimulusCode != 'ev_resolve') {
+		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		}
 

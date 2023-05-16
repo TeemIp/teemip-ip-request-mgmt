@@ -83,7 +83,7 @@ try {
 						case 'IPRequestAddressDelete':
 						case 'IPRequestSubnetUpdate':
 						case 'IPRequestSubnetDelete':
-							if ($sStimulus == 'ev_resolve') {
+							if (($sStimulus == 'ev_auto_resolve') || ($sStimulus == 'ev_resolve')) {
 								// Apply stimulus
 								if ($oObj->ApplyStimulus($sStimulus)) {
 									$sMessage = Dict::Format('UI:Class_Object_Updated', MetaModel::GetName(get_class($oObj)), $oObj->GetName());
@@ -92,10 +92,8 @@ try {
 									$sMessage = Dict::S('UI:FailedToApplyStimuli');
 									DisplayMessage::Info($oP, $sMessage);
 								}
-								if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.0', '>=')) {
-									$sHeaderTitle = Dict::Format('UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object', $oObj->GetName());
-									$oP->SetBreadCrumbEntry($sHeaderTitle, $sHeaderTitle, '', '', 'fas fa-wrench', iTopWebPage::ENUM_BREADCRUMB_ENTRY_ICON_TYPE_CSS_CLASSES);
-								}
+								$sHeaderTitle = Dict::Format('UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object', $oObj->GetName());
+								$oP->SetBreadCrumbEntry($sHeaderTitle, $sHeaderTitle, '', '', 'fas fa-wrench', iTopWebPage::ENUM_BREADCRUMB_ENTRY_ICON_TYPE_CSS_CLASSES);
 								IPUtils::DisplayDetails($oP, $oObj);
 							}
 						break;
@@ -150,10 +148,8 @@ try {
 						$sMessage = Dict::S('UI:FailedToApplyStimuli');
 						DisplayMessage::Info($oP, $sMessage);
 					}
-					if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.0', '>=')) {
-						$sHeaderTitle = Dict::Format('UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object', $oObj->GetName());
-						$oP->SetBreadCrumbEntry($sHeaderTitle, $sHeaderTitle, '', '', 'fas fa-wrench', iTopWebPage::ENUM_BREADCRUMB_ENTRY_ICON_TYPE_CSS_CLASSES);
-					}
+					$sHeaderTitle = Dict::Format('UI:IPManagement:Action:Implement:IPRequest:Title_Class_Object', $oObj->GetName());
+					$oP->SetBreadCrumbEntry($sHeaderTitle, $sHeaderTitle, '', '', 'fas fa-wrench', iTopWebPage::ENUM_BREADCRUMB_ENTRY_ICON_TYPE_CSS_CLASSES);
 					IPUtils::DisplayDetails($oP, $oObj);
 				}
 			}

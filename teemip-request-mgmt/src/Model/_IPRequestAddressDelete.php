@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -21,7 +21,7 @@ class _IPRequestAddressDelete extends IPRequestAddress {
 		// If user profile allows it and if parameter allows automatic processing, try to release IP straight away
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
-			if (parent::ApplyStimulus('ev_resolve', true /* $bDoNotWrite */)) {
+			if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
 				// Release IP and update public log
 				$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
 				$sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
@@ -41,7 +41,7 @@ class _IPRequestAddressDelete extends IPRequestAddress {
 	 * @inheritdoc
 	 */
 	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
-		if ($sStimulusCode != 'ev_resolve') {
+		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} elseif (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */)) {
 			$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);

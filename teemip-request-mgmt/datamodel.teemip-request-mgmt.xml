@@ -441,7 +441,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -503,8 +504,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -1002,7 +1003,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -1064,8 +1066,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -1561,7 +1563,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -1623,8 +1626,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -1997,7 +2000,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -2059,8 +2063,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -2513,7 +2517,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -2578,8 +2583,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -3059,7 +3064,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -3124,8 +3130,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -3552,7 +3558,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -3617,8 +3624,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -3997,7 +4004,8 @@
           <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_assign" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_auto_assign" xsi:type="StimulusInternal"/>
-          <stimulus id="ev_resolve" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_resolve" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_auto_resolve" xsi:type="StimulusInternal"/>
           <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
         </stimuli>
         <states>
@@ -4062,8 +4070,8 @@
                 <target>assigned</target>
                 <actions/>
               </transition>
-              <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
+              <transition id="ev_auto_resolve">
+                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
