@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.1">
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0">
   <classes>
     <class id="IPSubnet" _delta="must_exist">
       <fields>
@@ -405,6 +405,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -465,7 +468,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -979,6 +981,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -1039,7 +1044,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -1553,6 +1557,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -1615,7 +1622,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -2052,6 +2058,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -2064,7 +2073,6 @@
       </properties>
       <fields/>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -2542,6 +2550,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -2635,7 +2646,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -3087,6 +3097,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -3324,7 +3337,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -3776,6 +3788,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -3834,7 +3849,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
@@ -4280,6 +4294,9 @@
             <attribute id="ref"/>
           </attributes>
         </naming>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
         <style>
           <icon>asset/img/iprequest.png</icon>
         </style>
@@ -4292,7 +4309,6 @@
       </properties>
       <fields/>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale>
           <item id="closed">
             <rank>1</rank>
