@@ -227,6 +227,7 @@ EOF
 			$sJS = "$('[data-uid=\"ev_resolve\"]').prop('href', '{$sUrl}');";
 			$oPage->add_ready_script($sJS);
 		}
+		// Highlight key attributes
 		if ($this instanceof IPRequestAddress) {
 			$oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/css/_iprequests_address.scss');
 		} else {
