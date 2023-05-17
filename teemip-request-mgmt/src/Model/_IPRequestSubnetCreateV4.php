@@ -32,6 +32,7 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// CheckStimulus is not called as all check operations need to be replayed here
 			// If the block exists...
+			$sLogEntry = '';
 			$oBlock = MetaModel::GetObject('IPv4Block', $this->Get('block_id'), false /* MustBeFound */);
 			if (!is_null($oBlock)) {
 				// ... and allows auto registration
@@ -44,15 +45,23 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 						if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
 							$this->RegisterSubnet(true, $aFreeSpace[0]['firstip']);
 
-							$oLog = $this->Get('public_log');
 							$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
 							$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation', $aFreeSpace[0]['firstip'].' /'.$this->Get('mask'), $this->Get('status_subnet'));
-							$oLog->AddLogEntry($sLogEntry);
-							$this->Set('public_log', $oLog);
-							$this->DBUpdate();
 						}
+					} else {
+						$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock');
 					}
+				} else {
+					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock');
 				}
+			} else {
+				$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock');
+			}
+			if ($sLogEntry != '') {
+				$oLog = $this->Get('public_log');
+				$oLog->AddLogEntry($sLogEntry);
+				$this->Set('public_log', $oLog);
+				$this->DBUpdate();
 			}
 		}
 	}

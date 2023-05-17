@@ -511,6 +511,7 @@ Dict::Add('EN US', 'English', 'English', array(
 
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'Subnet doesn\'t exist!',
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet' => 'Automatic IP creation is disabled for that subnet!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'Subnet is full!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullRange' => 'IP Range is full!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Short name already exists within domain!',
@@ -528,7 +529,8 @@ Dict::Add('EN US', 'English', 'English', array(
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'Subnet block doesn\'t exist!',
-	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'There is no more room in the block for a network with a %1$s mask !',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock' => 'Automatic subnet creation is disabled for that block!',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'There is no more room in the block for a network with a %1$s mask!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Select a free subnet',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'Subnet %1$s has already been selected.',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation' => 'Subnet %1$s has been created with status %2$s.',

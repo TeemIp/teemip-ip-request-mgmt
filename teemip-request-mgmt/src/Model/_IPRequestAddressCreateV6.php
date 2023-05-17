@@ -35,8 +35,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// Can the stimulus be applied ?
-			$sResCheck = $this->CheckStimulus('ev_auto_resolve');
-			if ($sResCheck == '') {
+			$sLogEntry = $this->CheckStimulus('ev_auto_resolve');
+			if ($sLogEntry == '') {
 				// If the subnet exists...
 				$oIPSubnet = MetaModel::GetObject('IPv6Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
 				if (!is_null($oIPSubnet)) {
@@ -49,16 +49,24 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 								// Register IP and update public log
 								$this->RegisterIp(true, $aFreeIPs[0]);
 
-								$oLog = $this->Get('public_log');
 								$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
 								$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation', $aFreeIPs[0], $this->Get('status_ip'));
-								$oLog->AddLogEntry($sLogEntry);
-								$this->Set('public_log', $oLog);
-								$this->DBUpdate();
 							}
+						} else {
+							$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet');
 						}
+					} else {
+						$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet');
 					}
+				} else {
+					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet');
 				}
+			}
+			if ($sLogEntry != '') {
+				$oLog = $this->Get('public_log');
+				$oLog->AddLogEntry($sLogEntry);
+				$this->Set('public_log', $oLog);
+				$this->DBUpdate();
 			}
 		}
 	}

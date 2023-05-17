@@ -511,6 +511,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'Le Sous-réseau n\'existe pas !',
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet' => 'La création automatique des IPs est désativée dans ce sous-réseau !',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'Le Sous-réseau est plein !',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullRange' => 'La plage d\'IPs est pleine !',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Le nom court existe déjà dans le domaine !',
@@ -528,6 +529,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'Le bloc de sous-réseaux n\'existe pas !',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock' => 'La création automatique des sous-réseaux est désactivée dans ce bloc !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'Il n\'y a plus de place pour un sous réseau de masque %1$s dans le bloc !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Sélectionner un sous-réseau de libre',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'Le sous-réseau %1$s a été sélectionné !',

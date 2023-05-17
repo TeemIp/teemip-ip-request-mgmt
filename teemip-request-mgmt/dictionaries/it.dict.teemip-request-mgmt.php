@@ -511,6 +511,7 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'La sottorete non esiste!',
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet' => 'La creazione automatica dell\'IP è disabilitata per quella sottorete!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'La sottorete Þ piena!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullRange' => 'L\'intervallo IP Þ pieno!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Il nome breve esiste giÓ nel dominio!',
@@ -528,6 +529,7 @@ Dict::Add('IT IT', 'Italian', 'Italiano', array(
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'La sottorete non esiste!',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock' => 'La creazione automatica della sottorete è disabilitata per quel blocco !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'Non c\'è più spazio nel blocco per una rete con una maschera %1$s !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Selezione una sottorete libera',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'La sottorete %1$s Þ giÓ stata selezionata.',

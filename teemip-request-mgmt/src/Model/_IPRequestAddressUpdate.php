@@ -22,21 +22,23 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// Can the stimulus be applied ?
-			$sResCheck = $this->CheckStimulus('ev_auto_resolve');
-			if ($sResCheck == '') {
+			$sLogEntry = $this->CheckStimulus('ev_auto_resolve');
+			if ($sLogEntry == '') {
 				if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */)) {
 					// Update IP and update public log
 					$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
 					$sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
 					$this->UpdateIP($oIp);
 
-					$oLog = $this->Get('public_log');
 					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
 					$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation', $sIp, $this->Get('status_ip'));
-					$oLog->AddLogEntry($sLogEntry);
-					$this->Set('public_log', $oLog);
-					$this->DBUpdate();
 				}
+			}
+			if ($sLogEntry != '') {
+				$oLog = $this->Get('public_log');
+				$oLog->AddLogEntry($sLogEntry);
+				$this->Set('public_log', $oLog);
+				$this->DBUpdate();
 			}
 		}
 	}

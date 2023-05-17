@@ -24,22 +24,23 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 		$aProfiles = UserRights::ListProfiles();
 		if (in_array('IP Portal Automation user', $aProfiles)) {
 			// Can the stimulus be applied ?
-			$sResCheck = $this->CheckStimulus('ev_auto_resolve');
-			if ($sResCheck == '') {
+			$sLogEntry = $this->CheckStimulus('ev_auto_resolve');
+			if ($sLogEntry == '') {
 				if (parent::ApplyStimulus('ev_auto_resolve', false /* $bDoNotWrite */)) {
 					// Update subnet and update public log
 					$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
 					$sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip').' /'.$oSubnet->Get('mask');
 					$this->UpdateSubnet($oSubnet);
 
-
-					$oLog = $this->Get('public_log');
 					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
 					$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation', $sSubnet);
-					$oLog->AddLogEntry($sLogEntry);
-					$this->Set('public_log', $oLog);
-					$this->DBUpdate();
 				}
+			}
+			if ($sLogEntry != '') {
+				$oLog = $this->Get('public_log');
+				$oLog->AddLogEntry($sLogEntry);
+				$this->Set('public_log', $oLog);
+				$this->DBUpdate();
 			}
 		}
 	}

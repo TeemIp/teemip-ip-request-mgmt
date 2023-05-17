@@ -511,6 +511,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// Implement IP Address Create
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet' => 'Subnetz existiert nicht!',
+	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet' => 'Die automatische IP-Erstellung ist für dieses Subnetz deaktiviert!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet' => 'Subnetz ist voll!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullRange' => 'IP Bereich ist voll!',
 	'UI:IPManagement:Action:Implement:IPRequestAddressCreate:IPNameCollision' => 'Der Short Name existiert bereits in der Domain!',
@@ -528,6 +529,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// Implement Subnet Create
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock' => 'Subnetz Block existiert nicht!',
+	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock' => 'Die automatische Subnetzerstellung ist für diesen Block deaktiviert!',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock' => 'Es gibt keinen Platz in diesem Block für ein Netzwerk mit der Maske %1$s !',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:PickASubnet' => 'Wählen Sie ein freies Subnetz aus',
 	'UI:IPManagement:Action:Implement:IPRequestSubnetCreate:ConfirmSelectedSubnet' => 'Subnetz %1$s wurde bereits ausgewählt.',
