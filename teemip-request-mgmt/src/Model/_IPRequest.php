@@ -63,31 +63,6 @@ class _IPRequest extends Ticket {
 		return 'R-IP-%06d';
 	}
 
-	/**
-	 * @param bool $bImgTag
-	 *
-	 * @return string
-	 * @throws \CoreException
-	 * @throws \Exception
-	 */
-	public function GetIcon($bImgTag = true) {
-		switch ($this->GetState()) {
-			case 'closed':
-				$sIconFile = 'iprequest-closed.png';
-				break;
-
-			default:
-				$sIconFile = 'iprequest.png';
-				break;
-		}
-		$sPath = utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/img/'.$sIconFile;
-		if ($bImgTag) {
-			return "<img src=\"$sPath\" style=\"vertical-align:middle;\" alt=\"\"/>";
-		} else {
-			return $sPath;
-		}
-	}
-
 	/*
 	 * Displays choices related to operation.
 	 *
