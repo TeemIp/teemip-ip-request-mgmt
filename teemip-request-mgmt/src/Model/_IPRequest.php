@@ -15,10 +15,10 @@ use Combodo\iTop\Application\UI\Base\Layout\Object\ObjectFactory;
 use Combodo\iTop\Application\UI\Base\Layout\PageContent\PageContentFactory;
 use Combodo\iTop\Application\UI\Base\Layout\UIContentBlock;
 use Dict;
+use IPRequestAddress;
 use iTopWebPage;
 use MetaModel;
 use Ticket;
-use UserRights;
 use utils;
 use WebPage;
 
@@ -241,7 +241,7 @@ EOF
 	 * @inheritdoc
 	 */
 	public function DisplayBareProperties(WebPage $oPage, $bEditMode = false, $sPrefix = '', $aExtraParams = array()) {
-		$aDisplayBlocks = parent::DisplayBareProperties($oPage, $bEditMode, $sPrefix, $aExtraParams);
+		$aFieldsMap = parent::DisplayBareProperties($oPage, $bEditMode, $sPrefix, $aExtraParams);
 
 		if ($this->Get('status') == 'assigned') {
 			// Replace  standard url behind ev_assign action by the one we need
@@ -252,8 +252,13 @@ EOF
 			$sJS = "$('[data-uid=\"ev_resolve\"]').prop('href', '{$sUrl}');";
 			$oPage->add_ready_script($sJS);
 		}
+		if ($this instanceof IPRequestAddress) {
+			$oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/css/_iprequests_address.scss');
+		} else {
+			$oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/css/_iprequests_subnet.scss');
+		}
 
-		return $aDisplayBlocks ;
+		return $aFieldsMap ;
 	}
 
 	/**
