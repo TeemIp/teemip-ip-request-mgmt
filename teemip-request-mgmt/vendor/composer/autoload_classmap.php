@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Hook\\IPRequestPlugIn' => $baseDir . '/src/Hook/IPRequestPlugIn.php',
     'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Model\\_IPRequest' => $baseDir . '/src/Model/_IPRequest.php',
     'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Model\\_IPRequestAddressCreateV4' => $baseDir . '/src/Model/_IPRequestAddressCreateV4.php',
     'TeemIp\\TeemIp\\Extension\\IPRequestManagement\\Model\\_IPRequestAddressCreateV6' => $baseDir . '/src/Model/_IPRequestAddressCreateV6.php',
