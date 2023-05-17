@@ -289,9 +289,17 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 	 */
 	private function RegisterIp($bNewIp, $sIp) {
 		if ($bNewIp) {
+			// Find corresponding IPConfig
+			$iOrgId = $this->Get('org_id');
+			$oIPConfig = MetaModel::GetObjectFromOQL("SELECT IPConfig AS c WHERE c.org_id = :org_id", array('org_id' => $iOrgId));
+			if (is_null($oIPConfig)) {
+				return;
+			}
+
 			// Create IP
 			$oIpv6 = MetaModel::NewObject('IPv6Address');
-			$oIpv6->Set('org_id', $this->Get('org_id'));
+			$oIpv6->Set('org_id', $iOrgId);
+			$oIpv6->Set('ipconfig_id', $oIPConfig->GetKey());
 			$oIpv6->Set('status', $this->Get('status_ip'));
 			$oIpv6->Set('short_name', $this->Get('short_name'));
 			$oIpv6->Set('domain_id', $this->Get('domain_id'));

@@ -192,8 +192,17 @@ class _IPRequestSubnetCreateV4 extends IPRequestSubnetCreate {
 	private function RegisterSubnet($bNewSubnet, $sSubnetIp) {
 		// Prepare and register subnet
 		if ($bNewSubnet) {
+			// Find corresponding IPConfig
+			$iOrgId = $this->Get('org_id');
+			$oIPConfig = MetaModel::GetObjectFromOQL("SELECT IPConfig AS c WHERE c.org_id = :org_id", array('org_id' => $iOrgId));
+			if (is_null($oIPConfig)) {
+				return;
+			}
+
+			// Create Subnet
 			$oSubnet = MetaModel::NewObject('IPv4Subnet');
-			$oSubnet->Set('org_id', $this->Get('org_id'));
+			$oSubnet->Set('org_id', $iOrgId);
+			$oSubnet->Set('ipconfig_id', $oIPConfig->GetKey());
 			$oSubnet->Set('block_id', $this->Get('block_id'));
 			$oSubnet->Set('ip', $sSubnetIp);
 			$oSubnet->Set('mask', $this->Get('mask'));
