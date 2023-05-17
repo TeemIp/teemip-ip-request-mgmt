@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -24,4 +24,4 @@ $sDir = basename(__DIR__);
 define('PORTAL_MODULE_ID', $sDir);
 define('PORTAL_ID', $sDir);
 
-require_once APPROOT . '/env-' . utils::GetCurrentEnvironment() . '/itop-portal-base/portal/web/index.php';
+require_once MODULESROOT.'itop-portal-base/index.php';

@@ -1,12 +1,12 @@
 <?php
 /*
- * @copyright   Copyright (C) 2021 TeemIp
+ * @copyright   Copyright (C) 2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'teemip-portal/3.0.0',
+	'teemip-portal/3.1.0',
 	array(
 		// Identification
 		'label' => 'Enhanced Portal for TeemIp',
@@ -14,7 +14,7 @@ SetupWebPage::AddModule(
 
 		// Setup
 		'dependencies' => array(
-			'itop-portal-base/2.7.0',
+			'itop-portal-base/3.0.0',
 		),
 		'mandatory' => false,
 		'visible' => true,
