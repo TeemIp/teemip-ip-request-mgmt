@@ -44,7 +44,7 @@
             <attachments>
                <allow_delete>true</allow_delete>
             </attachments>
-            <urlmaker_class>TeemIpPortalURLMaker</urlmaker_class>
+            <urlmaker_class>TeemIpPortalEditURLMaker</urlmaker_class>
          </properties>
          <bricks>
             <brick id="user-profile" xsi:type="Combodo\iTop\Portal\Brick\UserProfileBrick">
@@ -1122,7 +1122,7 @@
       </parameters>
    </module_parameters>
    <snippets>
-      <snippet id="TeemIpPortalURLMaker" _delta="define">
+      <snippet id="TeemIpPortalEditUrlMaker" _delta="define">
          <placement>module</placement>
          <rank>3</rank>
          <module>teemip-portal</module>
@@ -1155,7 +1155,13 @@ class TeemIpPortalViewUrlMaker extends TeemIpPortalEditUrlMaker
 }
 
 // Default portal hyperlink (for notifications) is the edit hyperlink
-DBObject::RegisterURLMakerClass('teemip-portal', 'TeemIpPortalViewUrlMaker');
+DBObject::RegisterURLMakerClass(TeemIpPortalEditUrlMaker::PORTAL_ID, 'TeemIpPortalEditUrlMaker');
+// Additional entries for hyperlinks in notifications:
+// - Explicit link to object in edit mode
+DBObject::RegisterURLMakerClass(TeemIpPortalEditUrlMaker::PORTAL_ID . '-edit', 'TeemIpPortalEditUrlMaker');
+// - Explicit link to object in view mode
+DBObject::RegisterURLMakerClass(TeemIpPortalEditUrlMaker::PORTAL_ID . '-view', 'TeemIpPortalViewUrlMaker');
+
 ]]></content>
       </snippet>
    </snippets>
