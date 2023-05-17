@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2023 TeemIp
+ * @copyright   Copyright (C) 2010-2023 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -21,11 +21,10 @@ SetupWebPage::AddModule(
 		
 		// Components
 		'datamodel' => array(
-			'model.teemip-portal.php'
+			'model.teemip-portal.php',
 		),
 		
 		'webservice' => array(
-		//'webservices.itop-portal.php',
 		),
 		
 		'dictionary' => array(
