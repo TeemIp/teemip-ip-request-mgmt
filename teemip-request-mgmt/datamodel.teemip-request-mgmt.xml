@@ -4841,19 +4841,24 @@
     <menu id="WelcomeMenuPage" xsi:type="DashboardMenuNode" _delta="must_exist">
       <definition>
         <cells>
-          <cell id="1">
-            <rank>1</rank>
+          <cell id="3" _delta="define">
+            <rank>3</rank>
             <dashlets>
-              <dashlet id="1" xsi:type="DashletHeaderDynamic" _delta="define">
+              <dashlet id="teemip-3-0" xsi:type="DashletHeaderStatic">
                 <rank>0</rank>
                 <title>Menu:IPRequestManagement</title>
+                <icon>teemip-ip-mgmt/asset/img/icons8-internet-folder-48.png</icon>
+              </dashlet>
+              <dashlet id="teemip-3-1" xsi:type="DashletHeaderDynamic" _delta="define">
+                <rank>1</rank>
+                <title>Menu:IPRequestManagement:Requests</title>
                 <icon>teemip-request-mgmt/asset/img/iprequest.png</icon>
                 <subtitle>Menu:IPRequestManagement:Overview:Requests</subtitle>
                 <query>SELECT IPRequest</query>
                 <group_by>status</group_by>
                 <values>new,rejected,assigned,resolved,closed</values>
               </dashlet>
-              <dashlet id="2" xsi:type="DashletObjectList" _delta="define">
+              <dashlet id="teemip-3-2" xsi:type="DashletObjectList" _delta="define">
                 <rank>1</rank>
                 <title>Menu:IPRequestManagement:MyOpenRequests</title>
                 <query>SELECT IPRequest AS r WHERE r.agent_id = :current_contact_id AND r.status NOT IN ("resolved", "closed")</query>

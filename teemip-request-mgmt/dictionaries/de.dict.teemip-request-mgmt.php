@@ -472,6 +472,8 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'Menu:IPRequestManagement:Overview+' => '',
 	'Menu:IPRequestManagement:ShortCut' => 'Shortcuts',
 	'Menu:IPRequestManagement:ShortCut+' => '',
+	'Menu:IPRequestManagement:Requests' => 'IP Anforderungen',
+	'Menu:IPRequestManagement:Requests+' => 'Alle Anforderungen für IP Objekte anzeigen',
 	'Menu:IPRequestManagement:OpenRequests' => 'Offene IP Anforderungen',
 	'Menu:IPRequestManagement:OpenRequests+' => 'Alle offenen Anforderungen für IP Objekte anzeigen',
 	'Menu:IPRequestManagement:MyRequests' => 'Meine IP Anforderungen',

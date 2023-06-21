@@ -472,6 +472,8 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Menu:IPRequestManagement:Overview+' => '',
 	'Menu:IPRequestManagement:ShortCut' => 'Raccourcis',
 	'Menu:IPRequestManagement:ShortCut+' => '',  
+	'Menu:IPRequestManagement:Requests' => 'Demandes IP',
+	'Menu:IPRequestManagement:Requests+' => 'Liste des demandes IP',
 	'Menu:IPRequestManagement:OpenRequests' => 'Demandes IP en cours',
 	'Menu:IPRequestManagement:OpenRequests+' => 'Liste des demandes IP en cours',
 	'Menu:IPRequestManagement:MyRequests' => 'Mes demandes IPs',
