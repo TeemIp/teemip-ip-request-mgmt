@@ -1,4 +1,4 @@
-# <img src="https://wiki.teemip.net/lib/exe/fetch.php?media=extensions:classicon_iprequest.png"> TeemIp IP Request Management
+# <img src="https://wiki.teemip.net/lib/exe/fetch.php?media=extensions:picto_iprequestmanagement.png"> TeemIp IP Request Management
 TeemIp workflow to handle IPAM requests - Includes TeemIp portal
 
 
