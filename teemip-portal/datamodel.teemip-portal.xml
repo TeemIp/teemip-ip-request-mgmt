@@ -55,7 +55,7 @@
                   <default>Brick:Portal:UserProfile:Navigation:Dropdown:MyProfil</default>
                </title>
                <decoration_class>
-                  <default>fa fa-user fa-2x</default>
+                  <default>fas fa-user fa-2x</default>
                </decoration_class>
                <form>
                   <!-- Optionnal tag to list the fields -->
@@ -93,7 +93,7 @@
                   <home>false</home>
                </visible>
                <decoration_class>
-                  <default>fa fa-bolt fa-2x fa-fw</default>
+                  <default>fas fa-bolt fa-2x fa-fw</default>
                </decoration_class>
 	            <!-- Class that will be create created with the form -->
 	            <class>IPRequest</class>
