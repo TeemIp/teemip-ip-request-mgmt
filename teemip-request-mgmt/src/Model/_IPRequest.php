@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2023 TeemIp
+ * @copyright   Copyright (C) 2010-2024 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -229,10 +229,15 @@ EOF
 		}
 		// Highlight key attributes
 		if ($this instanceof IPRequestAddress) {
-			$oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/css/_iprequests_address.scss');
+			$sSCSSFile = 'teemip-request-mgmt/asset/css/_iprequests_address.scss';
 		} else {
-			$oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().'teemip-request-mgmt/asset/css/_iprequests_subnet.scss');
+            $sSCSSFile = 'teemip-request-mgmt/asset/css/_iprequests_subnet.scss';
 		}
+        if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.2', '<')) {
+            $oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().$sSCSSFile);
+        } else {
+            $oPage->LinkStylesheetFromModule($sSCSSFile);
+        }
 
 		return $aFieldsMap ;
 	}
