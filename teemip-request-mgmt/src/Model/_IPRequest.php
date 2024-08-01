@@ -14,13 +14,13 @@ use Combodo\iTop\Application\UI\Base\Component\Toolbar\ToolbarUIBlockFactory;
 use Combodo\iTop\Application\UI\Base\Layout\Object\ObjectFactory;
 use Combodo\iTop\Application\UI\Base\Layout\PageContent\PageContentFactory;
 use Combodo\iTop\Application\UI\Base\Layout\UIContentBlock;
+use Combodo\iTop\Application\WebPage\WebPage;
 use Dict;
 use IPRequestAddress;
 use iTopWebPage;
 use MetaModel;
 use Ticket;
 use utils;
-use WebPage;
 
 class _IPRequest extends Ticket {
 	/**
@@ -56,10 +56,13 @@ class _IPRequest extends Ticket {
 		$this->Set('last_update', time());
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function GetTicketRefFormat() {
+
+    /**
+     * Get the format used to build tickets' ref
+     *
+     * @return string
+     */
+    public static function GetTicketRefFormat() {
 		return 'R-IP-%06d';
 	}
 
@@ -245,11 +248,11 @@ EOF
 	/**
 	 * @inheritdoc
 	 */
-	public function DisplayBareRelations(WebPage $oP, $bEditMode = false) {
-		parent::DisplayBareRelations($oP, $bEditMode);
+	public function DisplayBareRelations(WebPage $oPage, $bEditMode = false) {
+		parent::DisplayBareRelations($oPage, $bEditMode);
 
-		if (!$bEditMode) {
-			$oP->RemoveTab('Ticket:ImpactAnalysis');
+		if ($this->GetDisplayMode() == static::ENUM_DISPLAY_MODE_VIEW) {
+            $oPage->RemoveTab('Ticket:ImpactAnalysis');
 		}
 	}
 
