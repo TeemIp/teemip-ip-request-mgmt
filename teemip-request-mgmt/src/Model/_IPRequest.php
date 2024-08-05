@@ -14,13 +14,14 @@ use Combodo\iTop\Application\UI\Base\Component\Toolbar\ToolbarUIBlockFactory;
 use Combodo\iTop\Application\UI\Base\Layout\Object\ObjectFactory;
 use Combodo\iTop\Application\UI\Base\Layout\PageContent\PageContentFactory;
 use Combodo\iTop\Application\UI\Base\Layout\UIContentBlock;
-use Combodo\iTop\Application\WebPage\WebPage;
+//use Combodo\iTop\Application\WebPage\WebPage;
 use Dict;
 use IPRequestAddress;
 use iTopWebPage;
 use MetaModel;
 use Ticket;
 use utils;
+use WebPage;
 
 class _IPRequest extends Ticket {
 	/**
@@ -216,8 +217,8 @@ EOF
 	}
 
 	/**
-	 * @inheritdoc
-	 */
+     * @inheritdoc
+     */
 	public function DisplayBareProperties(WebPage $oPage, $bEditMode = false, $sPrefix = '', $aExtraParams = array()) {
 		$aFieldsMap = parent::DisplayBareProperties($oPage, $bEditMode, $sPrefix, $aExtraParams);
 
@@ -252,6 +253,7 @@ EOF
 		parent::DisplayBareRelations($oPage, $bEditMode);
 
 		if ($this->GetDisplayMode() == static::ENUM_DISPLAY_MODE_VIEW) {
+            /** @var \iTopWebPage $oPage */
             $oPage->RemoveTab('Ticket:ImpactAnalysis');
 		}
 	}
