@@ -14,7 +14,6 @@ use Combodo\iTop\Application\UI\Base\Component\Toolbar\ToolbarUIBlockFactory;
 use Combodo\iTop\Application\UI\Base\Layout\Object\ObjectFactory;
 use Combodo\iTop\Application\UI\Base\Layout\PageContent\PageContentFactory;
 use Combodo\iTop\Application\UI\Base\Layout\UIContentBlock;
-//use Combodo\iTop\Application\WebPage\WebPage;
 use Dict;
 use IPRequestAddress;
 use iTopWebPage;
@@ -237,11 +236,7 @@ EOF
 		} else {
             $sSCSSFile = 'teemip-request-mgmt/asset/css/_iprequests_subnet.scss';
 		}
-        if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.2', '<')) {
-            $oPage->add_linked_stylesheet(utils::GetAbsoluteUrlModulesRoot().$sSCSSFile);
-        } else {
-            $oPage->LinkStylesheetFromModule($sSCSSFile);
-        }
+        $oPage->LinkStylesheetFromModule($sSCSSFile);
 
 		return $aFieldsMap ;
 	}
@@ -252,7 +247,7 @@ EOF
 	public function DisplayBareRelations(WebPage $oPage, $bEditMode = false) {
 		parent::DisplayBareRelations($oPage, $bEditMode);
 
-		if ($this->GetDisplayMode() == static::ENUM_DISPLAY_MODE_VIEW) {
+		if ($this->GetDisplayMode() == cmdbAbstractObject::ENUM_DISPLAY_MODE_VIEW) {
             /** @var \iTopWebPage $oPage */
             $oPage->RemoveTab('Ticket:ImpactAnalysis');
 		}
