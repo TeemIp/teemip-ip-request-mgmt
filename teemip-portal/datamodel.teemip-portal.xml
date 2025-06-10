@@ -21,26 +21,58 @@
       <module_design id="teemip-portal" xsi:type="portal" _delta="define">
          <properties>
             <name>portal:teemip-portal</name>
-	         <!-- Can be either a fileref or a relative path to the file (To
-							be tested). Takes over env-xxx/branding/portal-logo.png -->
-	         <!--<fileref ref="brt_6a2be154b2a62659d3332c513bdad715"/> -->
-	         <!--<logo>../img/itop-logo.png</logo> -->
-	         <!-- Can be either a fileref or a relative path to the file from
-							/env-xxx -->
-	         <!-- Available themes must have a unique id. Some ids are loaded
-							in a specific order : bootstrap/portal/custom. Other ids are loaded after
-							them, but their order cannot be predicted -->
-	         <themes/>
-	         <!-- Can be either a fileref or a relative path to the file from
-							/env-xxx -->
-	         <!-- Available templates are id="layout|home" -->
-	         <templates/>
-	         <!-- An OQL query to determine which TriggerOnPortalUpdate to
-							use within THIS instance of the portal. This is mostly needed to enable different
-							triggers on several portal instances -->
-	         <!-- Note : ":parent_classes" parameter is a reserved name that
-							will be used for the current object class name (and its ancestors) -->
-	         <triggers_query><![CDATA[SELECT TriggerOnPortalUpdate AS t WHERE t.target_class IN (:parent_classes)]]></triggers_query>
+            <logo>teemip-portal/asset/img/Logo_TeemIP_horizontal_Blanc.svg</logo>
+            <themes>
+               <theme id="portal">itop-portal-new-look-for-3.2-lts/public/css/portal.scss</theme>
+               <theme id="bootstrap">itop-portal-new-look-for-3.2-lts/public/css/bootstrap-theme-combodo.scss</theme>
+               <theme id="main">itop-portal-new-look-for-3.2-lts/public/css/main.scss</theme>
+            </themes>
+            <templates>
+                <template id="layout">itop-portal-new-look-for-3.2-lts/templates/layout.html.twig</template>
+                <template id="home">itop-portal-new-look-for-3.2-lts/templates/home/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:page">itop-portal-new-look-for-3.2-lts/templates/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:navigation_menu">itop-portal-new-look-for-3.2-lts/templates/pages/navigation_menu.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:modal">itop-portal-new-look-for-3.2-lts/templates/modal/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:loader">itop-portal-new-look-for-3.2-lts/templates/helpers/loader.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:tagset_clic_handler_js">itop-portal-new-look-for-3.2-lts/templates/helpers/tagset_clic_handler.js.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:session_message">itop-portal-new-look-for-3.2-lts/templates/helpers/session_messages/session_message.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\AbstractController:session_messages">itop-portal-new-look-for-3.2-lts/templates/helpers/session_messages/session_messages.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\PortalBrick:tile">itop-portal-new-look-for-3.2-lts/templates/bricks/tile.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:page">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:tile">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/tile-default.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:tile_badge">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/tile-badge.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:tile_chart">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/tile-chart.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:tile_top_list">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/tile-top-list.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:page_chart">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/layout-chart.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:page_table">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/layout-table.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:mode_chart_bar">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/mode-bar-chart.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:mode_chart_pie">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/mode-pie-chart.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\ManageBrick:popup-export-excel">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/popup-export-excel.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\AggregatePageBrick:page">itop-portal-new-look-for-3.2-lts/templates/bricks/aggregate-page/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\AbstractBrick:page">itop-portal-new-look-for-3.2-lts/templates/bricks/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\BrowseBrick:tile">itop-portal-new-look-for-3.2-lts/templates/bricks/tile.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\BrowseBrick:page">itop-portal-new-look-for-3.2-lts/templates/bricks/browse/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\BrowseBrick:page_list">itop-portal-new-look-for-3.2-lts/templates/bricks/browse/mode_list.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\BrowseBrick:page_mosaic">itop-portal-new-look-for-3.2-lts/templates/bricks/browse/mode_mosaic.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\BrowseBrick:page_tree">itop-portal-new-look-for-3.2-lts/templates/bricks/browse/mode_tree.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\FilterBrick:tile">itop-portal-new-look-for-3.2-lts/templates/bricks/filter/tile.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\UserProfileBrick:page">itop-portal-new-look-for-3.2-lts/templates/bricks/user-profile/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\UserProfileBrick:user_info">itop-portal-new-look-for-3.2-lts/templates/bricks/user-profile/user_info.html.twig</template>
+                <template id="Combodo\iTop\Portal\Brick\UserProfileBrick:user_info_ready_js">itop-portal-new-look-for-3.2-lts/templates/bricks/user-profile/user_info.ready.js.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\DefaultController:page">itop-portal-new-look-for-3.2-lts/templates/home/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ManageBrickController:modal_export_excel">itop-portal-new-look-for-3.2-lts/templates/bricks/manage/popup-export-excel.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:page">itop-portal-new-look-for-3.2-lts/templates/bricks/object/layout.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:modal">itop-portal-new-look-for-3.2-lts/templates/bricks/object/modal.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_create">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_create.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_edit">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_edit.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_search_hierarchy">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_search_hierarchy.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_search_regular">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_search_regular.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_view">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_view.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_apply_stimulus">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_apply_stimulus.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_loader">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_loader.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:plugins_buttons">itop-portal-new-look-for-3.2-lts/templates/bricks/object/plugins_buttons.html.twig</template>
+            </templates>
+	        <triggers_query><![CDATA[SELECT TriggerOnPortalUpdate AS t WHERE t.target_class IN (:parent_classes)]]></triggers_query>
             <attachments>
                <allow_delete>true</allow_delete>
             </attachments>
@@ -58,16 +90,9 @@
                   <default>fas fa-user fa-2x</default>
                </decoration_class>
                <form>
-                  <!-- Optionnal tag to list the fields -->
 	               <fields/>
-	               <!-- Optionnal tag to specify the form layout. Fields that
-										are not positionned in the layout will be placed at the end of the form -->
 	               <twig>
-                     <!-- data-field-id attribute must be an attribute code 
-                        of the class -->
-		               <!-- data-field-flags attribute contains flags among
-											read_only/hidden/mandatory/must_prompt/must_change -->
-		               <div class="form_field" data-field-id="first_name" data-field-flags="read_only"/>
+   	                 <div class="form_field" data-field-id="first_name" data-field-flags="read_only"/>
                      <div class="form_field" data-field-id="name" data-field-flags="read_only"/>
                      <div class="form_field" data-field-id="org_id" data-field-flags="read_only"/>
                      <div class="form_field" data-field-id="email" data-field-flags="read_only"/>
@@ -78,7 +103,7 @@
                   </twig>
                </form>
             </brick>
-            <brick id="quick-new-iprequest-extended" xsi:type="Combodo\iTop\Portal\Brick\CreateBrick" _delta="define">
+            <brick id="quick-new-iprequest-extended" xsi:type="Combodo\iTop\Portal\Brick\CreateBrick">
                <active>true</active>
                <rank>
                   <default>10</default>
@@ -95,8 +120,7 @@
                <decoration_class>
                   <default>fas fa-bolt fa-2x fa-fw</default>
                </decoration_class>
-	            <!-- Class that will be create created with the form -->
-	            <class>IPRequest</class>
+               <class>IPRequest</class>
                <rules>
                   <rule id="contact-to-iprequest"/>
                </rules>
@@ -115,32 +139,15 @@
                   <default>fc fc-ongoing-request fc-2x</default>
                </decoration_class>
                <oql><![CDATA[SELECT IPRequest]]></oql>
-	            <!-- Optional tag to define the how the objects should be
-								 opened. Values can be edit|view. Note that even if this is set to edit, objects
-								 not allowed in edition mode for the user (cf. scopes and security layers)
-								 will open in view mode -->
-	            <!-- <opening_mode>edit</opening_mode> -->
-	            <!-- Can be either a class tag with the class name or an oql
-								 tag with the query -->
-	            <!-- <class>Ticket</class> -->
 	            <fields>
                   <field id="title"/>
                   <field id="start_date"/>
                   <field id="status"/>
                </fields>
-	            <!-- Optional tag to add attributes to the table by their
-								 code -->
 	            <grouping>
-                  <!-- Optionnal -->
 		            <tabs>
-                     <!-- Optionnal. Grouping by tabs -->
-			            <!--<attribute>operational_status</attribute> -->
-			            <!-- attribute xor groups tag -->
-			            <groups>
-                        <!-- Can be used only with ../oql tag, not ../class 
-                           tag. Reason is that we can't know the class alias to apply to the condition's 
-                           fields. We might have an exception saying that the field in ambigious for 
-                           the generated query. -->
+                        <show_tab_counts>true</show_tab_counts>
+                        <groups>
 				            <group id="recent">
                            <rank>1</rank>
                            <title>Brick:Portal:OngoingRequests:Tab:Recent</title>
@@ -158,7 +165,6 @@
                         </group>
                      </groups>
                   </tabs>
-		            <!-- Implicit grouping on y axis by finalclass -->
                </grouping>
                <data_loading>full</data_loading>
             </brick>
@@ -179,26 +185,16 @@
                   <default>fc fc-closed-request fc-2x</default>
                </decoration_class>
                <oql><![CDATA[SELECT IPRequest WHERE org_id = :current_contact->org_id AND caller_id = :current_contact_id AND status = 'closed']]></oql>
-	            <!-- Can be either a class tag with the class name or an oql
-								 tag with the query -->
-	            <!-- <class>Ticket</class> -->
 	            <fields>
                   <field id="title"/>
                   <field id="start_date"/>
                   <field id="status"/>
                </fields>
                <grouping>
-                  <!-- Optionnal -->
 	               <tabs>
-                     <!-- Optionnal. Grouping by tabs -->
-		               <!--<attribute>operational_status</attribute> -->
-		               <!-- attribute xor groups tag -->
-		               <groups>
-                        <!-- Can be used only with ../oql tag, not ../class
-                           tag. Reason is that we can't know the class alias to apply to the condition's
-                           fields. We might have an exception saying that the field in ambigious for
-                           the generated query. -->
-			               <group id="recent">
+                      <show_tab_counts>true</show_tab_counts>
+                      <groups>
+ 			               <group id="recent">
                            <rank>1</rank>
                            <title>Brick:Portal:ClosedRequests:Tab:Recent</title>
                            <condition><![CDATA[SELECT IPRequest WHERE (status = 'closed') AND (start_date > DATE(DATE_SUB(NOW(), INTERVAL 7 DAY))) ]]></condition>
@@ -210,7 +206,6 @@
                         </group>
                      </groups>
                   </tabs>
-	               <!-- Implicit grouping on y axis by finalclass -->
                </grouping>
                <data_loading>auto</data_loading>
             </brick>
@@ -276,8 +271,7 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="create"/>
+                  <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestaddresscreatev4-edit">
@@ -481,7 +475,6 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
@@ -526,7 +519,6 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="create"/>
                </modes>
             </form>
@@ -575,7 +567,6 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
@@ -598,7 +589,6 @@
                  </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="create"/>
                </modes>
             </form>
@@ -629,7 +619,6 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
@@ -677,7 +666,6 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="create"/>
                </modes>
             </form>
@@ -732,7 +720,6 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
 	               <mode id="edit"/>
                   <mode id="view"/>
                </modes>
@@ -780,8 +767,7 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="create"/>
+                  <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestsubnetcreatev6-edit">
@@ -835,8 +821,7 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="edit"/>
+                  <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -883,8 +868,7 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="create"/>
+                  <mode id="create"/>
                </modes>
              </form>
             <form id="iprequestsubnetupdate-edit">
@@ -935,8 +919,7 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="edit"/>
+                  <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
@@ -958,8 +941,7 @@
                  </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="create"/>
+                  <mode id="create"/>
                </modes>
             </form>
             <form id="iprequestsubnetdelete-edit">
@@ -989,20 +971,16 @@
                   </div>
                </twig>
                <modes>
-                  <!-- mode id can among create / edit / view -->
-	               <mode id="edit"/>
+                  <mode id="edit"/>
                   <mode id="view"/>
                </modes>
             </form>
          </forms>
          <classes>
-            <!-- Note : A class (or one of its ancestors) MUST be declared 
-                     here to be displayed in the portal -->
-	         <class id="FunctionalCI">
+            <class id="FunctionalCI">
             <scopes>
                <scope id="all">
                   <oql_view><![CDATA[SELECT FunctionalCI WHERE org_id = :current_contact->org_id]]></oql_view>
-	               <!-- oql_edit><![CDATA[SELECT FunctionalCI]]></oql_edit -->
                </scope>
             </scopes>
          </class>
@@ -1089,8 +1067,7 @@
          </class>
          <class id="User">
             <scopes>
-               <!-- Note : Silos apply to those scope queries -->
-	            <scope id="all">
+               <scope id="all">
                   <oql_view><![CDATA[SELECT User AS U JOIN Person AS P ON U.contactid=P.id WHERE P.id = :current_contact_id]]></oql_view>
                </scope>
             </scopes>
@@ -1098,12 +1075,9 @@
          </classes>
          <action_rules>
             <action_rule id="contact-to-iprequest">
-               <!-- source_oql|source_class is only necessary if there is some 
-                  copy preset|retrofit -->
-	            <source_oql><![CDATA[SELECT Contact AS C WHERE C.id = :current_contact_id]]></source_oql>
+               <source_oql><![CDATA[SELECT Contact AS C WHERE C.id = :current_contact_id]]></source_oql>
                <presets>
-                  <!-- Only set() and copy() are supported for now -->
-	               <preset id="1">set(caller_id, $current_contact_id$)</preset>
+                  <preset id="1">set(caller_id, $current_contact_id$)</preset>
                   <preset id="2">copy(org_id, org_id)</preset>
                </presets>
                <retrofits/>
@@ -1119,6 +1093,11 @@
    <module_parameters>
       <parameters id="teemip-portal" _delta="define">
          <lazy_loading_threshold>500</lazy_loading_threshold><!-- Will be placed in the conf/<env>/config-itop.php file under the itop-portal module's settings  -->
+      </parameters>
+      <parameters id="itop-portal-new-look-for-3.2-lts" _delta="must_exist">
+         <menu_display_style type="hash">
+            <teemip-portal _delta="define">horizontal</teemip-portal>
+         </menu_display_style>
       </parameters>
    </module_parameters>
    <snippets>
