@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" load="strict">
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2" load="strict">
   <classes>
     <class id="IPSubnet" _delta="must_exist">
       <fields>
@@ -176,7 +176,35 @@
           <is_null_allowed>true</is_null_allowed>
         </field>
       </fields>
-      <methods/>
+      <event_listeners>
+        <event_listener id="OnIPRequestBeforeWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_BEFORE_WRITE</event>
+          <callback>OnIPRequestBeforeWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
+      <methods>
+        <method id="OnIPRequestBeforeWriteRequestedByIpRequestMgmt">
+          <static>false</static>
+          <access>public</access>
+          <type>EventListener</type>
+          <code><![CDATA[ public function OnIPRequestBeforeWriteRequestedByIpRequestMgmt(Combodo\iTop\Service\Events\EventData $oEventData): void
+	{
+        $aEventData = $oEventData->GetEventData();
+        if ($aEventData['is_new']) {
+            $this->Set('start_date', time());
+            $this->Set('last_update', time());
+        } else {
+            // Auto assign if possible
+            if (($this->Get('status') == 'new') && ($this->Get('team_id') > 0) && ($this->Get('agent_id') > 0)) {
+                $this->ApplyStimulus('ev_auto_assign');
+            }
+
+            $this->Set('last_update', time());
+        }
+    }]]></code>
+        </method>
+      </methods>
       <presentation>
         <search>
           <items>
@@ -467,6 +495,13 @@
           <target_attcode>name</target_attcode>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="OnIPRequestAddressCreateV4AfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestAddressCreateV4AfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -526,7 +561,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -539,12 +573,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -591,7 +623,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -665,12 +696,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -747,19 +776,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -1043,6 +1072,13 @@
           <target_attcode>name</target_attcode>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="OnIPRequestAddressCreateV6AfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestAddressCreateV6AfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -1102,7 +1138,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -1115,12 +1150,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -1167,7 +1200,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -1241,12 +1273,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -1323,19 +1353,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -1621,6 +1651,13 @@
           <target_attcode>name</target_attcode>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="OnIPRequestAddressUpdateAfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestAddressUpdateAfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -1680,7 +1717,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -1693,12 +1729,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -1745,7 +1779,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -1804,12 +1837,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -1868,19 +1899,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -2072,6 +2103,13 @@
         </reconciliation>
       </properties>
       <fields/>
+      <event_listeners>
+        <event_listener id="OnIPRequestAddressDeleteAfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestAddressDeleteAfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -2131,7 +2169,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -2144,12 +2181,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -2193,7 +2228,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -2240,12 +2274,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -2292,19 +2324,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -2645,6 +2677,13 @@
           <jointype/>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="OnIPRequestSubnetCreateV4AfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestSubnetCreateV4AfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -2707,7 +2746,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -2720,12 +2758,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -2772,7 +2808,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -2834,12 +2869,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -2898,19 +2931,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -3336,6 +3369,13 @@
           <jointype/>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="OnIPRequestSubnetCreateV6AfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestSubnetCreateV6AfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -3398,7 +3438,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -3411,12 +3450,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -3463,7 +3500,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -3525,12 +3561,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -3589,19 +3623,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -3848,6 +3882,13 @@
           <jointype/>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="OnIPRequestSubnetUpdateAfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestSubnetUpdateAfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -3910,7 +3951,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -3923,12 +3963,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -3972,7 +4010,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -4034,12 +4071,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -4101,19 +4136,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
@@ -4308,6 +4343,13 @@
         </reconciliation>
       </properties>
       <fields/>
+      <event_listeners>
+        <event_listener id="OnIPRequestSubnetDeleteAfterWriteRequestedByIpRequestMgmt">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnIPRequestSubnetDeleteAfterWriteRequestedByIpRequestMgmt</callback>
+          <rank>10</rank>
+        </event_listener>
+      </event_listeners>
       <lifecycle>
         <highlight_scale>
           <item id="closed">
@@ -4370,7 +4412,6 @@
             </flags>
             <transitions>
               <transition id="ev_assign">
-                <stimulus>ev_assign</stimulus>
                 <target>assigned</target>
                 <flags>
                   <attribute id="team_id">
@@ -4383,12 +4424,10 @@
                 <actions/>
               </transition>
               <transition id="ev_auto_assign">
-                <stimulus>ev_auto_assign</stimulus>
                 <target>assigned</target>
                 <actions/>
               </transition>
               <transition id="ev_auto_resolve">
-                <stimulus>ev_auto_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
@@ -4432,7 +4471,6 @@
             </flags>
             <transitions>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
                 <actions/>
               </transition>
@@ -4479,12 +4517,10 @@
             </flags>
             <transitions>
               <transition id="ev_resolve">
-                <stimulus>ev_resolve</stimulus>
                 <target>resolved</target>
                 <actions/>
               </transition>
               <transition id="ev_reject">
-                <stimulus>ev_reject</stimulus>
                 <target>rejected</target>
                 <actions/>
               </transition>
@@ -4531,19 +4567,19 @@
             </flags>
             <transitions>
               <transition id="ev_close">
-                <stimulus>ev_close</stimulus>
                 <target>closed</target>
                 <actions>
                   <action>
-                    <verb>SetClosureDate</verb>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
                   </action>
                 </actions>
               </transition>
               <transition id="ev_reopen">
-                <stimulus>ev_reopen</stimulus>
                 <target>new</target>
-                <actions>
-                </actions>
+                <actions/>
               </transition>
             </transitions>
           </state>
