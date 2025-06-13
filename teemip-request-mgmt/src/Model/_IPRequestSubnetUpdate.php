@@ -1,11 +1,12 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2023 TeemIp
+ * @copyright   Copyright (C) 2010-2025 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 namespace TeemIp\TeemIp\Extension\IPRequestManagement\Model;
 
+use Combodo\iTop\Service\Events\EventData;
 use CMDBObjectSet;
 use DBObjectSearch;
 use Dict;
@@ -13,36 +14,42 @@ use IPRequestSubnet;
 use MetaModel;
 use UserRights;
 
-class _IPRequestSubnetUpdate extends IPRequestSubnet {
-	/**
-	 * @inheritdoc
-	 */
-	public function AfterInsert() {
-		parent::AfterInsert();
+class _IPRequestSubnetUpdate extends IPRequestSubnet
+{
+    /**
+     * Handle After Write event on IPRequestSubnetUpdate
+     *
+     * @param EventData $oEventData
+     * @return void
+     */
+    public function OnIPRequestSubnetUpdateAfterWriteRequestedByIpRequestMgmt(EventData $oEventData): void
+    {
+        $aEventData = $oEventData->GetEventData();
+        if ($aEventData['is_new']) {
+            // Has the user the right profile for automatic update ?
+            $aProfiles = UserRights::ListProfiles();
+            if (in_array('IP Portal Automation user', $aProfiles)) {
+                // Can the stimulus be applied ?
+                $sLogEntry = $this->CheckStimulus('ev_auto_resolve');
+                if ($sLogEntry == '') {
+                    if (parent::ApplyStimulus('ev_auto_resolve', false /* $bDoNotWrite */)) {
+                        // Update subnet and update public log
+                        $oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
+                        $sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip') . ' /' . $oSubnet->Get('mask');
+                        $this->UpdateSubnet($oSubnet);
 
-		// Has the user the right profile for automatic update ?
-		$aProfiles = UserRights::ListProfiles();
-		if (in_array('IP Portal Automation user', $aProfiles)) {
-			// Can the stimulus be applied ?
-			$sLogEntry = $this->CheckStimulus('ev_auto_resolve');
-			if ($sLogEntry == '') {
-				if (parent::ApplyStimulus('ev_auto_resolve', false /* $bDoNotWrite */)) {
-					// Update subnet and update public log
-					$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
-					$sSubnet = (is_null($oSubnet)) ? '' : $oSubnet->Get('ip').' /'.$oSubnet->Get('mask');
-					$this->UpdateSubnet($oSubnet);
-
-					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
-					$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation', $sSubnet);
-				}
-			}
-			if ($sLogEntry != '') {
-				$oLog = $this->Get('public_log');
-				$oLog->AddLogEntry($sLogEntry);
-				$this->Set('public_log', $oLog);
-				$this->DBUpdate();
-			}
-		}
+                        $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+                        $sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetUpdate:Confirmation', $sSubnet);
+                    }
+                }
+                if ($sLogEntry != '') {
+                    $oLog = $this->Get('public_log');
+                    $oLog->AddLogEntry($sLogEntry);
+                    $this->Set('public_log', $oLog);
+                    $this->DBUpdate();
+                }
+            }
+        }
 	}
 
 	/**
@@ -54,7 +61,8 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 	 * @throws \ArchivedObjectException
 	 * @throws \CoreException
 	 */
-	public function CheckStimulus($sStimulusCode) {
+	public function CheckStimulus($sStimulusCode): string
+    {
 		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// If subnet mask has changed, request agent to change it through manual tools
 			$oSubnet = MetaModel::GetObject('IPSubnet', $this->Get('subnet_id'), false /* MustBeFound */);
@@ -69,7 +77,8 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 	/**
 	 * @inheritdoc
 	 */
-	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
+	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false): bool
+    {
 		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} elseif (parent::ApplyStimulus($sStimulusCode, false /* $bDoNotWrite */)) {
@@ -88,7 +97,8 @@ class _IPRequestSubnetUpdate extends IPRequestSubnet {
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function UpdateSubnet($oSubnet) {
+	private function UpdateSubnet($oSubnet): bool
+    {
 		if (!is_null($oSubnet)) {
 			$sNewName = $this->Get('new_name');
 			if ($sNewName != '') {

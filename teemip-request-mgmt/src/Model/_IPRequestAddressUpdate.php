@@ -1,46 +1,53 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2023 TeemIp
+ * @copyright   Copyright (C) 2010-2025 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 namespace TeemIp\TeemIp\Extension\IPRequestManagement\Model;
 
+use Combodo\iTop\Service\Events\EventData;
 use Dict;
 use IPRequestAddress;
 use MetaModel;
 use UserRights;
 
-class _IPRequestAddressUpdate extends IPRequestAddress {
-	/**
-	 * @inheritdoc
-	 */
-	public function AfterInsert() {
-		parent::AfterInsert();
+class _IPRequestAddressUpdate extends IPRequestAddress
+{
+    /**
+     * Handle After Write event on IPRequestAddressUpdate
+     *
+     * @param EventData $oEventData
+     * @return void
+     */
+    public function OnIPRequestAddressUpdateAfterWriteRequestedByIpRequestMgmt(EventData $oEventData): void
+    {
+        $aEventData = $oEventData->GetEventData();
+        if ($aEventData['is_new']) {
+            // Has the user the right profile for automatic update ?
+            $aProfiles = UserRights::ListProfiles();
+            if (in_array('IP Portal Automation user', $aProfiles)) {
+                // Can the stimulus be applied ?
+                $sLogEntry = $this->CheckStimulus('ev_auto_resolve');
+                if ($sLogEntry == '') {
+                    if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */)) {
+                        // Update IP and update public log
+                        $oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
+                        $sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
+                        $this->UpdateIP($oIp);
 
-		// Has the user the right profile for automatic update ?
-		$aProfiles = UserRights::ListProfiles();
-		if (in_array('IP Portal Automation user', $aProfiles)) {
-			// Can the stimulus be applied ?
-			$sLogEntry = $this->CheckStimulus('ev_auto_resolve');
-			if ($sLogEntry == '') {
-				if (parent::ApplyStimulus('ev_resolve', false /* $bDoNotWrite */)) {
-					// Update IP and update public log
-					$oIp = MetaModel::GetObject('IPAddress', $this->Get('ip_id'), false /* MustBeFound */);
-					$sIp = (is_null($oIp)) ? '' : $oIp->Get('ip');
-					$this->UpdateIP($oIp);
-
-					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
-					$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation', $sIp, $this->Get('status_ip'));
-				}
-			}
-			if ($sLogEntry != '') {
-				$oLog = $this->Get('public_log');
-				$oLog->AddLogEntry($sLogEntry);
-				$this->Set('public_log', $oLog);
-				$this->DBUpdate();
-			}
-		}
+                        $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+                        $sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressUpdate:Confirmation', $sIp, $this->Get('status_ip'));
+                    }
+                }
+                if ($sLogEntry != '') {
+                    $oLog = $this->Get('public_log');
+                    $oLog->AddLogEntry($sLogEntry);
+                    $this->Set('public_log', $oLog);
+                    $this->DBUpdate();
+                }
+            }
+        }
 	}
 
 	/**
@@ -53,7 +60,8 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	public function CheckStimulus($sStimulusCode) {
+	public function CheckStimulus($sStimulusCode): string
+    {
 		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// Check that an IP address can be created with given parameters
 			$sNewShortName = $this->Get('new_short_name');
@@ -80,7 +88,8 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 	/**
 	 * @inheritdoc
 	 */
-	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
+	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false): bool
+    {
 		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} else {
@@ -101,7 +110,8 @@ class _IPRequestAddressUpdate extends IPRequestAddress {
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	private function UpdateIP($oIp) {
+	private function UpdateIP($oIp): bool
+    {
 		if (!is_null($oIp)) {
 			$sNewStatusIp = $this->Get('new_status_ip');
 			if (($sNewStatusIp != '') && ($sNewStatusIp != $oIp->Get('status'))) {

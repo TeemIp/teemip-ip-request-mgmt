@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2023 TeemIp
+ * @copyright   Copyright (C) 2010-2025 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -13,6 +13,7 @@ use Combodo\iTop\Application\UI\Base\Component\Input\Select\SelectOptionUIBlockF
 use Combodo\iTop\Application\UI\Base\Component\Input\SelectUIBlockFactory;
 use Combodo\iTop\Application\UI\Base\Layout\MultiColumn\Column\Column;
 use Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumn;
+use Combodo\iTop\Service\Events\EventData;
 use DBObjectSearch;
 use Dict;
 use IPConfig;
@@ -24,51 +25,57 @@ use TeemIp\TeemIp\Extension\IPv6Management\Model\ormIPv6;
 use UserRights;
 use utils;
 
-class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
-	/**
-	 * @inheritdoc
-	 */
-	public function AfterInsert() {
-		parent::AfterInsert();
+class _IPRequestAddressCreateV6 extends IPRequestAddressCreate
+{
+    /**
+     * Handle After Write event on IPRequestAddressCreateV6
+     *
+     * @param EventData $oEventData
+     * @return void
+     */
+    public function OnIPRequestAddressCreateV6AfterWriteRequestedByIpRequestMgmt(EventData $oEventData): void
+    {
+        $aEventData = $oEventData->GetEventData();
+        if ($aEventData['is_new']) {
+            // Has the user the right profile for auto registration ?
+            $aProfiles = UserRights::ListProfiles();
+            if (in_array('IP Portal Automation user', $aProfiles)) {
+                // Can the stimulus be applied ?
+                $sLogEntry = $this->CheckStimulus('ev_auto_resolve');
+                if ($sLogEntry == '') {
+                    // If the subnet exists...
+                    $oIPSubnet = MetaModel::GetObject('IPv6Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
+                    if (!is_null($oIPSubnet)) {
+                        // ... and allows auto registration
+                        if ($oIPSubnet->Get('allow_automatic_ip_creation') == "yes") {
+                            // If there is as least one Ip available
+                            $aFreeIPs = $this->GetFreeIPs();
+                            if (count($aFreeIPs) > 0) {
+                                if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
+                                    // Register IP and update public log
+                                    $this->RegisterIp(true, $aFreeIPs[0]);
 
-		// Has the user the right profile for auto registration ?
-		$aProfiles = UserRights::ListProfiles();
-		if (in_array('IP Portal Automation user', $aProfiles)) {
-			// Can the stimulus be applied ?
-			$sLogEntry = $this->CheckStimulus('ev_auto_resolve');
-			if ($sLogEntry == '') {
-				// If the subnet exists...
-				$oIPSubnet = MetaModel::GetObject('IPv6Subnet', $this->Get('subnet_id'), false /* MustBeFound */);
-				if (!is_null($oIPSubnet)) {
-					// ... and allows auto registration
-					if ($oIPSubnet->Get('allow_automatic_ip_creation') == "yes") {
-						// If there is as least one Ip available
-						$aFreeIPs = $this->GetFreeIPs();
-						if (count($aFreeIPs) > 0) {
-							if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
-								// Register IP and update public log
-								$this->RegisterIp(true, $aFreeIPs[0]);
-
-								$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
-								$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation', $aFreeIPs[0], $this->Get('status_ip'));
-							}
-						} else {
-							$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet');
-						}
-					} else {
-						$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet');
-					}
-				} else {
-					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet');
-				}
-			}
-			if ($sLogEntry != '') {
-				$oLog = $this->Get('public_log');
-				$oLog->AddLogEntry($sLogEntry);
-				$this->Set('public_log', $oLog);
-				$this->DBUpdate();
-			}
-		}
+                                    $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+                                    $sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestAddressCreate:Confirmation', $aFreeIPs[0], $this->Get('status_ip'));
+                                }
+                            } else {
+                                $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:FullSubnet');
+                            }
+                        } else {
+                            $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoAutomaticAllocationInSubnet');
+                        }
+                    } else {
+                        $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAddressCreate:NoSuchSubnet');
+                    }
+                }
+                if ($sLogEntry != '') {
+                    $oLog = $this->Get('public_log');
+                    $oLog->AddLogEntry($sLogEntry);
+                    $this->Set('public_log', $oLog);
+                    $this->DBUpdate();
+                }
+            }
+        }
 	}
 
 	/**
@@ -81,7 +88,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 	 * @throws \CoreException
 	 * @throws \CoreUnexpectedValue
 	 */
-	public function CheckStimulus($sStimulusCode) {
+	public function CheckStimulus($sStimulusCode): string
+    {
 		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// Run the check only if no IP has been manually assigned yet !
 			if ($this->Get('ip_id') <= 0) {
@@ -114,7 +122,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 	/**
 	 * @inheritdoc
 	 */
-	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault) {
+	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault): void
+    {
 		$sStimulus = $aDefault['stimulus'];
 		if ($sStimulus != 'ev_resolve') {
 			return;
@@ -160,7 +169,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 	/**
 	 * @inheritdoc
 	 */
-	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
+	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false): bool
+    {
 		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		}
@@ -202,7 +212,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 	 * @throws \MySQLException
 	 * @throws \OQLException
 	 */
-	private function GetFreeIPs() {
+	private function GetFreeIPs(): array
+    {
 		$aFreeIPs = array();
 
 		// Make sure specified subnet exists
@@ -287,7 +298,8 @@ class _IPRequestAddressCreateV6 extends IPRequestAddressCreate {
 	 * @throws \MySQLException
 	 * @throws \OQLException
 	 */
-	private function RegisterIp($bNewIp, $sIp) {
+	private function RegisterIp($bNewIp, $sIp): void
+    {
 		if ($bNewIp) {
 			// Find corresponding IPConfig
 			$iOrgId = $this->Get('org_id');

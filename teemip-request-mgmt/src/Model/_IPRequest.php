@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2024 TeemIp
+ * @copyright   Copyright (C) 2010-2025 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -22,47 +22,15 @@ use Ticket;
 use utils;
 use WebPage;
 
-class _IPRequest extends Ticket {
-	/**
-	 * @param $sStimulusCode
-	 *
-	 * @return bool
-	 * @throws \CoreException
-	 * @throws \CoreUnexpectedValue
-	 */
-	public function SetClosureDate($sStimulusCode) {
-		$this->Set('close_date', time());
-
-		return true;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	protected function OnInsert() {
-		$this->Set('start_date', time());
-		$this->Set('last_update', time());
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	protected function OnUpdate() {
-		// Auto assign if possible
-		if (($this->Get('status') == 'new') && ($this->Get('team_id') > 0) && ($this->Get('agent_id') > 0)) {
-			$this->ApplyStimulus('ev_auto_assign');
-		}
-
-		$this->Set('last_update', time());
-	}
-
-
+class _IPRequest extends Ticket
+{
     /**
      * Get the format used to build tickets' ref
      *
      * @return string
      */
-    public static function GetTicketRefFormat() {
+    public static function GetTicketRefFormat(): string
+    {
 		return 'R-IP-%06d';
 	}
 
@@ -79,7 +47,8 @@ class _IPRequest extends Ticket {
 	 * @throws \CoreException
 	 * @throws \DictExceptionMissingString
 	 */
-	public function DisplayOperationForm(iTopWebPage $oP, $oAppContext, $sOperation, $aDefault = array()) {
+	public function DisplayOperationForm(iTopWebPage $oP, $oAppContext, $sOperation, $aDefault = array()): void
+    {
 		$id = $this->GetKey();
 		$sClass = get_class($this);
 		$sClassLabel = MetaModel::GetName($sClass);
@@ -148,7 +117,8 @@ EOF
 	 * @param $sClassLabel
 	 * @param bool $bIcon
 	 */
-	public function SetPageTitles(iTopWebPage $oP, $sUIPath, $bIcon = true) {
+	public function SetPageTitles(iTopWebPage $oP, $sUIPath, $bIcon = true): void
+    {
 		$sClassLabel = MetaModel::GetName(get_class($this));
 		$oP->set_title(Dict::Format($sUIPath.':PageTitle_Object_Class', $this->GetName(), $sClassLabel));
 		$oP->add("<div class=\"page_header teemip_page_header\">\n");
@@ -166,7 +136,8 @@ EOF
 	 *
 	 * @return string
 	 */
-	public function GetNewFormId($sPrefix) {
+	public function GetNewFormId($sPrefix): string
+    {
 		self::$iGlobalFormId++;
 		$this->m_iFormId = $sPrefix.self::$iGlobalFormId;
 
@@ -180,7 +151,8 @@ EOF
 	 *
 	 * @return string
 	 */
-	public function MakeUIPath($sOperation) {
+	public function MakeUIPath($sOperation): string
+    {
 		switch ($sOperation) {
 			case 'stimulus':
 			case 'apply_stimulus':
@@ -196,7 +168,8 @@ EOF
 	 *
 	 * @return string
 	 */
-	function GetNextOperation($sOperation) {
+	function GetNextOperation($sOperation): string
+    {
 		switch ($sOperation) {
 			case 'stimulus':
 				return 'apply_stimulus';
@@ -211,14 +184,16 @@ EOF
 	/**
 	 * Check validity of stimulus before allowing it to be applied
 	 */
-	public function CheckStimulus($sStimulusCode) {
+	public function CheckStimulus($sStimulusCode): string
+    {
 		return '';
 	}
 
 	/**
      * @inheritdoc
      */
-	public function DisplayBareProperties(WebPage $oPage, $bEditMode = false, $sPrefix = '', $aExtraParams = array()) {
+	public function DisplayBareProperties(WebPage $oPage, $bEditMode = false, $sPrefix = '', $aExtraParams = array()): array
+    {
 		$aFieldsMap = parent::DisplayBareProperties($oPage, $bEditMode, $sPrefix, $aExtraParams);
 
 		if ($this->Get('status') == 'assigned') {
@@ -244,7 +219,8 @@ EOF
 	/**
 	 * @inheritdoc
 	 */
-	public function DisplayBareRelations(WebPage $oPage, $bEditMode = false) {
+	public function DisplayBareRelations(WebPage $oPage, $bEditMode = false): void
+    {
 		parent::DisplayBareRelations($oPage, $bEditMode);
 
 		if ($this->GetDisplayMode() == cmdbAbstractObject::ENUM_DISPLAY_MODE_VIEW) {
@@ -263,7 +239,8 @@ EOF
 	 *
 	 * @return void
 	 */
-	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault) {
+	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault):void
+    {
 	}
 
 }

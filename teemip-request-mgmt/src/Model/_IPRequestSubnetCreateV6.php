@@ -1,6 +1,6 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2023 TeemIp
+ * @copyright   Copyright (C) 2010-2025 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -12,6 +12,7 @@ use Combodo\iTop\Application\UI\Base\Component\Input\Select\SelectOptionUIBlockF
 use Combodo\iTop\Application\UI\Base\Component\Input\SelectUIBlockFactory;
 use Combodo\iTop\Application\UI\Base\Layout\MultiColumn\Column\Column;
 use Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumn;
+use Combodo\iTop\Service\Events\EventData;
 use Dict;
 use IPRequestSubnetCreate;
 use iTopWebPage;
@@ -20,56 +21,63 @@ use TeemIp\TeemIp\Extension\IPv6Management\Model\ormIPv6;
 use UserRights;
 use utils;
 
-class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate {
-	/**
-	 * @inheritdoc
-	 */
-	public function AfterInsert() {
-		parent::AfterInsert();
+class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate
+{
+    /**
+     * Handle After Write event on IPRequestSubnetCreateV6
+     *
+     * @param EventData $oEventData
+     * @return void
+     */
+    public function OnIPRequestSubnetCreateV6AfterWriteRequestedByIpRequestMgmt(EventData $oEventData): void
+    {
+        $aEventData = $oEventData->GetEventData();
+        if ($aEventData['is_new']) {
+            // Has the user the right profile for auto registration ?
+            $aProfiles = UserRights::ListProfiles();
+            if (in_array('IP Portal Automation user', $aProfiles)) {
+                // CheckStimulus is not called as all check operations need to be replayed here
+                // If the block exists...
+                $sLogEntry = '';
+                $oBlock = MetaModel::GetObject('IPv6Block', $this->Get('block_id'), false /* MustBeFound */);
+                if (!is_null($oBlock)) {
+                    // ... and allows auto registration
+                    if ($oBlock->Get('allow_automatic_subnet_creation') == "yes") {
+                        // Check if there is some space available
+                        $iPrefix = $this->Get('mask');
+                        $aFreeSpace = $oBlock->GetFreeSpace($iPrefix, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
+                        if (count($aFreeSpace) > 0) {
+                            if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
+                                // Register subnet and update public log
+                                $this->RegisterSubnet(true, $aFreeSpace[0]['firstip']->ToString());
 
-		// Has the user the right profile for auto registration ?
-		$aProfiles = UserRights::ListProfiles();
-		if (in_array('IP Portal Automation user', $aProfiles)) {
-			// CheckStimulus is not called as all check operations need to be replayed here
-			// If the block exists...
-			$sLogEntry = '';
-			$oBlock = MetaModel::GetObject('IPv6Block', $this->Get('block_id'), false /* MustBeFound */);
-			if (!is_null($oBlock)) {
-				// ... and allows auto registration
-				if ($oBlock->Get('allow_automatic_subnet_creation') == "yes") {
-					// Check if there is some space available
-					$iPrefix = $this->Get('mask');
-					$aFreeSpace = $oBlock->GetFreeSpace($iPrefix, DEFAULT_MAX_FREE_SPACE_OFFERS_REQ);
-					if (count($aFreeSpace) > 0) {
-						if (parent::ApplyStimulus('ev_auto_resolve', true /* $bDoNotWrite */)) {
-							// Register subnet and update public log
-							$this->RegisterSubnet(true, $aFreeSpace[0]['firstip']->ToString());
-
-							$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
-							$sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation', $aFreeSpace[0]['firstip'].' /'.$this->Get('mask'), $this->Get('status_subnet'));
-						}
-					} else {
-						$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock');
-					}
-				} else {
-					$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock');
-				}
-			} else {
-				$sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock');
-			}
-			if ($sLogEntry != '') {
-				$oLog = $this->Get('public_log');
-				$oLog->AddLogEntry($sLogEntry);
-				$this->Set('public_log', $oLog);
-				$this->DBUpdate();
-			}
-		}
+                                $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestAutomaticallyProcessed');
+                                $sLogEntry .= Dict::Format('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:Confirmation', $aFreeSpace[0]['firstip'] . ' /' . $this->Get('mask'), $this->Get('status_subnet'));
+                            }
+                        } else {
+                            $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSpaceInBlock');
+                        }
+                    } else {
+                        $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoAutomaticAllocationInBlock');
+                    }
+                } else {
+                    $sLogEntry = Dict::S('UI:IPManagement:Action:Implement:IPRequestSubnetCreate:NoSuchBlock');
+                }
+                if ($sLogEntry != '') {
+                    $oLog = $this->Get('public_log');
+                    $oLog->AddLogEntry($sLogEntry);
+                    $this->Set('public_log', $oLog);
+                    $this->DBUpdate();
+                }
+            }
+        }
 	}
 
 	/**
 	 * Check validity of stimulus before allowing it to be applied
 	 */
-	public function CheckStimulus($sStimulusCode) {
+	public function CheckStimulus($sStimulusCode): string
+    {
 		if (($sStimulusCode == 'ev_auto_resolve') || ($sStimulusCode == 'ev_resolve')) {
 			// Run the check only if no subnet has been manually assigned yet !
 			if ($this->Get('subnet_id') <= 0) {
@@ -93,7 +101,8 @@ class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate {
 	/**
 	 * @inheritdoc
 	 */
-	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault) {
+	protected function DisplayActionFieldsForOperationV3(iTopWebPage $oP, $oObjectDetails, $sOperation, $aDefault): void
+    {
 		$sStimulus = $aDefault['stimulus'];
 		if ($sStimulus != 'ev_resolve') {
 			return;
@@ -138,7 +147,8 @@ class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate {
 	/**
 	 * @inheritdoc
 	 */
-	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false) {
+	public function ApplyStimulus($sStimulusCode, $bDoNotWrite = false): bool
+    {
 		if (($sStimulusCode != 'ev_auto_resolve') && ($sStimulusCode != 'ev_resolve')) {
 			return parent::ApplyStimulus($sStimulusCode);
 		} else {
@@ -182,7 +192,8 @@ class _IPRequestSubnetCreateV6 extends IPRequestSubnetCreate {
 	 * @throws \MySQLException
 	 * @throws \OQLException
 	 */
-	private function RegisterSubnet($bNewSubnet, $sSubnetIp) {
+	private function RegisterSubnet($bNewSubnet, $sSubnetIp): void
+    {
 		// Prepare and register subnet
 		if ($bNewSubnet) {
 			// Find corresponding IPConfig
