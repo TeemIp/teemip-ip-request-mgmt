@@ -1,12 +1,12 @@
 <?php
 /*
- * @copyright   Copyright (C) 2010-2024 TeemIp
+ * @copyright   Copyright (C) 2010-2025 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'teemip-request-mgmt/3.1.3-dev',
+	'teemip-request-mgmt/3.2.0',
 	array(
 		// Identification
 		//
@@ -16,10 +16,10 @@ SetupWebPage::AddModule(
 		// Setup
 		//
 		'dependencies' => array(
-			'itop-tickets/3.0.0',
-			'teemip-ip-mgmt/3.1.0',
-			'teemip-ipv6-mgmt/3.1.0',
-			'teemip-network-mgmt/3.1.0',
+			'itop-tickets/3.2.0',
+			'teemip-ip-mgmt/3.2.0',
+			'teemip-ipv6-mgmt/3.2.0',
+			'teemip-network-mgmt/3.2.0',
 		),
 		'mandatory' => false,
 		'visible' => true,
