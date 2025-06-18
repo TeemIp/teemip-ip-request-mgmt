@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2" load="strict">
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2" load="strict"
+  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/TeemIp/teemip-core-ip-mgmt/refs/heads/master/teemip-framework/doc/design.xsd">
   <classes>
     <class id="IPSubnet" _delta="must_exist">
       <fields>
@@ -382,7 +383,7 @@
             <attribute id="org_id"/>
           </dependencies>
           <sql>ciclass</sql>
-          <default_value></default_value>
+          <default_value/>
           <is_null_allowed>true</is_null_allowed>
           <display_style>list</display_style>
         </field>
@@ -407,7 +408,7 @@
             <attribute id="ciclass"/>
           </dependencies>
           <sql>ci_ip_attribute</sql>
-          <default_value></default_value>
+          <default_value/>
           <is_null_allowed>true</is_null_allowed>
           <display_style>list</display_style>
         </field>
@@ -4507,9 +4508,9 @@
               </attribute>
               <attribute id="close_date">
                 <hidden/>
+              </attribute>
               <attribute id="user_comment">
                 <hidden/>
-              </attribute>
               </attribute>
               <attribute id="subnet_id">
                 <read_only/>
