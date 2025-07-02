@@ -6,7 +6,7 @@
 	<label><![CDATA[IP request management]]></label>
 	<description><![CDATA[TeemIp workflow to handle IPAM requests - Includes TeemIp portal]]></description>
 	<version>3.2.0</version>
-	<release_date>2025-xx-yy</release_date>
+	<release_date>2025-07-02</release_date>
 	<version_description><![CDATA[Enhancements from TeemIp 3.1.2 - See wiki at https://wiki.teemip.net/doku.php?id=extensions:teemip-request-mgmt]]></version_description>
 	<itop_version_min>3.2.0</itop_version_min>
 	<status>stable</status>
