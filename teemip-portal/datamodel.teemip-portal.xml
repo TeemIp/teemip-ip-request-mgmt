@@ -69,7 +69,7 @@
                 <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_search_regular">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_search_regular.html.twig</template>
                 <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_view">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_view.html.twig</template>
                 <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_apply_stimulus">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_apply_stimulus.html.twig</template>
-                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_loader">itop-portal-new-look-for-3.2-lts/templates/bricks/object/mode_loader.html.twig</template>
+                <template id="Combodo\iTop\Portal\Controller\ObjectController:mode_loader">itop-portal-new-look-for-3.2-lts/templates/modal/mode_loader.html.twig</template>
                 <template id="Combodo\iTop\Portal\Controller\ObjectController:plugins_buttons">itop-portal-new-look-for-3.2-lts/templates/bricks/object/plugins_buttons.html.twig</template>
             </templates>
 	        <triggers_query><![CDATA[SELECT TriggerOnPortalUpdate AS t WHERE t.target_class IN (:parent_classes)]]></triggers_query>
